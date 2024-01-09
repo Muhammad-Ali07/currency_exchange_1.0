@@ -3,7 +3,7 @@
 @section('style')
 
 @endsection
-
+@dd('test')
 @section('content')
     <div class="content-wrapper">
         <div class="content-header row">
