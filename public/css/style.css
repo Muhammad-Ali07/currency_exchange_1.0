@@ -1,0 +1,32 @@
+#toast-container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+}
+.card-left-side > * {
+    display: inline-block;
+}
+.required{
+    color:red;
+}
+.position-relative .select2-selection--single {
+    min-height: 29.99px !important;
+}
+.position-relative .select2-selection__rendered{
+    line-height: 15px !important;
+    font-size: 13px;
+}
+
+.position-relative .select2-selection__arrow>b{
+    top:28% !important;
+}
+.NumberValidate{
+    text-align: right;
+}
+.FloatValidate{
+    text-align: right;
+}
+#addon_remove:hover {
+    cursor: pointer;
+}
+.pr-0{padding-right: 0}
