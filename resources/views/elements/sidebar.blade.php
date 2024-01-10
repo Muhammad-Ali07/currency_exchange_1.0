@@ -118,7 +118,7 @@
                     @endpermission
                 </ul>
             </li>
-            {{-- <li id="accounts_nav" class="nav-item has-sub {{ ($prefix == '/accounts')?'open':'' }}">
+            <li id="accounts_nav" class="nav-item has-sub {{ ($prefix == '/accounts')?'open':'' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather='book-open'></i>
                     <span class="menu-title text-truncate">Accounts</span>
@@ -174,7 +174,7 @@
                     </li>
                     @endpermission
                 </ul>
-            </li> --}}
+            </li>
             {{-- <li id="invoice_nav" class="nav-item has-sub {{ ($prefix == '/invoice')?'open':'' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather='shopping-bag'></i>

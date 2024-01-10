@@ -38,7 +38,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        dump('testing');
+        // dump('testing');
         $data['permission'] = 'home-view';
         $date = Carbon::now()->subDays(7);
 
