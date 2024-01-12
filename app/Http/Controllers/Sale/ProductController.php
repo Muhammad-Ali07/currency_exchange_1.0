@@ -294,5 +294,15 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+        $data = [];
+        DB::beginTransaction();
+        try{
+            Product::where('uuid',$id)->where(Utilities::CurrentBC())->delete();
+        }catch (Exception $e) {
+            DB::rollback();
+            return $this->jsonErrorResponse($data, $e->getMessage(), 200);
+        }
+        DB::commit();
+        return $this->jsonSuccessResponse($data, 'Successfully deleted', 200);
     }
 }
