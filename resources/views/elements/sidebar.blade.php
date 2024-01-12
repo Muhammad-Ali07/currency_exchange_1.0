@@ -120,14 +120,6 @@
                         </a>
                     </li>
                     @endpermission
-                    @permission('supplier'.$sidebar_menu)
-                    <li class="{{ ($path == 'master/supplier')?'active':'' }}">
-                        {{-- <a class="d-flex align-items-center" href="{{ route('master.supplier.index') }}"> --}}
-                        <a class="d-flex align-items-center" href="#">
-                            <span class="menu-item text-truncate">Supplier</span>
-                        </a>
-                    </li>
-                    @endpermission
                 </ul>
             </li>
             <li id="accounts_nav" class="nav-item has-sub {{ ($prefix == '/accounts')?'open':'' }}">
