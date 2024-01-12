@@ -86,7 +86,6 @@
 <!-- BEGIN: Page Vendor JS-->
 <script src="{{asset('assets/vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>
 <script src="{{asset('assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
-<script src="{{asset('assets/vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
 <script src="{{asset('assets/vendors/js/pickers/pickadate/picker.js')}}"></script>
 <script src="{{asset('assets/vendors/js/pickers/pickadate/picker.date.js')}}"></script>
 <script src="{{asset('assets/vendors/js/pickers/pickadate/picker.time.js')}}"></script>
@@ -95,6 +94,7 @@
 <script src="{{asset('assets/vendors/js/extensions/toastr.min.js')}}"></script>
 <!-- END: Page Vendor JS-->
 <script src="{{asset('assets/vendors/js/jquery/jquery.min.js')}}"></script>
+<script src="{{asset('assets/vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
 
 <!-- BEGIN: Theme JS-->
 <script src="{{asset('assets/js/core/app-menu.js')}}"></script>

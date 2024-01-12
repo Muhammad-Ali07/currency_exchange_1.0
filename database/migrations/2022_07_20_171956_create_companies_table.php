@@ -18,14 +18,15 @@ return new class extends Migration
             $table->string('uuid');
             $table->string('name');
             $table->string('contact_no')->nullable();
-            $table->unsignedBigInteger('country_id');
+            // $table->unsignedBigInteger('country_id');
             $table->string('address')->nullable();
+            $table->string('company_image')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
 
-            $table->foreign('country_id')->references('id')->on('countries')
-                ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('country_id')->references('id')->on('countries')
+            //     ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -15,7 +15,7 @@ class Company extends Model
         'name',
         'contact_no',
         'address',
-        'country_id',
+        'company_image',
     ];
 
     public function addresses(){

@@ -13,6 +13,7 @@ $(function () {
     var initFeather = function () {
         feather.replace();
     }
+    // console.log(dt_ajax_table);
     if (dt_ajax_table.length) {
         var dt_ajax = dt_ajax_table.dataTable({
             processing: true,
@@ -21,6 +22,7 @@ $(function () {
             "ajax": {
                 "url": dataPath,
                 "data": function (data) {
+                    // console.log(data);
                     $.each(ajaxParams, function (key, value) {
                         data[key] = value;
                     });
@@ -46,5 +48,6 @@ $(function () {
                 initFeather();
             },
         });
+        // console.log(dt_ajax_table.length);
     }
 });

@@ -18,7 +18,7 @@ $(function () {
               $(element).valid();
             }, */
             rules: {
-                name: {
+                product_name: {
                     required: true,
                 },
             },

@@ -130,6 +130,7 @@
     });
     $(document).on('click','.datatables-ajax>tbody>tr>td',function(){
         var thix = $(this);
+        // console.log('ii');
         if(thix.find('a.item-edit').length == 0){
             var tr = thix.parents('tr');
             var edit_url = tr.find('a.item-edit').attr('href');

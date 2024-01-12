@@ -35,6 +35,7 @@ use App\Http\Controllers\Purchase\ProductVariationController;
 use App\Http\Controllers\Sale\BookingTransferController;
 use App\Http\Controllers\Sale\DealerController;
 use App\Http\Controllers\Sale\CustomerController;
+use App\Http\Controllers\Sale\ProductController;
 use App\Http\Controllers\Sale\SaleInvoiceController;
 use App\Http\Controllers\Setting\BranchController;
 
@@ -176,7 +177,7 @@ Route::group(['middleware' => 'auth'], function () {
 
             });
             Route::prefix('master')->name('master.')->group(function () {
-                Route::prefix('product')->resource('product', ProductPropertyController::class);
+                Route::prefix('product')->resource('product', ProductController::class);
                 Route::prefix('customer')->resource('customer', CustomerController::class);
                 Route::prefix('supplier')->resource('supplier', SupplierController::class);
 

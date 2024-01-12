@@ -5,7 +5,7 @@
 
 @section('content')
     @permission($data['permission'])
-    <form id="region_create" class="region_create" action="{{route('setting.company.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
+    <form id="company_create" class="company_create" action="{{route('setting.company.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
         @csrf
         <div class="row">
             <div class="col-12">
@@ -31,8 +31,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
@@ -40,23 +38,6 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-sm" value="" id="contact_no" name="contact_no" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Country <span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select class="select2 form-select" id="country_id" name="country_id">
-                                            <option value="0" selected>Select</option>
-                                            @foreach($data['countries'] as $country)
-                                                <option value="{{$country->id}}"> {{$country->name}} </option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -73,6 +54,38 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-1">
+                                {{-- <label class="col-form-label">Avatar: </label> --}}
+                                @php $img = asset('assets/images/avatars/blank-img.png') @endphp
+                                <style>
+                                    .AClass {
+                                        right: 100px;
+                                        position: absolute;
+                                        top: 77px;
+                                        width: 1rem;
+                                        font-size: larger;
+                                        height: 1rem;
+                                        background-color: crimson;
+                                        border-radius: 20%;
+                                    }
+                                    .img_remove{
+                                        position: absolute;
+                                        top: -6px;
+                                        left: 2px;
+                                        color:white;
+                                    }
+                                </style>
+                                <div style="position: relative;">
+                                    <a onclick="document.getElementById('company_showImage').src='{{ $img }}'" class="close AClass" id="company_resetInput">
+                                        <span class="img_remove">&times;</span>
+                                    </a>
+                                    <img id="company_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};">
+                                </div>
+                                <input class="form-control form-control-sm" type="file" value="{{ $img }}" id="company_image_url" name="company_image"/>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -82,9 +95,28 @@
 @endsection
 
 @section('pageJs')
-    <script src="{{ asset('/pages/setting/region/create.js') }}"></script>
+<script type="text/javascript" src="{{ asset('pages/setting/company/create.js') }}"></script>
 @endsection
 
 @section('script')
+
+    <script>
+        //Show image on change picture
+        $(document).ready(function() {
+            $('#company_image_url').change(function(e) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#company_showImage').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(e.target.files['0']);
+            });
+        });
+        //Reset Image on Cross Click
+        $(document).ready(function() {
+            $('#company_resetInput').on('click', function() {
+                $('#company_image_url').val('');
+            });
+        });
+    </script>
 
 @endsection

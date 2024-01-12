@@ -25,8 +25,9 @@
 <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
-            <li class="nav-item me-auto"><a class="navbar-brand" href="javascript:;"><span class="brand-logo">
-                            <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
+            <li class="nav-item me-auto"><a class="navbar-brand" href="javascript:;">
+                        <span class="brand-logo">
+                            {{-- <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                                 <defs>
                                     <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%" y2="89.4879456%">
                                         <stop stop-color="#000000" offset="0%"></stop>
@@ -48,7 +49,18 @@
                                         </g>
                                     </g>
                                 </g>
-                            </svg></span>
+                            </svg> --}}
+                            @php $root = \Illuminate\Support\Facades\Request::root();
+                                $company = \App\Models\Company::first();
+                                $image_url = $company->company_image;
+                            @endphp
+                            @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
+                                @php $img = $root.'/uploads/'.$image_url; @endphp
+                            @else
+                                @php $img = asset('assets/images/avatars/blank-img.png') @endphp
+                            @endif
+                            <img id="company_image_showImage" src="{{ $img }}" style="width: 100px; height: 39px;">
+                        </span>
                     <h2 class="brand-text">HZ Traders</h2>
                 </a></li>
             <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
@@ -70,10 +82,10 @@
             @endpermission
             @permission('company'.$sidebar_menu)
             <li class="nav-item {{ ($path == 'setting/company')?'active':'' }}">
-                {{-- <a class="d-flex align-items-center" href="{{ route('setting.company.index') }}">
+                <a class="d-flex align-items-center" href="{{ route('setting.company.index') }}">
                     <i data-feather='briefcase'></i>
                     <span class="menu-item text-truncate">Company</span>
-                </a> --}}
+                </a>
             </li>
             @endpermission
             @permission('project'.$sidebar_menu)
@@ -94,8 +106,8 @@
                 <ul class="menu-content" id="master_nav_ul">
                     @permission('product'.$sidebar_menu)
                     <li class="{{ ($path == 'master/product')?'active':'' }}">
-                        {{-- <a class="d-flex align-items-center" href="{{ route('master.product.index') }}"> --}}
-                        <a class="d-flex align-items-center" href="#">
+                        <a class="d-flex align-items-center" href="{{ route('master.product.index') }}">
+                        {{-- <a class="d-flex align-items-center" href="#"> --}}
                                 <span class="menu-item text-truncate">Product</span>
                         </a>
                     </li>

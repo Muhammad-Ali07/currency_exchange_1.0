@@ -1,7 +1,7 @@
 $(function () {
     'use strict';
 
-    var pageLoginForm = $('#region_create');
+    var pageLoginForm = $('#company_create');
 
     // jQuery Validation
     // --------------------------------------------------------------------

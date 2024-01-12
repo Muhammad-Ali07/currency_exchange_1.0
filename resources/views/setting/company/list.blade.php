@@ -2,7 +2,7 @@
 @section('title', $data['title'])
 @section('style')
 @endsection
-
+@dump($data)
 @section('content')
     <div class="datatable">
     <!-- Datatable -->
@@ -14,11 +14,11 @@
                         <div class="card-left-side">
                             <h4 class="card-title">{{$data['title']}}</h4>
                         </div>
-                        {{--<div class="card-link">
+                        <div class="card-link">
                             @permission($data['permission_create'])
                             <a href="{{route('setting.company.create')}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Create</a>
                             @endpermission
-                        </div>--}}
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="card-datatable">
@@ -28,8 +28,8 @@
                                 <tr>
                                     <th class="cell-fit">Name</th>
                                     <th class="cell-fit">Contact No</th>
-                                    <th class="cell-fit">Country</th>
-                                    <th class="cell-fit">Address</th>
+                                    {{-- <th class="cell-fit">Address</th> --}}
+                                    <th class="cell-fit">Logo</th>
                                     <th class="cell-fit"></th>
                                 </tr>
                                 </thead>

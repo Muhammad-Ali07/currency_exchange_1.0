@@ -1,33 +1,33 @@
 <?php
 
-namespace App\Http\Controllers\Setting;
+namespace App\Http\Controllers\Purchase;
 
-use App\Models\Company;
-use App\Models\Country;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Accounts\ChartOfAccountController;
 use App\Http\Controllers\Controller;
-use Illuminate\Validation\Rule;
+use App\Library\Utilities;
+use App\Models\ChartOfAccount;
+use App\Models\Supplier;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class CompanyController extends Controller
+class SupplierController extends Controller
 {
-
     private static function Constants()
     {
-        $name = 'company';
+        $name = 'supplier';
         return [
-            'title' => 'Company',
-            'list_url' => route('setting.company.index'),
+            'title' => 'Supplier',
+            'list_url' => route('purchase.supplier.index'),
             'list' => "$name-list",
             'create' => "$name-create",
             'edit' => "$name-edit",
             'delete' => "$name-delete",
+            'view' => "$name-view",
         ];
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -39,17 +39,16 @@ class CompanyController extends Controller
         $data['title'] = self::Constants()['title'];
         $data['permission_list'] = self::Constants()['list'];
         $data['permission_create'] = self::Constants()['create'];
-        $result_count = 0;
-
         if ($request->ajax()) {
             $draw = 'all';
 
-            $dataSql = Company::where('id','<>',0)->orderByName();
+            $dataSql = Supplier::where('id','<>',0)->where(Utilities::CompanyProjectId())->orderByName();
 
             $allData = $dataSql->get();
 
             $recordsTotal = count($allData);
             $recordsFiltered = count($allData);
+
             $delete_per = false;
             if(auth()->user()->isAbleTo(self::Constants()['delete'])){
                 $delete_per = true;
@@ -58,11 +57,11 @@ class CompanyController extends Controller
             if(auth()->user()->isAbleTo(self::Constants()['edit'])){
                 $edit_per = true;
             }
-
             $entries = [];
             foreach ($allData as $row) {
-                $urlEdit = route('setting.company.edit',$row->uuid);
-                $urlDel = route('setting.company.destroy',$row->uuid);
+                $entry_status = $this->getStatusTitle()[$row->status];
+                $urlEdit = route('purchase.supplier.edit',$row->uuid);
+                $urlDel = route('purchase.supplier.destroy',$row->uuid);
 
                 $actions = '<div class="text-end">';
                 if($delete_per) {
@@ -81,29 +80,21 @@ class CompanyController extends Controller
                 $entries[] = [
                     $row->name,
                     $row->contact_no,
-                    // isset($row->addresses->country->name)?$row->addresses->country->name:"",
-                    // $row->address,
-                    $row->company_image,
+                    $row->email,
+                    '<div class="text-center"><span class="badge rounded-pill ' . $entry_status['class'] . '">' . $entry_status['title'] . '</span></div>',
                     $actions,
                 ];
             }
-            $form = 'company';
             $result = [
                 'draw' => $draw,
-                'form' => $form,
                 'recordsTotal' => $recordsTotal,
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $entries,
             ];
-            $result_count = $recordsTotal;
-            // dd($result_count);
             return response()->json($result);
         }
-        
-        dd($result_count);
-        // $data['result_count'] = $result_count;
 
-        return view('setting.company.list', compact('data'));
+        return view('purchase.supplier.list', compact('data'));
     }
 
     /**
@@ -117,9 +108,8 @@ class CompanyController extends Controller
         $data['title'] = self::Constants()['title'];
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['create'];
-        return view('setting.company.create', compact('data'));
+        return view('purchase.supplier.create', compact('data'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -132,7 +122,7 @@ class CompanyController extends Controller
         $data = [];
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'company_image' => ['required',Rule::notIn([0,'0'])]
+            'email' => 'nullable|email',
         ]);
 
         if ($validator->fails()) {
@@ -147,22 +137,34 @@ class CompanyController extends Controller
 
         DB::beginTransaction();
         try {
-            dump($request->all());
-            $company_filename = '';
-            // $om_filename = '';
-            if ($request->has('company_image')) {
-                $file = $request->file('company_image');
-                $company_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
-                $file->move(public_path('uploads'), $company_filename);
-            }
-            // dd($company_filename);
-            $company = Company::create([
+
+            $supplier = Supplier::create([
                 'uuid' => self::uuid(),
                 'name' => self::strUCWord($request->name),
                 'contact_no' => $request->contact_no,
-                'address' => $request->address,
-                'company_image' => $company_filename,
+                'email' => $request->email,
+                'status' => isset($request->status) ? "1" : "0",
+                'company_id' => auth()->user()->company_id,
+                'project_id' => auth()->user()->project_id,
+                'user_id' => auth()->user()->id,
             ]);
+
+            $r = self::insertAddress($request,$supplier);
+
+            if(isset($r['status']) && $r['status'] == 'error'){
+                return $this->jsonErrorResponse($data, $r['message']);
+            }
+
+            $req = [
+                'name' => $request->name,
+                'level' => 4,
+                'parent_account' => '03-01-0001-0000',
+            ];
+            $r = Utilities::createCOA($req);
+
+            if(isset($r['status']) && $r['status'] == 'error'){
+                return $this->jsonErrorResponse($data, $r['message']);
+            }
 
         }catch (Exception $e) {
             DB::rollback();
@@ -190,7 +192,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $data = [];
         $data['id'] = $id;
@@ -198,15 +200,22 @@ class CompanyController extends Controller
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['edit'];
 
-        if(Company::where('uuid',$id)->exists()){
+        if(Supplier::where('uuid',$id)->exists()){
 
-            $data['current'] = Company::where('uuid',$id)->first();
+            $data['current'] = Supplier::where('uuid',$id)->where(Utilities::CompanyProjectId())->first();
+
 
         }else{
             abort('404');
         }
 
-        return view('setting.company.edit', compact('data'));
+        $data['view'] = false;
+        if(isset($request->view)){
+            $data['view'] = true;
+            $data['permission'] = self::Constants()['view'];
+            $data['permission_edit'] = self::Constants()['edit'];
+        }
+        return view('purchase.supplier.edit', compact('data'));
     }
 
     /**
@@ -216,14 +225,12 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, $id)
     {
-        // dd('in update');
         $data = [];
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'country_id' => 'required'
+            'email' => 'nullable|email',
         ]);
 
         if ($validator->fails()) {
@@ -238,17 +245,20 @@ class CompanyController extends Controller
 
         DB::beginTransaction();
         try {
-
-            Company::where('uuid',$id)
+            Supplier::where('uuid',$id)
                 ->update([
                     'name' => self::strUCWord($request->name),
                     'contact_no' => $request->contact_no,
-                    'address' => $request->address,
-                    'country_id' => $request->country_id,
+                    'email' => $request->email,
+                    'status' => isset($request->status) ? "1" : "0",
+                    'company_id' => auth()->user()->company_id,
+                    'project_id' => auth()->user()->project_id,
+                    'user_id' => auth()->user()->id,
                 ]);
-            $company = Company::where('uuid',$id)->first();
 
-            $r = self::insertAddress($request,$company);
+            $supplier = Supplier::where('uuid',$id)->where(Utilities::CompanyProjectId())->first();
+
+            $r = self::insertAddress($request,$supplier);
 
             if(isset($r['status']) && $r['status'] == 'error'){
                 return $this->jsonErrorResponse($data, $r['message']);
@@ -276,7 +286,7 @@ class CompanyController extends Controller
         DB::beginTransaction();
         try{
 
-            Company::where('uuid',$id)->delete();
+            Supplier::where('uuid',$id)->where(Utilities::CompanyProjectId())->delete();
 
         }catch (Exception $e) {
             DB::rollback();
@@ -285,5 +295,4 @@ class CompanyController extends Controller
         DB::commit();
         return $this->jsonSuccessResponse($data, 'Successfully deleted', 200);
     }
-
 }

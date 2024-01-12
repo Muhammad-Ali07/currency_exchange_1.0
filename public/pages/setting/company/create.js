@@ -21,7 +21,7 @@ $(function () {
                 name: {
                     required: true,
                 },
-                country_id: {
+                company_image: {
                     required: true,
                 },
             },
