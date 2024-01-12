@@ -99,8 +99,8 @@ class CompanyController extends Controller
             // dd($result_count);
             return response()->json($result);
         }
-        
-        dd($result_count);
+
+        // dd($result_count);
         // $data['result_count'] = $result_count;
 
         return view('setting.company.list', compact('data'));
