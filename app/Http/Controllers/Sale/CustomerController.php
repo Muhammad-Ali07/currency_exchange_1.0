@@ -20,7 +20,7 @@ class CustomerController extends Controller
         $name = 'customer';
         return [
             'title' => 'Customer',
-            'list_url' => route('sale.customer.index'),
+            'list_url' => route('master.customer.index'),
             'list' => "$name-list",
             'create' => "$name-create",
             'edit' => "$name-edit",
@@ -45,7 +45,7 @@ class CustomerController extends Controller
         if ($request->ajax()) {
             $draw = 'all';
 
-            $dataSql = Customer::where('id','<>',0)->where(Utilities::CompanyProjectId())->orderByName();
+            $dataSql = Customer::where('id','<>',0)->where(Utilities::CurrentBC())->orderByName();
 
             $allData = $dataSql->get();
 
@@ -64,8 +64,8 @@ class CustomerController extends Controller
             $entries = [];
             foreach ($allData as $row) {
                 $entry_status = $this->getStatusTitle()[$row->status];
-                $urlEdit = route('sale.customer.edit',$row->uuid);
-                $urlDel = route('sale.customer.destroy',$row->uuid);
+                $urlEdit = route('master.customer.edit',$row->uuid);
+                $urlDel = route('master.customer.destroy',$row->uuid);
 
                 $actions = '<div class="text-end">';
                 if($delete_per){
@@ -95,6 +95,7 @@ class CustomerController extends Controller
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $entries,
             ];
+            // dd($result);
             return response()->json($result);
         }
 
@@ -112,6 +113,14 @@ class CustomerController extends Controller
         $data['title'] = self::Constants()['title'];
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['create'];
+        $doc_data = [
+            'model'             => 'Customer',
+            'code_field'        => 'code',
+            'code_prefix'       => strtoupper('cst'),
+            'form_type_field'        => 'form_type',
+            'form_type_value'       => 'customer',
+        ];
+        $data['code'] = Utilities::documentCode($doc_data);
 
         return view('sale.customer.create', compact('data'));
     }
@@ -130,7 +139,7 @@ class CustomerController extends Controller
             'cnic_no' => 'required',
             'email' => 'nullable|email',
         ]);
-
+        // dd($request->all());
         if ($validator->fails()) {
             $data['validator_errors'] = $validator->errors();
             $validator_errors = $data['validator_errors']->getMessageBag()->toArray();
@@ -140,38 +149,34 @@ class CustomerController extends Controller
             }
             return $this->jsonErrorResponse($data, $err);
         }
-
+        $doc_data = [
+            'model'             => 'Customer',
+            'code_field'        => 'code',
+            'code_prefix'       => strtoupper('cst'),
+            'form_type_field'        => 'form_type',
+            'form_type_value'       => 'customer',
+        ];
+        $data['code'] = Utilities::documentCode($doc_data);
+        dd($data['code']);
         DB::beginTransaction();
         try {
 
-            $dealer = Customer::create([
+            $customer = Customer::create([
                 'uuid' => self::uuid(),
                 'name' => self::strUCWord($request->name),
-                'cnic_no' => $request->cnic_no,
+                'code' => $data['code'],
+                'father_name' => $request->father_name,
                 'contact_no' => $request->contact_no,
                 'mobile_no' => $request->mobile_no,
+                'cnic_no' => $request->cnic_no,
                 'email' => $request->email,
-                'father_name' => $request->father_name,
-                'registration_no' => $request->registration_no,
-                'membership_no' => $request->cnic_no,
-                'nominee_no' => $request->nominee_no,
-                'nominee_name' => $request->nominee_name,
-                'nominee_father_name' => $request->nominee_father_name,
-                'nominee_relation' => $request->nominee_relation,
-                'nominee_contact_no' => $request->nominee_contact_no,
-                'nominee_cnic_no' => $request->nominee_cnic_no,
+                'address' => $request->address,
                 'status' => isset($request->status) ? "1" : "0",
+
                 'company_id' => auth()->user()->company_id,
-                'project_id' => auth()->user()->project_id,
+                'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ]);
-            $data['id'] = $dealer->id;
-            $data['name'] = $dealer->name;
-            $r = self::insertAddress($request,$dealer);
-
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
 
             $req = [
                 'name' => $request->name,

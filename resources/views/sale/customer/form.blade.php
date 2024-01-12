@@ -1,5 +1,5 @@
 @permission($data['permission'])
-<form id="customer_create" class="customer_create" action="{{route('sale.customer.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
+<form id="customer_create" class="customer_create" action="{{route('master.customer.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
     @csrf
     <div class="row">
         <div class="col-12">
@@ -21,6 +21,11 @@
                 </div>
                 <div class="card-body mt-2">
                     <div class="row">
+                        <div class="mb-1 row">
+                            <div class="col-md-6">
+                                <h5>{{$data['code']}} </h5>
+                            </div>
+                        </div>
                         <div class="col-sm-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
@@ -30,6 +35,8 @@
                                     <input type="text" class="form-control form-control-sm" value="" id="name" name="name" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label p-0">S/O,W/O Name</label>
@@ -38,6 +45,10 @@
                                     <input type="text" class="form-control form-control-sm" value="" id="father_name" name="father_name" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label">Contact No#</label>
@@ -46,6 +57,8 @@
                                     <input type="text" class="text-start form-control form-control-sm NumberValidate" value="" id="contact_no" name="contact_no" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label">Mobile No#</label>
@@ -54,6 +67,10 @@
                                     <input type="text" class="text-start form-control form-control-sm NumberValidate" value="" id="mobile_no" name="mobile_no" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label">Email</label>
@@ -62,6 +79,8 @@
                                     <input type="text" class="form-control form-control-sm" value="" id="email" name="email" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label">CNIC No# <span class="required">*</span></label>
@@ -71,7 +90,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label">Registration No.</label>
@@ -80,6 +101,8 @@
                                     <input type="text" class="form-control form-control-sm" value="" id="registration_no" name="registration_no" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
                                     <label class="col-form-label">Status</label>
@@ -90,10 +113,24 @@
                                     </div>
                                 </div>
                             </div>
-                            @include('partials.address')
                         </div>
-                    </div>{{--end row--}}
-                    <h3>Nominee Info</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="col-sm-12">
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Address <span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-sm" id="address" name="address" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{--end row--}}
+                    {{-- <h3>Nominee Info</h3>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="mb-1 row">
@@ -147,7 +184,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

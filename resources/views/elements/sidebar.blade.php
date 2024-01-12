@@ -114,8 +114,8 @@
                     @endpermission
                     @permission('customer'.$sidebar_menu)
                     <li class="{{ ($path == 'master/customer')?'active':'' }}">
-                        {{-- <a class="d-flex align-items-center" href="{{ route('master.customer.index') }}"> --}}
-                        <a class="d-flex align-items-center" href="#">
+                        <a class="d-flex align-items-center" href="{{ route('master.customer.index') }}">
+                        {{-- <a class="d-flex align-items-center" href="#"> --}}
                                 <span class="menu-item text-truncate">Customer</span>
                         </a>
                     </li>
