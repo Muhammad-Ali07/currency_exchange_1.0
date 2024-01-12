@@ -76,6 +76,7 @@ class ProfileController extends Controller
         $data['title'] = 'Profile';
 
         $data['current'] = User::where('id',auth()->user()->id)->first();
+        // dd($data['current']);
 
         return view('user.profile.edit',compact('data'));
     }
@@ -114,11 +115,11 @@ class ProfileController extends Controller
 
             $user = User::where('id',auth()->user()->id)->first();
 
-            $r = self::insertAddress($request,$user);
+            // $r = self::insertAddress($request,$user);
 
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
+            // if(isset($r['status']) && $r['status'] == 'error'){
+            //     return $this->jsonErrorResponse($data, $r['message']);
+            // }
 
         }catch (Exception $e) {
             DB::rollback();

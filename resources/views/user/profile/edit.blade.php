@@ -43,7 +43,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                @include('partials.address')
+                                {{-- @include('partials.address') --}}
                             </div>
                         </div>
                     </div>
