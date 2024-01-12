@@ -2,7 +2,6 @@
 @section('title', $data['title'])
 @section('style')
 @endsection
-@dump($data)
 @section('content')
     <div class="datatable">
     <!-- Datatable -->
