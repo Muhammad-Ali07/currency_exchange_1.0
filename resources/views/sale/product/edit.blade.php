@@ -101,6 +101,7 @@
                                     <input type="hidden" value="{{ $image_url }}" name="company_image_hidden_image" id="company_image_hidden_avatar">
                                 </div>
 
+
                                 <div class="mb-1 row">
                                     <div class="col-sm-4">
                                         <label class="col-form-label">Status</label>
