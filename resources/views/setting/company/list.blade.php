@@ -14,9 +14,9 @@
                             <h4 class="card-title">{{$data['title']}}</h4>
                         </div>
                         <div class="card-link">
-                            @permission($data['permission_create'])
+                            {{-- @permission($data['permission_create'])
                             <a href="{{route('setting.company.create')}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Create</a>
-                            @endpermission
+                            @endpermission --}}
                         </div>
                     </div>
                     <div class="card-body">
