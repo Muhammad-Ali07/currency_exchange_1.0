@@ -9,6 +9,7 @@ use App\Models\BuyableType;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Product;
+use App\Models\ProductQuantity;
 use App\Models\ProductVariation;
 use App\Models\ProductVariationDtl;
 use App\Models\Project;
@@ -24,10 +25,10 @@ class ProductPropertyController extends Controller
 {
     private static function Constants()
     {
-        $name = 'product';
+        $name = 'product-quantity';
         return [
-            'title' => 'Product Inventory',
-            'list_url' => route('purchase.product-property.index'),
+            'title' => 'Product Quantity',
+            'list_url' => route('master.product-quantity.index'),
             'list' => "$name-list",
             'create' => "$name-create",
             'edit' => "$name-edit",
@@ -42,6 +43,7 @@ class ProductPropertyController extends Controller
      */
     public function index(Request $request)
     {
+        // dd('in index');
         $data = [];
         $data['title'] = self::Constants()['title'];
         $data['permission_list'] = self::Constants()['list'];
@@ -49,7 +51,7 @@ class ProductPropertyController extends Controller
         if ($request->ajax()) {
             $draw = 'all';
 
-            $dataSql = Product::where('product_form_type','property')->where(Utilities::CompanyProjectId())->orderByName();
+            $dataSql = ProductQuantity::where('form_type','product_quantity')->where(Utilities::CompanyProjectId());
 
             $allData = $dataSql->get();
 
@@ -66,17 +68,17 @@ class ProductPropertyController extends Controller
             }
             $entries = [];
             foreach ($allData as $row) {
-                $entry_status = $this->getStatusTitle()[$row->status];
-                $urlEdit = route('purchase.product-property.edit',$row->uuid);
-                $urlDel = route('purchase.product-property.destroy',$row->uuid);
+                // $entry_status = $this->getStatusTitle()[$row->status];
+                $urlEdit = route('master.product-quantity.edit',$row->uuid);
+                $urlDel = route('master.product-quantity.destroy',$row->uuid);
 
                 $actions = '<div class="text-end">';
                 if($delete_per) {
                     $actions .= '<div class="d-inline-flex">';
-                    $actions .= '<a class="pe-1 dropdown-toggle hide-arrow text-primary" data-bs-toggle="dropdown"><i data-feather="more-vertical"></i></a>';
-                    $actions .= '<div class="dropdown-menu dropdown-menu-end">';
-                    $actions .= '<a href="javascript:;" data-url="' . $urlDel . '" class="dropdown-item delete-record"><i data-feather="trash-2" class="me-50"></i>Delete</a>';
-                    $actions .= '</div>'; // end dropdown-menu
+                    // $actions .= '<a class="pe-1 dropdown-toggle hide-arrow text-primary" data-bs-toggle="dropdown"><i data-feather="more-vertical"></i></a>';
+                    // $actions .= '<div class="dropdown-menu dropdown-menu-end">';
+                    // $actions .= '<a href="javascript:;" data-url="' . $urlDel . '" class="dropdown-item delete-record"><i data-feather="trash-2" class="me-50"></i>Delete</a>';
+                    // $actions .= '</div>'; // end dropdown-menu
                     $actions .= '</div>'; // end d-inline-flex
                 }
                 if($edit_per) {
@@ -87,10 +89,11 @@ class ProductPropertyController extends Controller
                 $entries[] = [
                     $row->code,
                     $row->name,
-                    '<div class="text-center"><span class="badge rounded-pill ' . $entry_status['class'] . '">' . $entry_status['title'] . '</span></div>',
+                    // '<div class="text-center"><span class="badge rounded-pill ' . $entry_status['class'] . '">' . $entry_status['title'] . '</span></div>',
                     $actions,
                 ];
             }
+            // dd($entries);
             $result = [
                 'draw' => $draw,
                 'recordsTotal' => $recordsTotal,
@@ -100,7 +103,7 @@ class ProductPropertyController extends Controller
             return response()->json($result);
         }
 
-        return view('purchase.product_property.list', compact('data'));
+        return view('sale.product_quantity.list', compact('data'));
     }
 
     /**
@@ -115,17 +118,14 @@ class ProductPropertyController extends Controller
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['create'];
         $doc_data = [
-            'model'             => 'Product',
+            'model'             => 'ProductQuantity',
             'code_field'        => 'code',
-            'code_prefix'       => strtoupper('pp'),
-            'form_type_field'        => 'product_form_type',
-            'form_type_value'       => 'property',
+            'code_prefix'       => strtoupper('pq'),
+            'form_type_field'        => 'form_type',
+            'form_type_value'       => 'product_quantity',
         ];
         $data['code'] = Utilities::documentCode($doc_data);
-       // $data['project'] = Project::where(Utilities::CompanyId())->OrderByName()->get();
-        $data['buyable'] = BuyableType::OrderByName()->where(Utilities::CompanyProjectId())->get();
-
-        return view('purchase.product_property.create', compact('data'));
+        return view('sale.product_quantity.create', compact('data'));
     }
 
     /**
@@ -138,13 +138,15 @@ class ProductPropertyController extends Controller
     {
         $data = [];
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-         //   'project_id' => ['required',Rule::notIn([0,'0'])],
+            'product_name' => 'required',
+            'product_quantity' => 'required',
+            'buying_rate' => 'required',
         ],[
-            'name.required' => 'Name is required',
-        //    'project_id.required' => 'Project is required',
-        //    'project_id.not_in' => 'Project is required',
+            'product_name.required' => 'Name is required',
+            'product_quantity.required' => 'Quantity is required',
+            'buying_rate.required' => 'Buying rate is required',
         ]);
+        // dd($request->all());
 
         if ($validator->fails()) {
             $data['validator_errors'] = $validator->errors();
@@ -155,70 +157,38 @@ class ProductPropertyController extends Controller
             }
             return $this->jsonErrorResponse($data, $err);
         }
-
+        // dd($request->all());
         DB::beginTransaction();
         try {
             $doc_data = [
-                'model'             => 'Product',
+                'model'             => 'ProductQuantity',
                 'code_field'        => 'code',
-                'code_prefix'       => strtoupper('pp'),
-                'form_type_field'        => 'product_form_type',
-                'form_type_value'       => 'property',
+                'code_prefix'       => strtoupper('pq'),
+                'form_type_field'        => 'form_type',
+                'form_type_value'       => 'product_quantity',
             ];
             $data['code'] = Utilities::documentCode($doc_data);
+            // dd($request->product_id);
+            $product = Product::where('id',$request->product_id)->where(Utilities::CompanyProjectId())->first();
+            // dd($product);
             $p_data = [
                 'uuid' => self::uuid(),
-                'name' => self::strUCWord($request->name),
+                'entry_date' => date('Y-m-d', strtotime($request->entry_date)),
+                'name' => self::strUCWord($request->product_name),
                 'code' => $data['code'],
-                'external_item_id' => $request->external_item_id,
-                'status' => isset($request->status) ? "1" : "0",
-                'default_sale_price' => $request->default_sale_price,
-                'product_form_type' => 'property',
-                'project_id' => auth()->user()->project_id,
+                'form_type' => 'product_quantity',
+                'product_id' => $request->product_id,
+                'supplier_id' => $request->supplier_id,
+                'quantity' => $request->product_quantity,
+                'buying_rate' => $request->buying_rate,
+
                 'company_id' => auth()->user()->company_id,
+                'project_id' => auth()->user()->project_id,
+                'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ];
-            if(isset($request->buyable_type_id) && !empty($request->buyable_type_id)){
-                $p_data['buyable_type_id'] = $request->buyable_type_id;
-            }else{
-                $p_data['buyable_type_id'] = NULL;
-            }
-            $product = Product::create($p_data);
 
-
-            if(isset($request->pv) && !empty($request->pv)){
-                foreach ($request->pv as $pvId=>$pvVal){
-                    if(is_array($pvVal)){
-                        $k = 1;
-                        foreach ($pvVal as $checkboxList){
-                            if(!empty($checkboxList)){
-                                PropertyVariation::create([
-                                    'sr_no' => $k,
-                                    'product_id' => $product->id,
-                                    'product_variation_id' => $pvId,
-                                    'value' => $checkboxList,
-                                    'company_id' => auth()->user()->company_id,
-                                    'project_id' => auth()->user()->project_id,
-                                    'user_id' => auth()->user()->id,
-                                ]);
-                                $k = $k + 1;
-                            }
-                        }
-                    }else{
-                        if(!empty($pvVal)){
-                            PropertyVariation::create([
-                                'sr_no' => 1,
-                                'product_id' => $product->id,
-                                'product_variation_id' => $pvId,
-                                'value' => $pvVal,
-                                'company_id' => auth()->user()->company_id,
-                                'project_id' => auth()->user()->project_id,
-                                'user_id' => auth()->user()->id,
-                            ]);
-                        }
-                    }
-                }
-            }
+            ProductQuantity::create($p_data);
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());
@@ -245,7 +215,7 @@ class ProductPropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function edit($id)
     {
         $data = [];
         $data['id'] = $id;
@@ -253,34 +223,14 @@ class ProductPropertyController extends Controller
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['edit'];
 
-        if(Product::where('uuid',$id)->exists()){
+        if(ProductQuantity::where('uuid',$id)->exists()){
 
-            $data['current'] = Product::with('property_variation')->where(Utilities::CompanyProjectId())->where('uuid',$id)->first();
-            $data['property_values'] = [];
-            if(!empty($data['current']->property_variation)){
-                foreach ($data['current']->property_variation as $property_variation){
-                    $data['property_values'][$property_variation->product_variation_id][$property_variation->sr_no] = $property_variation->value;
-                }
-                $pvdtls = ProductVariationDtl::with('product_variation')->where('buyable_type_id',$data['current']->buyable_type_id)->where(Utilities::CompanyProjectId())->get()->toArray();
-                $data['prod_var'] = [];
-                foreach ($pvdtls as $pvdtl ){
-                    $data['prod_var'][$pvdtl['value_type']][$pvdtl['product_variation_id']][] = $pvdtl;
-                }
-            }
-          // dd($data['property_values']);
+            $data['current'] = ProductQuantity::with('product')->where(Utilities::CompanyProjectId())->where('uuid',$id)->first();
         }else{
             abort('404');
         }
-        $data['view'] = false;
-        if(isset($request->view)){
-            $data['view'] = true;
-            $data['permission'] = self::Constants()['view'];
-            $data['permission_edit'] = self::Constants()['edit'];
-        }
-       // $data['project'] = Project::OrderByName()->get();
-        $data['buyable'] = BuyableType::OrderByName()->where(Utilities::CompanyProjectId())->get();
 
-        return view('purchase.product_property.edit', compact('data'));
+        return view('sale.product_quantity.edit', compact('data'));
     }
 
     /**
@@ -293,13 +243,15 @@ class ProductPropertyController extends Controller
     public function update(Request $request, $id)
     {
         $data = [];
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-         //   'project_id' => ['required',Rule::notIn([0,'0'])],
+            'product_name' => 'required',
+            'product_quantity' => 'required',
+            'buying_rate' => 'required',
         ],[
-            'name.required' => 'Name is required',
-//            'project_id.required' => 'Project is required',
-//            'project_id.not_in' => 'Project is required',
+           'product_name.required' => 'Name is required',
+           'product_quantity.required' => 'Project is required',
+           'buying_rate.required' => 'Buying rate is required',
         ]);
 
         if ($validator->fails()) {
@@ -315,64 +267,19 @@ class ProductPropertyController extends Controller
         DB::beginTransaction();
         try {
             $p_data = [
-                'name' => self::strUCWord($request->name),
-                'external_item_id' => $request->external_item_id,
-                'status' => isset($request->status) ? "1" : "0",
-                'default_sale_price' => $request->default_sale_price,
-                'buyable_type_id' => $request->buyable_type_id,
-                'product_form_type' => 'property',
-                'project_id' => auth()->user()->project_id,
+                'name' => self::strUCWord($request->product_name),
+                'product_id' => $request->product_id,
+                'quantity' => $request->product_quantity,
+                'buying_rate' => $request->buying_rate,
+
                 'company_id' => auth()->user()->company_id,
+                'project_id' => auth()->user()->project_id,
+                'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ];
-            if(isset($request->buyable_type_id) && !empty($request->buyable_type_id)){
-                $p_data['buyable_type_id'] = $request->buyable_type_id;
-            }else{
-                $p_data['buyable_type_id'] = NULL;
-            }
-
-            Product::where('uuid',$id)
+            ProductQuantity::where('uuid',$id)
                 ->update($p_data);
 
-            $product = Product::where('uuid',$id)->where(Utilities::CompanyProjectId())->first();
-
-            if($product->buyable_type_id != $request->buyable_type_id){
-                PropertyVariation::where('product_id',$product->id)->where(Utilities::CompanyProjectId())->delete();
-            }
-            if(isset($request->pv) && !empty($request->pv)){
-                PropertyVariation::where('product_id',$product->id)->where(Utilities::CompanyProjectId())->delete();
-                foreach ($request->pv as $pvId=>$pvVal){
-                    if(is_array($pvVal)){
-                        $k = 1;
-                        foreach ($pvVal as $checkboxList){
-                            if(!empty($checkboxList)){
-                                PropertyVariation::create([
-                                    'sr_no' => $k,
-                                    'product_id' => $product->id,
-                                    'product_variation_id' => $pvId,
-                                    'value' => $checkboxList,
-                                    'company_id' => auth()->user()->company_id,
-                                    'project_id' => auth()->user()->project_id,
-                                    'user_id' => auth()->user()->id,
-                                ]);
-                                $k = $k + 1;
-                            }
-                        }
-                    }else{
-                        if(!empty($pvVal)){
-                            PropertyVariation::create([
-                                'sr_no' => 1,
-                                'product_id' => $product->id,
-                                'product_variation_id' => $pvId,
-                                'value' => $pvVal,
-                                'company_id' => auth()->user()->company_id,
-                                'project_id' => auth()->user()->project_id,
-                                'user_id' => auth()->user()->id,
-                            ]);
-                        }
-                    }
-                }
-            }
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());
@@ -391,6 +298,7 @@ class ProductPropertyController extends Controller
      */
     public function destroy($id)
     {
+        dd('in delete');
         $data = [];
         DB::beginTransaction();
         try{

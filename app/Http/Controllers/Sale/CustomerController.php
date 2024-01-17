@@ -174,6 +174,7 @@ class CustomerController extends Controller
                 'status' => isset($request->status) ? "1" : "0",
 
                 'company_id' => auth()->user()->company_id,
+                'project_id' => auth()->user()->project_id,
                 'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ]);

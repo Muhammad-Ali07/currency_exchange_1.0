@@ -88,6 +88,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('customer/{str?}', [HelpController::class, 'customer'])->name('customer');
             Route::get('oldCustomerHelp/{str?}', [HelpController::class, 'oldCustomerHelp'])->name('oldCustomerHelp');
             Route::get('property-product/{str?}', [HelpController::class, 'propertyProduct'])->name('propertyProduct');
+            // Route::get('product/{str?}', [HelpController::class, 'product'])->name('product');
+            Route::get('productHelp', [HelpController::class, 'productHelp'])->name('product');
+            Route::get('supplier/{str?}', [HelpController::class, 'supplier'])->name('supplier');
+
+
         });
 
         Route::prefix('accounts')->name('accounts.')->group(function () {
@@ -180,12 +185,13 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::prefix('product')->resource('product', ProductController::class);
                 Route::prefix('customer')->resource('customer', CustomerController::class);
                 Route::prefix('supplier')->resource('supplier', SupplierController::class);
+                Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
 
 
             });
             Route::prefix('invoice')->name('invoice.')->group(function () {
                 // Route::prefix('dealer')->resource('dealer', DealerController::class);
-                Route::prefix('product-property')->resource('product-property', ProductPropertyController::class);
+                // Route::prefix('product-property')->resource('product-property', ProductPropertyController::class);
                 Route::prefix('sale')->resource('sale', SaleInvoiceController::class);
                 Route::prefix('purchase')->resource('purchase', SaleInvoiceController::class);
                 Route::prefix('return')->resource('return', SaleInvoiceController::class);

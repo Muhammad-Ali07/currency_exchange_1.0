@@ -1,4 +1,4 @@
-var help_product_url = '/help/productHelp';
+var help_product_url = '/help/property-product';
 var help_product_id = 'product_name';
 var help_product_surname = 'productHelp';
 
@@ -26,7 +26,7 @@ $(document).on('click','.data_tbody_row',function(e){
 $('#'+help_product_id).on('focusin keyup',function(e){
     $('#inLineHelp').remove();
     var validate = true;
-    var project_id = 1;
+    var project_id = current_project_id;
 
     if(valueEmpty(project_id)){
         ntoastr.error("First Select Any Project");
@@ -43,11 +43,9 @@ $('#'+help_product_id).on('focusin keyup',function(e){
             eg_help_block.append('<div id="inLineHelp"></div>');
             var inLineHelp = eg_help_block.find('#inLineHelp');
             val = val.replace(/\s/g,'%20');
-            // var setval = "?project_id="+project_id
-            // setval += "&search="+val
-            // var url2 = help_product_url +'/'+setval
-            var url2 = help_product_url
-
+            var setval = "?project_id="+project_id
+            setval += "&search="+val
+            var url2 = help_product_url +'/'+setval
             inLineHelp.load(url2);
             var offsetTop = 30;
             var offsetLeft = thix.offset().left - eg_help_block.offset().left;

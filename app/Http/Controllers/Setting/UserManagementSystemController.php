@@ -116,7 +116,11 @@ class UserManagementSystemController extends Controller
                         'name' => 'product',
                         'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
                     ],
-
+                    [
+                        'dname' => 'Product Quantity',
+                        'name' => 'product-quantity',
+                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    ],
                 ]
             ],
             // Transactional Forms

@@ -43,7 +43,7 @@ class ProductController extends Controller
         if ($request->ajax()) {
             $draw = 'all';
 
-            $dataSql = Product::where('product_form_type','property')->where(Utilities::CurrentBC())->orderByName();
+            $dataSql = Product::where('product_form_type','currency')->where(Utilities::CurrentBC())->orderByName();
             // dd('done');
             $allData = $dataSql->get();
 
@@ -118,10 +118,6 @@ class ProductController extends Controller
         $data['code'] = Utilities::documentCode($doc_data);
         $data['product_types'] = ['Currency','Ticket'];
 
-        // dd($data['product_types']);
-        // $data['project'] = Project::where(Utilities::CompanyId())->OrderByName()->get();
-        // $data['buyable'] = BuyableType::OrderByName()->where(Utilities::CompanyProjectId())->get();
-
         return view('sale.product.create', compact('data'));
     }
 
@@ -179,8 +175,9 @@ class ProductController extends Controller
                 'status' => isset($request->status) ? "1" : "0",
                 // 'external_item_id' => $request->external_item_id,
                 // 'default_sale_price' => $request->default_sale_price,
-                'branch_id' => auth()->user()->branch_id,
                 'company_id' => auth()->user()->company_id,
+                'branch_id' => auth()->user()->branch_id,
+                'project_id' => auth()->user()->project_id,
                 'user_id' => auth()->user()->id,
             ];
 
@@ -297,7 +294,12 @@ class ProductController extends Controller
         $data = [];
         DB::beginTransaction();
         try{
-            Product::where('uuid',$id)->where(Utilities::CurrentBC())->delete();
+            if(Product::where('uuid',$id)->where(Utilities::CurrentBC())->exists()){
+                Product::where('uuid',$id)->where(Utilities::CurrentBC())->delete();
+            }else{
+                abort('404');
+            }
+
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage(), 200);

@@ -13,11 +13,15 @@ class Supplier extends Model
 
     protected $fillable = [
         'uuid',
+        'code',
         'name',
         'contact_no',
         'email',
         'status',
+        'form_type',
+        'address',
         'company_id',
+        'branch_id',
         'project_id',
         'user_id',
     ];

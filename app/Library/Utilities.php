@@ -16,6 +16,7 @@ class Utilities
         return [
             'company_id'=>auth()->user()->company_id,
             'project_id'=>auth()->user()->project_id,
+            'branch_id'=>auth()->user()->branch_id,
         ];
     }
     public static function CurrentBC(){

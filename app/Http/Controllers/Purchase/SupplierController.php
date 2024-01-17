@@ -20,7 +20,7 @@ class SupplierController extends Controller
         $name = 'supplier';
         return [
             'title' => 'Supplier',
-            'list_url' => route('purchase.supplier.index'),
+            'list_url' => route('master.supplier.index'),
             'list' => "$name-list",
             'create' => "$name-create",
             'edit' => "$name-edit",
@@ -60,8 +60,8 @@ class SupplierController extends Controller
             $entries = [];
             foreach ($allData as $row) {
                 $entry_status = $this->getStatusTitle()[$row->status];
-                $urlEdit = route('purchase.supplier.edit',$row->uuid);
-                $urlDel = route('purchase.supplier.destroy',$row->uuid);
+                $urlEdit = route('master.supplier.edit',$row->uuid);
+                $urlDel = route('master.supplier.destroy',$row->uuid);
 
                 $actions = '<div class="text-end">';
                 if($delete_per) {
@@ -94,7 +94,7 @@ class SupplierController extends Controller
             return response()->json($result);
         }
 
-        return view('purchase.supplier.list', compact('data'));
+        return view('sale.supplier.list', compact('data'));
     }
 
     /**
@@ -108,7 +108,15 @@ class SupplierController extends Controller
         $data['title'] = self::Constants()['title'];
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['create'];
-        return view('purchase.supplier.create', compact('data'));
+        $doc_data = [
+            'model'             => 'Supplier',
+            'code_field'        => 'code',
+            'code_prefix'       => strtoupper('sp'),
+            'form_type_field'        => 'form_type',
+            'form_type_value'       => 'supplier',
+        ];
+        $data['code'] = Utilities::documentCode($doc_data);
+        return view('sale.supplier.create', compact('data'));
     }
 
     /**
@@ -122,9 +130,10 @@ class SupplierController extends Controller
         $data = [];
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            // 'cnic_no' => 'required',
             'email' => 'nullable|email',
         ]);
-
+        // dd($request->all());
         if ($validator->fails()) {
             $data['validator_errors'] = $validator->errors();
             $validator_errors = $data['validator_errors']->getMessageBag()->toArray();
@@ -134,37 +143,45 @@ class SupplierController extends Controller
             }
             return $this->jsonErrorResponse($data, $err);
         }
-
+        $doc_data = [
+            'model'             => 'Supplier',
+            'code_field'        => 'code',
+            'code_prefix'       => strtoupper('sp'),
+            'form_type_field'        => 'form_type',
+            'form_type_value'       => 'supplier',
+        ];
+        $data['code'] = Utilities::documentCode($doc_data);
+        // dd($request->all());
         DB::beginTransaction();
         try {
 
-            $supplier = Supplier::create([
+            Supplier::create([
                 'uuid' => self::uuid(),
                 'name' => self::strUCWord($request->name),
+                'code' => $data['code'],
                 'contact_no' => $request->contact_no,
                 'email' => $request->email,
                 'status' => isset($request->status) ? "1" : "0",
+                'form_type' => 'supplier',
+                'address' => $request->address,
+
                 'company_id' => auth()->user()->company_id,
                 'project_id' => auth()->user()->project_id,
+                'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ]);
 
-            $r = self::insertAddress($request,$supplier);
+            // COA working
+            // $req = [
+            //     'name' => $request->name,
+            //     'level' => 4,
+            //     'parent_account' => '06-03-0001-0000',
+            // ];
+            // $r = Utilities::createCOA($req);
 
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
-
-            $req = [
-                'name' => $request->name,
-                'level' => 4,
-                'parent_account' => '03-01-0001-0000',
-            ];
-            $r = Utilities::createCOA($req);
-
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
+            // if(isset($r['status']) && $r['status'] == 'error'){
+            //     return $this->jsonErrorResponse($data, $r['message']);
+            // }
 
         }catch (Exception $e) {
             DB::rollback();
@@ -209,13 +226,13 @@ class SupplierController extends Controller
             abort('404');
         }
 
-        $data['view'] = false;
-        if(isset($request->view)){
-            $data['view'] = true;
-            $data['permission'] = self::Constants()['view'];
-            $data['permission_edit'] = self::Constants()['edit'];
-        }
-        return view('purchase.supplier.edit', compact('data'));
+        // $data['view'] = false;
+        // if(isset($request->view)){
+        //     $data['view'] = true;
+        //     $data['permission'] = self::Constants()['view'];
+        //     $data['permission_edit'] = self::Constants()['edit'];
+        // }
+        return view('sale.supplier.edit', compact('data'));
     }
 
     /**
@@ -242,7 +259,7 @@ class SupplierController extends Controller
             }
             return $this->jsonErrorResponse($data, $err);
         }
-
+        // dd($request->all());
         DB::beginTransaction();
         try {
             Supplier::where('uuid',$id)
@@ -251,18 +268,21 @@ class SupplierController extends Controller
                     'contact_no' => $request->contact_no,
                     'email' => $request->email,
                     'status' => isset($request->status) ? "1" : "0",
+                    'address' => $request->address,
+
                     'company_id' => auth()->user()->company_id,
+                    'branch_id' => auth()->user()->branch_id,
                     'project_id' => auth()->user()->project_id,
                     'user_id' => auth()->user()->id,
                 ]);
 
-            $supplier = Supplier::where('uuid',$id)->where(Utilities::CompanyProjectId())->first();
+                Supplier::where('uuid',$id)->where(Utilities::CompanyProjectId())->first();
 
-            $r = self::insertAddress($request,$supplier);
+            // $r = self::insertAddress($request,$supplier);
 
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
+            // if(isset($r['status']) && $r['status'] == 'error'){
+            //     return $this->jsonErrorResponse($data, $r['message']);
+            // }
 
         }catch (Exception $e) {
             DB::rollback();

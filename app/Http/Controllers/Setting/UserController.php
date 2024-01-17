@@ -159,7 +159,9 @@ class UserController extends Controller
                 'user_status' => isset($request->status)?1:0,
                 'password' => Hash::make($request->password),
                 'company_id' => auth()->user()->company_id,
-                'branch_id' => $request->branch_id,
+                'branch_id' => 1,
+                'project_id' => 1,
+
             ]);
             // if(isset($request->projects)){
             //     $projects = $request->projects;
@@ -235,7 +237,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        // dd($request->all());
         $data = [];
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -270,8 +272,9 @@ class UserController extends Controller
             $user = User::where('uuid',$id)->first();
             $user->name = self::strUCWord($request->name);
             $user->user_status = isset($request->status)?1:0;
-            $user->branch_id = $request->branch_id;
             $user->company_id = auth()->user()->company_id;
+            $user->branch_id = 1;
+            $user->project_id = 1;
             $user->save();
 
             // if(isset($request->projects)){
@@ -309,7 +312,7 @@ class UserController extends Controller
         DB::beginTransaction();
         try{
 
-            // User::where('uuid',$id)->delete();
+            User::where('uuid',$id)->delete();
 
         }catch (Exception $e) {
             DB::rollback();

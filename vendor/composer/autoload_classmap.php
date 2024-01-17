@@ -59,6 +59,7 @@ return array(
     'App\\Models\\Permission' => $baseDir . '/app/Models/Permission.php',
     'App\\Models\\PermissionUser' => $baseDir . '/app/Models/PermissionUser.php',
     'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',
+    'App\\Models\\ProductQuantity' => $baseDir . '/app/Models/ProductQuantity.php',
     'App\\Models\\Project' => $baseDir . '/app/Models/Project.php',
     'App\\Models\\Role' => $baseDir . '/app/Models/Role.php',
     'App\\Models\\Sale' => $baseDir . '/app/Models/Sale.php',

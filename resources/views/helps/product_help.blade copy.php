@@ -81,11 +81,12 @@
                 <tr>
                     <th data-field="Product Code" width="25%">Product Code</th>
                     <th data-field="Product Name" width="50%">Product Name</th>
+                    <th data-field="Sale Price" width="25%">Sale Price</th>
                 </tr>
                 </thead>
             </table>
         </div>
-        @if(count($data['product']) == 0)
+        @if(count($data['property']) == 0)
             <div class="data_tbody_row">
                 <table border="1" class="val_table" width="100%">
                     <tbody>
@@ -96,16 +97,17 @@
                 </table>
             </div>
         @endif
-        @foreach($data['product'] as $product)
+        @foreach($data['property'] as $property)
             <div class="data_tbody_row">
                 <table border="1" class="val_table" width="100%">
                     <tbody>
                     <tr class="data-dtl">
-                        <td data-field="product_code" width="25%">{{$product->code}}</td>
-                        <td data-view="show" data-field="product_name" width="50%">{{$product->name}}</td>
+                        <td data-field="product_code" width="25%">{{$property->code}}</td>
+                        <td data-view="show" data-field="product_name" width="50%">{{$property->name}}</td>
+                        <td data-view="show" data-field="sale_price" width="25%">{{$property->default_sale_price}}</td>
                     </tr>
                     <tr class="d-none">
-                        <td data-field="product_id">{{$product->id}}</td>
+                        <td data-field="product_id">{{$property->id}}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class ProductQuantity extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'uuid',
         'code',
         'name',
         'quantity',
-        'product_form_type',
-        'product_sign',
+        'form_type',
+        'product_id',
         'company_id',
         'branch_id',
         'user_id',
@@ -35,23 +34,8 @@ class Product extends Model
         // 'external_item_id',
         // 'buyable_type_id',
     ];
-
-    protected function scopeOrderByName($qry,$dir = 'asc'){
-        return $qry->orderby('name',$dir);
+    public function product(){
+        return $this->belongsTo(Product::class,'product_id','id');
     }
 
-    protected function scopeProductProperty($qry){
-        return $qry->where('product_form_type','property');
-    }
-
-    protected function scopeProductInventory($qry){
-        return $qry->where('product_form_type','inventory');
-    }
-
-    public function property_variation(){
-        return $this->hasMany(PropertyVariation::class,'product_id','id')->orderby('sr_no');
-    }
-    public function buyable_type(){
-        return $this->belongsTo(BuyableType::class,'buyable_type_id','id');
-    }
 }

@@ -1,4 +1,4 @@
-<div id="inLineHelp" data-id="product">
+<div id="inLineHelp" data-id="supplier">
     <div class="inLineHelp inline_help_table">
         <style>
 
@@ -33,6 +33,11 @@
             .data_tbody_row>table {
                 table-layout: fixed;
             }
+           /* for header fixed
+           .inline_help_table>.data_thead_row{
+                position: fixed;
+                width: 484px;
+            }*/
             .inline_help_table>.data_thead_row>table>thead>tr>th,
             .inline_help>.data_thead_row>table>thead>tr>th {
                 background: #5578eb;
@@ -75,37 +80,38 @@
                 cursor: pointer;
             }
         </style>
-        <div class="data_thead_row" id="productHelp">
+        <div class="data_thead_row" id="supplierHelp">
             <table border="1" class="" width="100%">
                 <thead>
                 <tr>
-                    <th data-field="Product Code" width="25%">Product Code</th>
-                    <th data-field="Product Name" width="50%">Product Name</th>
+                    <th data-field="Supplier Name" width="50%">Supplier Name</th>
+                    <th data-field="Supplier Phone" width="50%">Supplier Phone</th>
                 </tr>
                 </thead>
             </table>
         </div>
-        @if(count($data['product']) == 0)
+        @if(count($data['supplier']) == 0)
             <div class="data_tbody_row">
                 <table border="1" class="val_table" width="100%">
                     <tbody>
                     <tr class="data-dtl">
-                        <td data-view="show">Data not found</td>
+                        <td class="create_new" data-view="show" data-field="create_new_supplier">Data not found -  Create New
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         @endif
-        @foreach($data['product'] as $product)
+        @foreach($data['supplier'] as $supplier)
             <div class="data_tbody_row">
                 <table border="1" class="val_table" width="100%">
                     <tbody>
                     <tr class="data-dtl">
-                        <td data-field="product_code" width="25%">{{$product->code}}</td>
-                        <td data-view="show" data-field="product_name" width="50%">{{$product->name}}</td>
+                        <td data-field="supplier_name" width="50%">{{$supplier->name}}</td>
+                        <td data-view="show" data-field="supplier_phone" width="50%">{{$supplier->contact_no}}</td>
                     </tr>
                     <tr class="d-none">
-                        <td data-field="product_id">{{$product->id}}</td>
+                        <td data-field="supplier_id">{{$supplier->id}}</td>
                     </tr>
                     </tbody>
                 </table>
