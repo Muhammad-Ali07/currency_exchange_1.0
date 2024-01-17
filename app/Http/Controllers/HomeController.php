@@ -42,16 +42,16 @@ class HomeController extends Controller
         $data['permission'] = 'home-view';
         $date = Carbon::now()->subDays(7);
 
-        $data['today_sale'] = Sale::where('created_at', '>=', Carbon::today())->where(Utilities::CompanyProjectId())->sum('sale_price');
+        $data['today_sale'] = Sale::where('created_at', '>=', Carbon::today())->sum('sale_price');
         $data['today_sale'] = $data['today_sale']/1000;
 
-        $data['last_week_sale'] = Sale::where('created_at', '>=', $date)->where(Utilities::CompanyProjectId())->sum('sale_price');
+        $data['last_week_sale'] = Sale::where('created_at', '>=', $date)->sum('sale_price');
         $data['last_week_sale'] = $data['last_week_sale']/1000;
 
-        $data['current_week_sale'] = Sale::where(Utilities::CompanyProjectId())->whereBetween('created_at',[Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('sale_price');
+        $data['current_week_sale'] = Sale::whereBetween('created_at',[Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('sale_price');
         $data['current_week_sale'] = $data['current_week_sale']/1000;
 
-        $data['last_month_sale'] = Sale::where(Utilities::CompanyProjectId())->whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->sum('sale_price');
+        $data['last_month_sale'] = Sale::whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->sum('sale_price');
         $data['last_month_sale'] = $data['last_month_sale']/1000;
 
         // $data['items'] = Sale::select(
