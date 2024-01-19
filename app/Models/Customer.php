@@ -13,12 +13,14 @@ class Customer extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'code',
         'cnic_no',
         'contact_no',
         'mobile_no',
         'email',
         'status',
         'company_id',
+        'branch_id',
         'project_id',
         'user_id',
         'father_name',
@@ -31,6 +33,11 @@ class Customer extends Model
         'nominee_relation',
         'nominee_contact_no',
         'nominee_cnic_no',
+        'coa_id',
+        'coa_code',
+        'address',
+        'form_type',
+
     ];
 
     public function addresses(){

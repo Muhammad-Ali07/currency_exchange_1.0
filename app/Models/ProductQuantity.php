@@ -16,6 +16,7 @@ class ProductQuantity extends Model
         'form_type',
         'product_id',
         'company_id',
+        'project_id',
         'branch_id',
         'user_id',
         // 'is_taxable',

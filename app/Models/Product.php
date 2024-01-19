@@ -17,6 +17,7 @@ class Product extends Model
         'product_form_type',
         'product_sign',
         'company_id',
+        'project_id',
         'branch_id',
         'user_id',
         // 'is_taxable',

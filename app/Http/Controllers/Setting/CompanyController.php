@@ -247,7 +247,7 @@ class CompanyController extends Controller
                 $company_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
                 $file->move(public_path('uploads'), $company_filename);
             }
-            dd($request->all());
+            // dd($request->all());
             Company::where('uuid',$id)
                 ->update([
                     'name' => self::strUCWord($request->name),

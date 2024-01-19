@@ -24,6 +24,9 @@ class Supplier extends Model
         'branch_id',
         'project_id',
         'user_id',
+        'coa_id',
+        'coa_code',
+
     ];
 
     public function addresses(){

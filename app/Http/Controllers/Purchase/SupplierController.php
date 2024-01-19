@@ -154,23 +154,6 @@ class SupplierController extends Controller
         // dd($request->all());
         DB::beginTransaction();
         try {
-
-            Supplier::create([
-                'uuid' => self::uuid(),
-                'name' => self::strUCWord($request->name),
-                'code' => $data['code'],
-                'contact_no' => $request->contact_no,
-                'email' => $request->email,
-                'status' => isset($request->status) ? "1" : "0",
-                'form_type' => 'supplier',
-                'address' => $request->address,
-
-                'company_id' => auth()->user()->company_id,
-                'project_id' => auth()->user()->project_id,
-                'branch_id' => auth()->user()->branch_id,
-                'user_id' => auth()->user()->id,
-            ]);
-
             // COA working
             $req = [
                 'name' => $request->name,
@@ -182,6 +165,25 @@ class SupplierController extends Controller
             if(isset($r['status']) && $r['status'] == 'error'){
                 return $this->jsonErrorResponse($data, $r['message']);
             }
+
+            Supplier::create([
+                'uuid' => self::uuid(),
+                'name' => self::strUCWord($request->name),
+                'code' => $data['code'],
+                'contact_no' => $request->contact_no,
+                'email' => $request->email,
+                'status' => isset($request->status) ? "1" : "0",
+                'form_type' => 'supplier',
+                'address' => $request->address,
+                'coa_id' => $r['coa_id'],
+                'coa_code' => $r['coa_code'],
+
+                'company_id' => auth()->user()->company_id,
+                'project_id' => auth()->user()->project_id,
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+            ]);
+
 
         }catch (Exception $e) {
             DB::rollback();

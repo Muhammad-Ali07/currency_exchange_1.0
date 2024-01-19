@@ -14,6 +14,7 @@ use App\Models\SaleSeller;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Voucher;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Validation\Rule;
@@ -191,6 +192,9 @@ class SaleInvoiceController extends Controller
             ];
             $code = Utilities::documentCode($doc_data);
             // dd($request->all());
+            $customer_coa = Customer::where('id',$request->customer_id)->first();
+            $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
+            
             $sale = Sale::create([
                 'uuid' => self::uuid(),
                 'code' => $code,
@@ -206,10 +210,33 @@ class SaleInvoiceController extends Controller
                 'branch_id' => auth()->user()->branch_id,
                 'project_id' => auth()->user()->project_id,
                 'user_id' => auth()->user()->id,
-                // 'property_payment_mode_id' => $request->property_payment_mode_id,
-                // 'is_installment' => isset($request->is_installment)?1:0,
-                // 'is_booked' => isset($request->is_booked)?1:0,
-                // 'is_purchased' => isset($request->is_purchased)?1:0,
+            ]);
+
+            $max = Voucher::withTrashed()->where('type',self::Constants()['type'])->max('voucher_no');
+            $voucher_no = self::documentCode(self::Constants()['type'],$max);
+            $voucher_id = self::uuid();
+            $posted = $request->current_action_id == 'post'?1:0;
+
+            Voucher::create([
+                'voucher_id' => $voucher_id,
+                'uuid' => self::uuid(),
+                'date' => date('Y-m-d', strtotime($request->date)),
+                'type' => self::Constants()['type'],
+                'voucher_no' => $voucher_no,
+                'sr_no' => 1,
+                'chart_account_id' => $account->id,
+                'chart_account_name' => $account->name,
+                'chart_account_code' => $account->code,
+                'cheque_no' => $pd['egt_cheque_no'],
+                'cheque_date' => $pd['egt_cheque_date'],
+                'debit' => Utilities::NumFormat($pd['egt_debit']),
+                'credit' => Utilities::NumFormat($pd['egt_credit']),
+                'description' => $pd['egt_description'],
+                'remarks' => $request->remarks,
+                'company_id' => auth()->user()->company_id,
+                'project_id' => auth()->user()->project_id,
+                'user_id' => auth()->user()->id,
+                'posted' => $posted,
             ]);
         }catch (Exception $e) {
             DB::rollback();

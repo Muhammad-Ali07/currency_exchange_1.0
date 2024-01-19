@@ -141,6 +141,19 @@
                                 </div>
                             </div>
                             <div class="mb-1 row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Amount</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control form-control-sm" id="amount" name="amount" aria-invalid="false">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-1 row">
                                 <label class="col-form-label">Remarks</label>
                                 <div class="col-lg-12">
                                     <div class="row">
@@ -208,6 +221,17 @@
 
             // ['view', ['fullscreen', 'codeview', 'help']]
           ]
+        });
+      </script>
+      <script>
+        $(document).on('keyup','#quantity',function(){
+            var qty = $('#quantity').val();
+            var price = $('#sale_price').val();
+            var amount = 0;
+            console.log(qty);
+            amount = qty * price;
+            console.log(amount);
+            $('#amount').val(amount);
         });
       </script>
     @yield('scriptCustom')
