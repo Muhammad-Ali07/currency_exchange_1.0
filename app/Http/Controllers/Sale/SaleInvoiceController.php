@@ -192,9 +192,9 @@ class SaleInvoiceController extends Controller
             ];
             $code = Utilities::documentCode($doc_data);
             // dd($request->all());
-            $customer_coa = Customer::where('id',$request->customer_id)->first();
-            $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
-            
+            // $customer_coa = Customer::where('id',$request->customer_id)->first();
+            // $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
+
             $sale = Sale::create([
                 'uuid' => self::uuid(),
                 'code' => $code,
@@ -217,27 +217,27 @@ class SaleInvoiceController extends Controller
             $voucher_id = self::uuid();
             $posted = $request->current_action_id == 'post'?1:0;
 
-            Voucher::create([
-                'voucher_id' => $voucher_id,
-                'uuid' => self::uuid(),
-                'date' => date('Y-m-d', strtotime($request->date)),
-                'type' => self::Constants()['type'],
-                'voucher_no' => $voucher_no,
-                'sr_no' => 1,
-                'chart_account_id' => $account->id,
-                'chart_account_name' => $account->name,
-                'chart_account_code' => $account->code,
-                'cheque_no' => $pd['egt_cheque_no'],
-                'cheque_date' => $pd['egt_cheque_date'],
-                'debit' => Utilities::NumFormat($pd['egt_debit']),
-                'credit' => Utilities::NumFormat($pd['egt_credit']),
-                'description' => $pd['egt_description'],
-                'remarks' => $request->remarks,
-                'company_id' => auth()->user()->company_id,
-                'project_id' => auth()->user()->project_id,
-                'user_id' => auth()->user()->id,
-                'posted' => $posted,
-            ]);
+            // Voucher::create([
+            //     'voucher_id' => $voucher_id,
+            //     'uuid' => self::uuid(),
+            //     'date' => date('Y-m-d', strtotime($request->date)),
+            //     'type' => self::Constants()['type'],
+            //     'voucher_no' => $voucher_no,
+            //     'sr_no' => 1,
+            //     'chart_account_id' => $account->id,
+            //     'chart_account_name' => $account->name,
+            //     'chart_account_code' => $account->code,
+            //     'cheque_no' => $pd['egt_cheque_no'],
+            //     'cheque_date' => $pd['egt_cheque_date'],
+            //     'debit' => Utilities::NumFormat($pd['egt_debit']),
+            //     'credit' => Utilities::NumFormat($pd['egt_credit']),
+            //     'description' => $pd['egt_description'],
+            //     'remarks' => $request->remarks,
+            //     'company_id' => auth()->user()->company_id,
+            //     'project_id' => auth()->user()->project_id,
+            //     'user_id' => auth()->user()->id,
+            //     'posted' => $posted,
+            // ]);
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());
