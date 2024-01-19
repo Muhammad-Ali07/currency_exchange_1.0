@@ -15,7 +15,7 @@
                             <h4 class="card-title">{{$data['title']}}</h4>
                         </div>
                         <div class="card-link">
-                            <a href="{{route('accounts.cash-receive.revertList')}}" class="btn btn-danger btn-sm waves-effect waves-float waves-light">Archive List</a>
+                            {{-- <a href="{{route('accounts.cash-receive.revertList')}}" class="btn btn-danger btn-sm waves-effect waves-float waves-light">Archive List</a> --}}
                             @permission($data['permission_create'])
                             <a href="{{route('accounts.cash-receive.create')}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Create</a>
                             @endpermission

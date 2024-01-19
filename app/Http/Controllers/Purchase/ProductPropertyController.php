@@ -51,7 +51,7 @@ class ProductPropertyController extends Controller
         if ($request->ajax()) {
             $draw = 'all';
 
-            $dataSql = ProductQuantity::where('form_type','product_quantity')->where(Utilities::CompanyProjectId());
+            $dataSql = ProductQuantity::where(Utilities::CompanyProjectId());
 
             $allData = $dataSql->get();
 
@@ -173,6 +173,7 @@ class ProductPropertyController extends Controller
             $data['code'] = Utilities::documentCode($doc_data);
             // dd($request->product_id);
             $product = Product::where('id',$request->product_id)->where(Utilities::CompanyProjectId())->first();
+
             // dd($product);
             $p_data = [
                 'uuid' => self::uuid(),
@@ -190,6 +191,10 @@ class ProductPropertyController extends Controller
                 'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ];
+            $product = Product::where('id',$request->product_id)->where(Utilities::CompanyProjectId())->first();
+            $total_qty = $request->product_quantity + $product->stock_in;
+            $product->stock_in = $total_qty;
+            $product->save();
 
             ProductQuantity::create($p_data);
         }catch (Exception $e) {
@@ -280,8 +285,6 @@ class ProductPropertyController extends Controller
                 'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ];
-            ProductQuantity::where('uuid',$id)
-                ->update($p_data);
 
         }catch (Exception $e) {
             DB::rollback();

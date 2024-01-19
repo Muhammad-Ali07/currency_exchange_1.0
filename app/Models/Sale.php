@@ -19,6 +19,7 @@ class Sale extends Model
         'transaction_type',
         'sale_price',
         'quantity',
+        'amount',
         'description',
         'company_id',
         'branch_id',
