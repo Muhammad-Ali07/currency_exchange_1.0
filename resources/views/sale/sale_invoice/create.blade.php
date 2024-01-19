@@ -1,6 +1,7 @@
 @extends('layouts.form')
 @section('title', $data['title'])
 @section('style')
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <style>
         .right .modal-dialog {
             position: fixed;
@@ -26,12 +27,20 @@
         .right.fade.in .modal-dialog {
             right: 0;
         }
+        /* .note-editor .note-toolbar, .note-popover .popover-content{
+            background: #8989911f !important;
+        } */
+
     </style>
 @endsection
 
 @section('content')
     @permission($data['permission'])
-    <form id="sale_invoice_create" class="sale_invoice_create" action="{{route('sale.sale-invoice.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
+    @php
+        $entry_date = date('Y-m-d');
+    @endphp
+
+    <form id="sale_invoice_create" class="sale_invoice_create" action="{{route('transaction.sale.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
         <input type="hidden" id="form_type" value="sale_invoice">
         @csrf
         <div class="row">
@@ -48,193 +57,99 @@
                     </div>
                     <div class="card-body mt-2">
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <b>{{$data['code']}}</b>
-                                    </div>
-                                </div>{{--
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Project <span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select class="select2 form-select" id="project_id" name="project_id">
-                                            <option value="0" selected>Select</option>
-                                            @foreach($data['project'] as $project)
-                                                <option value="{{$project->id}}"> {{$project->name}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>--}}
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Product <span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <div class="input-group eg_help_block">
-                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                            <input id="product_name" type="text" class="product_name form-control form-control-sm text-left">
-                                            <input id="product_id" type="hidden" name="product_id">
+                            <div class="mb-1 row">
+                                <div class="col-sm-3">
+                                    <b>{{$data['code']}}</b>
+                                </div>
+                            </div>
+                            <div class="mb-1 row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Entry Date</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="entry_date" name="entry_date" class="form-control form-control-sm" value="{{date('d-m-Y', strtotime($entry_date))}}" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Customer <span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <div class="input-group eg_help_block">
-                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                            <input id="customer_name" type="text" class="customer_name form-control form-control-sm text-left">
-                                            <input id="customer_id" type="hidden" name="customer_id">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Type <span class="required">*</span></label>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Seller Type <span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select class="select2 form-select" id="seller_type" name="seller_type">
-                                            <option value="0" selected>Select</option>
-                                            <option value="dealer">Dealer</option>
-                                            <option value="staff">Staff</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Seller <span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select class="select2 form-select sellerList" id="seller_id" name="seller_id">
-                                        </select>
+                                        <div class="col-sm-9">
+                                            <div class="input-group eg_help_block">
+                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                <input id="transaction_type" name="transaction_type" type="text" placeholder="Click here..." class="transaction_type form-control form-control-sm text-left">
+                                                {{-- <input id="transaction_type_id" type="hidden" name="transaction_type_id"> --}}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3 pr-0">
-                                        <label class="col-form-label p-0">File Status</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select class="select2 form-select" id="file_status_id" name="file_status_id">
-                                            @foreach($data['file_status'] as $file_status)
-                                                <option value="{{$file_status->id}}" data-slug="{{$file_status->slug}}"> {{$file_status->name}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3 pr-0">
-                                        <label class="col-form-label p-0">Payment Mode</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select class="select2 form-select" id="property_payment_mode_id" name="property_payment_mode_id">
-                                            @foreach($data['property_payment_mode'] as $property_payment_mode)
-                                                <option value="{{$property_payment_mode->id}}" data-slug="{{$property_payment_mode->slug}}"> {{$property_payment_mode->name}} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Sale Price</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" readonly="" class="form-control form-control-sm" id="sale_price" name="sale_price" aria-invalid="false">
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label p-0">Sale Discount</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm FloatValidate" id="sale_discount" name="sale_discount">
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Booking Price</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm FloatValidate" id="booked_price" name="booked_price" aria-invalid="false">
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3 pr-0">
-                                        <label class="col-form-label p-0">Down Payment</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm FloatValidate" id="down_payment" name="down_payment" aria-invalid="false">
-                                    </div>
-                                </div>
-                                <div id="installments_block" style="display: none">
-                                    <div class="mb-1 row">
+                            <div class="mb-1 row">
+                                <div class="col-lg-6">
+                                    <div class="row">
                                         <div class="col-sm-3">
-                                            <label class="col-form-label p-0">On Balloting</label>
+                                            <label class="col-form-label">Product <span class="required">*</span></label>
                                         </div>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control form-control-sm FloatValidate" id="on_balloting" name="on_balloting" aria-invalid="false">
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 row">
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-6 pr-0">
-                                                    <label class="col-form-label p-0">No. Of Bi-Annual</label>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control form-control-sm FloatValidate" id="no_of_bi_annual" name="no_of_bi_annual" aria-invalid="false">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <label class="col-form-label">Installments</label>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control form-control-sm FloatValidate" id="installment_bi_annual" name="installment_bi_annual" aria-invalid="false"> </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 row">
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <label class="col-form-label p-0">No. of Month</label>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control form-control-sm FloatValidate" id="no_of_month" name="no_of_month" aria-invalid="false"> </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <label class="col-form-label">Installments</label>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control form-control-sm FloatValidate" id="installment_amount_monthly" name="installment_amount_monthly" aria-invalid="false"> </div>
+                                            <div class="input-group eg_help_block">
+                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                <input id="product_name" type="text" placeholder="Click here..." class="product_name form-control form-control-sm text-left">
+                                                <input id="product_id" type="hidden" name="product_id">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">On Possession</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm FloatValidate" id="on_possession" name="on_possession" aria-invalid="false">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Customer <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group eg_help_block">
+                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                <input id="customer_name" type="text" placeholder="Click here..." class="customer_name form-control form-control-sm text-left">
+                                                <input id="customer_id" type="hidden" name="customer_id">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label p-0">Currency Note No.</label>
+                            </div>
+                            <div class="mb-1 row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Price</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control form-control-sm" id="sale_price" name="sale_price" aria-invalid="false">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm" id="currency_note_no" name="currency_note_no">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Quantity</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-1 row">
+                                <label class="col-form-label">Remarks</label>
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        {{-- <div class="col-sm-3">
+                                        </div> --}}
+                                        <div class="col-sm-12">
+                                            <textarea name="remarks" class="form-control form-control-sm" id="summernote" ></textarea>
+                                            {{-- <div id="summernote"><p></p></div> --}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -245,7 +160,7 @@
         </div>
     </form>
 
-    <div class="modal fade right" id="createNewCustomer" tabindex="-1" aria-labelledby="exampleModalScrollableTitle" style="display: none;" aria-hidden="true">
+    {{-- <div class="modal fade right" id="createNewCustomer" tabindex="-1" aria-labelledby="exampleModalScrollableTitle" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" style="">
             <div class="modal-content" id="modal_create_customer">
                 <div class="modal-body " style="height:100vh">
@@ -256,14 +171,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     @endpermission
 @endsection
 
 @section('pageJs')
-    <script>
-        var current_project_id = '{{auth()->user()->project_id}}'
-    </script>
     <script src="{{ asset('/pages/sale/sale_invoice/create.js') }}"></script>
     @yield('pageJsScript')
 @endsection
@@ -271,67 +183,32 @@
 @section('script')
     <script src="{{asset('/pages/help/customer_help.js')}}"></script>
     <script src="{{asset('/pages/help/product_help.js')}}"></script>
-    <script>
-        $(document).on('change','#seller_type',function(){
-            var validate = true;
-            var thix = $(this);
-            var val = thix.find('option:selected').val();
-            if(valueEmpty(val)){
-                ntoastr.error("Select Seller Type");
-                validate = false;
-                return false;
-            }
-            if(validate){
-                var formData = {
-                    seller_type : val
-                };
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "POST",
-                    url: '{{ route('sale.sale-invoice.getSellerList') }}',
-                    dataType	: 'json',
-                    data        : formData,
-                    success: function(response,data) {
-                        if(response.status == 'success'){
-                            var seller = response.data['seller'];
-                            var length = seller.length;
-                            var options = "<option value='0' selected>Select</option>";
-                            for(var i=0;i<length;i++){
-                                if(seller[i]['name']){
-                                    options += '<option value="'+seller[i]['id']+'">'+seller[i]['name']+'</option>';
-                                }
-                            }
-                            $('form').find('.sellerList').html(options);
-                        }else{
-                            ntoastr.error(response.message);
-                        }
-                    },
-                    error: function(response,status) {
-                        ntoastr.error('server error..404');
-                    }
-                });
-            }
-        })
+    <script src="{{asset('/pages/help/transaction_type_help.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
-        $(document).on('change','#project_id',function(){
-            $('form').find('#product_name').val("");
-            $('form').find('#product_id').val("");
-        })
-        $(document).on('change','#property_payment_mode_id',function(){
-           var slug = $(this).find('option:selected').attr('data-slug');
-            $('#installments_block').hide();
-            $('#installments_block').find('input').val("");
-           if(slug == 'installment'){
-                $('#installments_block').show()
-           }
-        })
-        var slug = $('#property_payment_mode_id').find('option:selected').attr('data-slug');
-        if(slug == 'installment'){
-            $('#installments_block').show();
-        }
-    </script>
+      <script>
+          var entry_date = $('#entry_date');
+          if (entry_date.length) {
+              entry_date.flatpickr({
+                  dateFormat: 'd-m-Y',
+              });
+          }
+        $('#summernote').summernote({
+          placeholder: 'Write here',
+          tabsize: 2,
+          height: 120,
+          toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            // ['table', ['table']],
+            // ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen']]
 
+            // ['view', ['fullscreen', 'codeview', 'help']]
+          ]
+        });
+      </script>
     @yield('scriptCustom')
 @endsection

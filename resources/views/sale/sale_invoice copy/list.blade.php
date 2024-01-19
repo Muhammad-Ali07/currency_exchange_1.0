@@ -16,19 +16,21 @@
                             </div>
                             <div class="card-link">
                                 @permission($data['permission_create'])
-                                <a href="{{route('master.product-quantity.create')}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Create</a>
+                                <a href="{{route('sale.sale-invoice.create')}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Create</a>
                                 @endpermission
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="card-datatable">
                                 @permission($data['permission_list'])
-                                <table class="datatables-ajax table table-responsive" data-url="{{route('master.product-quantity.index')}}">
+                                <table class="datatables-ajax table table-responsive" data-url="{{route('sale.sale-invoice.index')}}">
                                     <thead>
                                     <tr>
+                                        <th class="cell-fit">Date</th>
                                         <th class="cell-fit">Code</th>
-                                        <th class="cell-fit">Name</th>
-                                        <th class="cell-fit text-center">Quantity</th>
+                                        <th class="cell-fit">Project</th>
+                                        <th class="cell-fit">Customer</th>
+                                        <th class="cell-fit">Payment Mode</th>
                                         <th class="cell-fit"></th>
                                     </tr>
                                     </thead>

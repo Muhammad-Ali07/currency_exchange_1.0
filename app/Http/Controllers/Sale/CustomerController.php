@@ -157,7 +157,7 @@ class CustomerController extends Controller
             'form_type_value'       => 'customer',
         ];
         $data['code'] = Utilities::documentCode($doc_data);
-        dd($data['code']);
+        // dd($data['code']);
         DB::beginTransaction();
         try {
 
@@ -182,7 +182,7 @@ class CustomerController extends Controller
             $req = [
                 'name' => $request->name,
                 'level' => 4,
-                'parent_account' => '06-03-0001-0000',
+                'parent_account' => '04-01-0006-0000',
             ];
             $r = Utilities::createCOA($req);
 
@@ -270,19 +270,12 @@ class CustomerController extends Controller
             Customer::where('uuid',$id)
                 ->update([
                 'name' => self::strUCWord($request->name),
-                'cnic_no' => $request->cnic_no,
+                'father_name' => $request->father_name,
                 'contact_no' => $request->contact_no,
                 'mobile_no' => $request->mobile_no,
+                'cnic_no' => $request->cnic_no,
                 'email' => $request->email,
-                'father_name' => $request->father_name,
-                'registration_no' => $request->registration_no,
-                'membership_no' => $request->cnic_no,
-                'nominee_no' => $request->nominee_no,
-                'nominee_name' => $request->nominee_name,
-                'nominee_father_name' => $request->nominee_father_name,
-                'nominee_relation' => $request->nominee_relation,
-                'nominee_contact_no' => $request->nominee_contact_no,
-                'nominee_cnic_no' => $request->nominee_cnic_no,
+                'address' => $request->address,
                 'status' => isset($request->status) ? "1" : "0",
                 'company_id' => auth()->user()->company_id,
                 'project_id' => auth()->user()->project_id,

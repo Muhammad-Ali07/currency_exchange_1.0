@@ -21,9 +21,9 @@ $(function () {
                 name: {
                     required: true,
                 },
-                country_id: {
-                    required: true,
-                },
+                // country_id: {
+                //     required: true,
+                // },
             },
             submitHandler: function (form) {
                 pageLoginForm.find(":submit").prop('disabled', true);

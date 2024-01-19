@@ -90,6 +90,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('property-product/{str?}', [HelpController::class, 'propertyProduct'])->name('propertyProduct');
             // Route::get('product/{str?}', [HelpController::class, 'product'])->name('product');
             Route::get('productHelp', [HelpController::class, 'productHelp'])->name('product');
+            Route::get('transactionTypeHelp', [HelpController::class, 'transactionTypeHelp'])->name('transactionType');
+
             Route::get('supplier/{str?}', [HelpController::class, 'supplier'])->name('supplier');
 
 
@@ -186,15 +188,22 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::prefix('customer')->resource('customer', CustomerController::class);
                 Route::prefix('supplier')->resource('supplier', SupplierController::class);
                 Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
-
-
             });
+            Route::prefix('transaction')->name('transaction.')->group(function () {
+                Route::prefix('sale')->resource('sale', SaleInvoiceController::class);
+
+                // Route::prefix('product')->resource('sale', ProductController::class);
+                // Route::prefix('customer')->resource('customer', CustomerController::class);
+                // Route::prefix('supplier')->resource('supplier', SupplierController::class);
+                // Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
+            });
+
             Route::prefix('invoice')->name('invoice.')->group(function () {
                 // Route::prefix('dealer')->resource('dealer', DealerController::class);
                 // Route::prefix('product-property')->resource('product-property', ProductPropertyController::class);
-                Route::prefix('sale')->resource('sale', SaleInvoiceController::class);
-                Route::prefix('purchase')->resource('purchase', SaleInvoiceController::class);
-                Route::prefix('return')->resource('return', SaleInvoiceController::class);
+                // Route::prefix('sale')->resource('sale', SaleInvoiceController::class);
+                // Route::prefix('purchase')->resource('purchase', SaleInvoiceController::class);
+                // Route::prefix('return')->resource('return', SaleInvoiceController::class);
 
             // Route::prefix('booking-transfer')->resource('booking-transfer', BookingTransferController::class);
             // Route::prefix('booking-transfer')->name('booking-transfer.')->controller(BookingTransferController::class)->group(function(){
@@ -203,12 +212,12 @@ Route::group(['middleware' => 'auth'], function () {
             //     Route::get('print/{id}', 'printView')->name('print');
             // });
         });
-        Route::prefix('sale')->name('sale.')->group(function () {
-            Route::prefix('sale-invoice')->name('sale-invoice.')->controller(SaleInvoiceController::class)->group(function(){
-                Route::post('get-seller-list', 'getSellerList')->name('getSellerList');
-                Route::post('get-product-detail', 'getProductDetail')->name('getProductDetail');
-                Route::get('print/{id}', 'printView')->name('print');
-            });
-        });
+        // Route::prefix('sale')->name('sale.')->group(function () {
+        //     Route::prefix('sale-invoice')->name('sale-invoice.')->controller(SaleInvoiceController::class)->group(function(){
+        //         Route::post('get-seller-list', 'getSellerList')->name('getSellerList');
+        //         Route::post('get-product-detail', 'getProductDetail')->name('getProductDetail');
+        //         Route::get('print/{id}', 'printView')->name('print');
+        //     });
+        // });
     // });
 });

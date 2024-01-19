@@ -14,8 +14,6 @@
     <link rel="apple-touch-icon" href="{{asset('assets/images/ico/apple-icon-120.png')}}">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/ico/favicon.ico')}}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
-
-    <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/vendors/css/vendors.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/vendors/css/forms/select/select2.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/vendors/css/pickers/pickadate/pickadate.css')}}">
@@ -43,17 +41,19 @@
 
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
+    {{-- <link href="{{ asset('assets/summernote-0.8.18-dist/summernote.css') }}" rel="stylesheet"> --}}
     <!-- END: Custom CSS-->
     @if(isset($data['view']) && $data['view'])
-        <style>
-            input[type='text'],.select2 {
-                pointer-events:none !important;
-                color:#000 !important;
-                background:#F5F5F5 !important;
-            }
-            .select2-selection{
-                background:#F5F5F5 !important;
-            }
+    <style>
+        input[type='text'],.select2 {
+            pointer-events:none !important;
+            color:#000 !important;
+            background:#F5F5F5 !important;
+        }
+        .select2-selection{
+            background:#F5F5F5 !important;
+        }
+
         </style>
     @endif
     @yield('style')
@@ -77,7 +77,9 @@
 <!-- END: Content-->
 
 <script>
-    var routeGetProductDetail = '{{ route('sale.sale-invoice.getProductDetail') }}';
+    // route('sale.sale-invoice.getProductDetail')
+    var routeGetProductDetail = '';
+
 </script>
 <!-- BEGIN: Vendor JS-->
 <script src="{{asset('assets/vendors/js/vendors.min.js')}}"></script>
@@ -112,7 +114,11 @@
 <!-- END: Page JS-->
 
 @yield('script')
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.summernote').summernote();
+    });
+</script>
 <script>
     $(window).on('load', function() {
         if (feather) {
@@ -221,52 +227,53 @@
     //         });
     //     }
     // });
-    $(document).on('change','.parentCategoryList',function(){
-        var validate = true;
-        var thix = $(this);
-        var val = thix.find('option:selected').val();
-        if(valueEmpty(val)){
-            ntoastr.error("Select country");
-            validate = false;
-            return false;
-        }
-        if(validate){
-            var formData = {
-                parent_id : val
-            };
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: '{{ route('purchase.category.getChildByParentCategory') }}',
-                dataType	: 'json',
-                data        : formData,
-                success: function(response,data) {
-                    if(response.status == 'success'){
-                        var child = response.data['child'];
-                        var length = child.length;
-                        var options = "<option value='0' selected>Select</option>";
-                        for(var i=0;i<length;i++){
-                            if(child[i]['name']){
-                                options += '<option value="'+child[i]['id']+'">'+child[i]['name']+'</option>';
-                            }
-                        }
-                        $('form').find('.childCategoryList').html(options);
-                    }else{
-                        ntoastr.error(response.message);
-                    }
-                },
-                error: function(response,status) {
-                    ntoastr.error('server error..404');
-                }
-            });
-        }
-    });
+    // $(document).on('change','.parentCategoryList',function(){
+    //     var validate = true;
+    //     var thix = $(this);
+    //     var val = thix.find('option:selected').val();
+    //     if(valueEmpty(val)){
+    //         ntoastr.error("Select country");
+    //         validate = false;
+    //         return false;
+    //     }
+    //     if(validate){
+    //         var formData = {
+    //             parent_id : val
+    //         };
+    //         $.ajax({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             },
+    //             type: "POST",
+    //             url: '{{ route('purchase.category.getChildByParentCategory') }}',
+    //             dataType	: 'json',
+    //             data        : formData,
+    //             success: function(response,data) {
+    //                 if(response.status == 'success'){
+    //                     var child = response.data['child'];
+    //                     var length = child.length;
+    //                     var options = "<option value='0' selected>Select</option>";
+    //                     for(var i=0;i<length;i++){
+    //                         if(child[i]['name']){
+    //                             options += '<option value="'+child[i]['id']+'">'+child[i]['name']+'</option>';
+    //                         }
+    //                     }
+    //                     $('form').find('.childCategoryList').html(options);
+    //                 }else{
+    //                     ntoastr.error(response.message);
+    //                 }
+    //             },
+    //             error: function(response,status) {
+    //                 ntoastr.error('server error..404');
+    //             }
+    //         });
+    //     }
+    // });
 </script>
 @include('layouts.commonJSFunc')
 
 <script src="{{asset('/pages/common/validateInputFields.js')}}"></script>
+{{-- <script src="{{ asset('assets/summernote-0.8.18-dist/summernote.js') }}"></script> --}}
 </body>
 <!-- END: Body-->
 

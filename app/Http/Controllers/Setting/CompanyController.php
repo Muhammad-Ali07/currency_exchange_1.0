@@ -44,12 +44,14 @@ class CompanyController extends Controller
         if ($request->ajax()) {
             $draw = 'all';
 
-            $dataSql = Company::where('id','<>',0)->orderByName();
+            $allData = Company::first();
+            // $dataSql = Company::where('id','<>',0)->orderByName();
 
-            $allData = $dataSql->get();
+            // $allData = $dataSql->get();
 
-            $recordsTotal = count($allData);
-            $recordsFiltered = count($allData);
+            // $recordsTotal = count($allData);
+            // $recordsFiltered = count($allData);
+            // dd($recordsFiltered);
             $delete_per = false;
             if(auth()->user()->isAbleTo(self::Constants()['delete'])){
                 $delete_per = true;
@@ -60,9 +62,9 @@ class CompanyController extends Controller
             }
 
             $entries = [];
-            foreach ($allData as $row) {
-                $urlEdit = route('setting.company.edit',$row->uuid);
-                $urlDel = route('setting.company.destroy',$row->uuid);
+            // foreach ($allData as $allData) {
+                $urlEdit = route('setting.company.edit',$allData->uuid);
+                $urlDel = route('setting.company.destroy',$allData->uuid);
 
                 $actions = '<div class="text-end">';
                 if($delete_per) {
@@ -79,24 +81,24 @@ class CompanyController extends Controller
                 $actions .= '</div>'; //end main div
 
                 $entries[] = [
-                    $row->name,
-                    $row->contact_no,
-                    // isset($row->addresses->country->name)?$row->addresses->country->name:"",
-                    // $row->address,
-                    $row->company_image,
+                    $allData->name,
+                    $allData->contact_no,
+                    // isset($allData->addresses->country->name)?$allData->addresses->country->name:"",
+                    // $allData->address,
+                    $allData->company_image,
                     $actions,
                 ];
-            }
+            // }
             $form = 'company';
             $result = [
                 'draw' => $draw,
                 'form' => $form,
-                'recordsTotal' => $recordsTotal,
-                'recordsFiltered' => $recordsFiltered,
+                // 'recordsTotal' => $recordsTotal,
+                // 'recordsFiltered' => $recordsFiltered,
                 'data' => $entries,
             ];
-            $result_count = $recordsTotal;
-            // dd($result_count);
+            // $result_count = $recordsTotal;
+            // dd($result);
             return response()->json($result);
         }
 
@@ -147,7 +149,7 @@ class CompanyController extends Controller
 
         DB::beginTransaction();
         try {
-            dump($request->all());
+            // dump($request->all());
             $company_filename = '';
             // $om_filename = '';
             if ($request->has('company_image')) {
@@ -223,7 +225,7 @@ class CompanyController extends Controller
         $data = [];
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'country_id' => 'required'
+            // 'country_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -238,22 +240,21 @@ class CompanyController extends Controller
 
         DB::beginTransaction();
         try {
-
+            $company_filename = '';
+            // $om_filename = '';
+            if ($request->has('company_image')) {
+                $file = $request->file('company_image');
+                $company_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $company_filename);
+            }
+            dd($request->all());
             Company::where('uuid',$id)
                 ->update([
                     'name' => self::strUCWord($request->name),
                     'contact_no' => $request->contact_no,
                     'address' => $request->address,
-                    'country_id' => $request->country_id,
-                ]);
-            $company = Company::where('uuid',$id)->first();
-
-            $r = self::insertAddress($request,$company);
-
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
-
+                    'company_image' => $company_filename,
+                    ]);
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());

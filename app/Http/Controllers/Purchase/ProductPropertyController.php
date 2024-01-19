@@ -89,6 +89,9 @@ class ProductPropertyController extends Controller
                 $entries[] = [
                     $row->code,
                     $row->name,
+                    $row->transaction_type,
+                    $row->quantity,
+                    $row->sale_price,
                     // '<div class="text-center"><span class="badge rounded-pill ' . $entry_status['class'] . '">' . $entry_status['title'] . '</span></div>',
                     $actions,
                 ];

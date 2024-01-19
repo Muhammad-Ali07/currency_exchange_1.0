@@ -172,16 +172,16 @@ class SupplierController extends Controller
             ]);
 
             // COA working
-            // $req = [
-            //     'name' => $request->name,
-            //     'level' => 4,
-            //     'parent_account' => '06-03-0001-0000',
-            // ];
-            // $r = Utilities::createCOA($req);
+            $req = [
+                'name' => $request->name,
+                'level' => 4,
+                'parent_account' => '05-02-0017-0000',
+            ];
+            $r = Utilities::createCOA($req);
 
-            // if(isset($r['status']) && $r['status'] == 'error'){
-            //     return $this->jsonErrorResponse($data, $r['message']);
-            // }
+            if(isset($r['status']) && $r['status'] == 'error'){
+                return $this->jsonErrorResponse($data, $r['message']);
+            }
 
         }catch (Exception $e) {
             DB::rollback();
@@ -268,6 +268,7 @@ class SupplierController extends Controller
                     'contact_no' => $request->contact_no,
                     'email' => $request->email,
                     'status' => isset($request->status) ? "1" : "0",
+                    'form_type' => 'supplier',
                     'address' => $request->address,
 
                     'company_id' => auth()->user()->company_id,
@@ -275,14 +276,6 @@ class SupplierController extends Controller
                     'project_id' => auth()->user()->project_id,
                     'user_id' => auth()->user()->id,
                 ]);
-
-                Supplier::where('uuid',$id)->where(Utilities::CompanyProjectId())->first();
-
-            // $r = self::insertAddress($request,$supplier);
-
-            // if(isset($r['status']) && $r['status'] == 'error'){
-            //     return $this->jsonErrorResponse($data, $r['message']);
-            // }
 
         }catch (Exception $e) {
             DB::rollback();

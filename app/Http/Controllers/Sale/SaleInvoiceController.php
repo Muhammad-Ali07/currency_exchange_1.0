@@ -23,10 +23,13 @@ class SaleInvoiceController extends Controller
 {
     private static function Constants()
     {
-        $name = 'sale-invoice';
+        // $name = 'sale-invoice';
+        $name = 'sale';
+
         return [
-            'title' => 'Booking',
-            'list_url' => route('sale.sale-invoice.index'),
+            'title' => 'Retail Transaction',
+            // 'list_url' => route('sale.sale-invoice.index'),
+            'list_url' => route('transaction.sale.index'),
             'list' => "$name-list",
             'create' => "$name-create",
             'edit' => "$name-edit",
@@ -42,6 +45,7 @@ class SaleInvoiceController extends Controller
      */
     public function index(Request $request)
     {
+        // dd('in index');
         $data = [];
         $data['title'] = self::Constants()['title'];
 
@@ -50,11 +54,12 @@ class SaleInvoiceController extends Controller
 
         if ($request->ajax()) {
             $draw = 'all';
+            // dd('in if');
 
-            $dataSql = Sale::with('customer','project','property_payment_mode')->where(Utilities::CompanyProjectId())->orderby('created_at','desc');
+            $dataSql = Sale::with('customer','product')->where(Utilities::CompanyProjectId())->orderby('created_at','desc');
 
             $allData = $dataSql->get();
-
+            // dd($allData);
             $recordsTotal = count($allData);
             $recordsFiltered = count($allData);
 
@@ -73,9 +78,13 @@ class SaleInvoiceController extends Controller
 
             $entries = [];
             foreach ($allData as $row) {
-                $urlEdit = route('sale.sale-invoice.edit',$row->uuid);
-                $urlDel = route('sale.sale-invoice.destroy',$row->uuid);
-                $urlPrint = route('sale.sale-invoice.print',$row->uuid);
+                $urlEdit = route('transaction.sale.edit',$row->uuid);
+                $urlDel = route('transaction.sale.destroy',$row->uuid);
+                // $urlPrint = route('transaction.sale.print',$row->uuid);
+
+                // $urlEdit = route('sale.sale-invoice.edit',$row->uuid);
+                // $urlDel = route('sale.sale-invoice.destroy',$row->uuid);
+                // $urlPrint = route('sale.sale-invoice.print',$row->uuid);
 
                 $actions = '<div class="text-end">';
                 if($delete_per || $print_per) {
@@ -83,7 +92,7 @@ class SaleInvoiceController extends Controller
                     $actions .= '<a class="pe-1 dropdown-toggle hide-arrow text-primary" data-bs-toggle="dropdown"><i data-feather="more-vertical"></i></a>';
                     $actions .= '<div class="dropdown-menu dropdown-menu-end">';
                     if($print_per) {
-                        $actions .= '<a href="' . $urlPrint . '" target="_blank" class="dropdown-item"><i data-feather="printer" class="me-50"></i>Print</a>';
+                        // $actions .= '<a href="' . $urlPrint . '" target="_blank" class="dropdown-item"><i data-feather="printer" class="me-50"></i>Print</a>';
                     }
                     if($delete_per) {
                         $actions .= '<a href="javascript:;" data-url="'.$urlDel.'" class="dropdown-item delete-record"><i data-feather="trash-2" class="me-50"></i>Delete</a>';
@@ -99,9 +108,12 @@ class SaleInvoiceController extends Controller
                 $entries[] = [
                     date('d-m-Y',strtotime($row->created_at)),
                     $row->code,
-                    $row->project->name,
+                    '<div class="text-center">' . ucfirst($row->transaction_type) . '</div>',
+                    $row->product->name,
                     $row->customer->name,
-                    isset($row->property_payment_mode->name)?$row->property_payment_mode->name:"",
+                    $row->sale_price,
+                    $row->quantity,
+                    // isset($row->property_payment_mode->name)?$row->property_payment_mode->name:"",
                     $actions,
                 ];
             }
@@ -111,6 +123,7 @@ class SaleInvoiceController extends Controller
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $entries,
             ];
+            // dd($result);
             return response()->json($result);
         }
 
@@ -134,11 +147,6 @@ class SaleInvoiceController extends Controller
             'code_prefix'       => strtoupper('si'),
         ];
         $data['code'] = Utilities::documentCode($doc_data);
-        $data['customer'] = Customer::get();
-        $data['file_status'] = BookingFileStatus::where('status',1)->get();
-   //     $data['project'] = Project::get();
-        $data['property'] = Product::ProductProperty()->where(Utilities::CompanyProjectId())->get();
-        $data['property_payment_mode'] = PropertyPaymentMode::where('status',1)->get();
         return view('sale.sale_invoice.create', compact('data'));
     }
 
@@ -150,24 +158,18 @@ class SaleInvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $data = [];
         $validator = Validator::make($request->all(), [
-           // 'project_id' => ['required',Rule::notIn([0,'0'])],
             'product_id' => ['required',Rule::notIn([0,'0'])],
             'customer_id' => ['required',Rule::notIn([0,'0'])],
-            'seller_type' => ['required',Rule::in(['dealer','staff'])],
-            'seller_id' => ['required',Rule::notIn([0,'0'])],
+            'sale_price' => ['required'],
+            'quantity' => ['required'],
         ],[
-//            'project_id.required' => 'Project is required',
-//            'project_id.not_in' => 'Project is required',
             'product_id.required' => 'Product is required',
-            'product_id.not_in' => 'Product is required',
             'customer_id.required' => 'Customer is required',
-            'customer_id.not_in' => 'Customer is required',
-            'seller_type.required' => 'Seller type is required',
-            'seller_type.in' => 'Seller type is required',
-            'seller_id.required' => 'Seller is required',
-            'seller_id.not_in' => 'Seller is required',
+            'sale_price.required' => 'Price is required',
+            'quantity.required' => 'Quantity is required',
         ]);
 
         if ($validator->fails()) {
@@ -188,45 +190,27 @@ class SaleInvoiceController extends Controller
                 'code_prefix'       => strtoupper('si'),
             ];
             $code = Utilities::documentCode($doc_data);
-            if($request->seller_type == 'staff'){
-                $modal = Staff::where('id',$request->seller_id)->first();
-            }
-            if($request->seller_type == 'dealer'){
-                $modal = Dealer::where('id',$request->seller_id)->first();
-            }
+            // dd($request->all());
             $sale = Sale::create([
                 'uuid' => self::uuid(),
                 'code' => $code,
+                'entry_date' => date('Y-m-d', strtotime($request->entry_date)),
                 'customer_id' => $request->customer_id,
-                'sale_by_staff' => ($request->seller_type == 'staff')?1:0,
-                'project_id' => auth()->user()->project_id,
                 'product_id' => $request->product_id,
-                'property_payment_mode_id' => $request->property_payment_mode_id,
-                'is_installment' => isset($request->is_installment)?1:0,
-                'is_booked' => isset($request->is_booked)?1:0,
-                'is_purchased' => isset($request->is_purchased)?1:0,
+                'transaction_type' => $request->transaction_type,
                 'sale_price' => $request->sale_price,
-                'currency_note_no' => empty($request->currency_note_no)?0:$request->currency_note_no,
-                'booked_price' => $request->booked_price,
-                'down_payment' => $request->down_payment,
-                'on_balloting' => $request->on_balloting,
-                'no_of_bi_annual' => $request->no_of_bi_annual,
-                'installment_bi_annual' => $request->installment_bi_annual,
-                'no_of_month' => $request->no_of_month,
-                'installment_amount_monthly' => $request->installment_amount_monthly,
-                'on_possession' => $request->on_possession,
-                'file_status_id' => $request->file_status_id,
-                'sale_discount' => $request->sale_discount,
-                'seller_commission_perc' => isset($modal->commission) ? $modal->commission : 0,
+                'quantity' => $request->quantity,
+                'description' => $request->remarks,
+
                 'company_id' => auth()->user()->company_id,
+                'branch_id' => auth()->user()->branch_id,
+                'project_id' => auth()->user()->project_id,
                 'user_id' => auth()->user()->id,
+                // 'property_payment_mode_id' => $request->property_payment_mode_id,
+                // 'is_installment' => isset($request->is_installment)?1:0,
+                // 'is_booked' => isset($request->is_booked)?1:0,
+                // 'is_purchased' => isset($request->is_purchased)?1:0,
             ]);
-
-            $saleSeller = new SaleSeller();
-            $saleSeller->sale_id = $sale->id;
-
-            $modal->sale_seller()->save($saleSeller);
-
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());
@@ -261,22 +245,19 @@ class SaleInvoiceController extends Controller
         $data['title'] = self::Constants()['title'];
         $data['list_url'] = self::Constants()['list_url'];
         $data['permission'] = self::Constants()['edit'];
-    //    $data['project'] = Project::get();
-        $data['property_payment_mode'] = PropertyPaymentMode::where('status',1)->get();
-        $data['file_status'] = BookingFileStatus::where('status',1)->get();
+
         if(Sale::where('uuid',$id)->exists()){
-
-            $data['current'] = Sale::where('uuid',$id)->where(Utilities::CompanyProjectId())->with('product','customer','dealer','staff')->first();
-
+            $data['current'] = Sale::where('uuid',$id)->where(Utilities::CompanyProjectId())->with('product','customer')->first();
         }else{
             abort('404');
         }
-        $data['view'] = false;
-        if(isset($request->view)){
-            $data['view'] = true;
-            $data['permission'] = self::Constants()['view'];
-            $data['permission_edit'] = self::Constants()['edit'];
-        }
+        // dd($data['current']);
+        // $data['view'] = false;
+        // if(isset($request->view)){
+        //     $data['view'] = true;
+        //     $data['permission'] = self::Constants()['view'];
+        //     $data['permission_edit'] = self::Constants()['edit'];
+        // }
 
         return view('sale.sale_invoice.edit', compact('data'));
     }

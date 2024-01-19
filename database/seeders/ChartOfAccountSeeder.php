@@ -21,54 +21,98 @@ class ChartOfAccountSeeder extends Seeder
     public function run()
     {
         $charts = [
-            [ 'code' => '01-00-0000-0000', 'name' => 'CAPITAL & RESERVES', 'level' => '1', 'parent_code' => 'NULL' ],
-            // [ 'code' => '01-01-0000-0000', 'name' => 'CAPITAL GROUP A/C', 'level' => '2', 'parent_code' => '01-00-0000-0000' ],
-            // [ 'code' => '01-01-0001-0000', 'name' => 'ABDULLAH GROUP', 'level' => '3', 'parent_code' => '01-01-0000-0000' ],
-            // [ 'code' => '01-01-0002-0000', 'name' => 'RE PURCHASE SHARE', 'level' => '3', 'parent_code' => '01-01-0000-0000' ],
-            [ 'code' => '01-02-0000-0000', 'name' => 'LOANS', 'level' => '2', 'parent_code' => '01-00-0000-0000' ],
-            [ 'code' => '01-02-0001-0000', 'name' => 'LOANS', 'level' => '3', 'parent_code' => '01-02-0000-0000' ],
-            [ 'code' => '01-03-0000-0000', 'name' => 'CASH CAPITAL', 'level' => '2', 'parent_code' => '01-00-0000-0000' ],
-            [ 'code' => '01-03-0001-0000', 'name' => 'CASH CAPITAL', 'level' => '3', 'parent_code' => '01-03-0000-0000' ],
+            //              ::::::::::ASSET SECTION STARTS::::::::::
+            [ 'code' => '01-00-0000-0000', 'name' => 'ASSETS', 'level' => '1', 'parent_code' => 'NULL' ],
 
-            [ 'code' => '02-00-0000-0000', 'name' => 'LONG TERMS LIABILITIES', 'level' => '1', 'parent_code' => 'NULL' ],
+            [ 'code' => '01-01-0000-0000', 'name' => 'FIXED ASSET', 'level' => '2', 'parent_code' => '01-00-0000-0000' ],
+            [ 'code' => '01-02-0000-0000', 'name' => 'CURRENT ASSET', 'level' => '2', 'parent_code' => '01-00-0000-0000' ],
 
-            [ 'code' => '03-00-0000-0000', 'name' => 'CURRENT LIABILITIES', 'level' => '1', 'parent_code' => 'NULL' ],
-            [ 'code' => '03-01-0000-0000', 'name' => 'SUPPLIERS', 'level' => '2', 'parent_code' => '03-00-0000-0000' ],
-            [ 'code' => '03-01-0001-0000', 'name' => 'SUPPLIERS', 'level' => '3', 'parent_code' => '03-01-0000-0000' ],
-            [ 'code' => '03-02-0000-0000', 'name' => 'OTHER PAYABLE', 'level' => '2', 'parent_code' => '03-00-0000-0000' ],
-            [ 'code' => '03-02-0001-0000', 'name' => 'BILLS PAYABLE', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            [ 'code' => '03-02-0002-0000', 'name' => 'ACCOUNTS PAYABLE', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            [ 'code' => '03-02-0003-0000', 'name' => 'PROVISION FOR STAFF BENEFITS', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            [ 'code' => '03-02-0004-0000', 'name' => 'CAPITAL RESERVE', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            [ 'code' => '03-02-0005-0000', 'name' => 'PROVISION FOR TAXATION', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            [ 'code' => '03-02-0006-0000', 'name' => 'RETAINED EARNINGS', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            [ 'code' => '03-02-0007-0000', 'name' => 'PAYABLE TAX', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
-            // [ 'code' => '03-03-0000-0000', 'name' => 'DEALER', 'level' => '2', 'parent_code' => '03-00-0000-0000' ],
-            // [ 'code' => '03-03-0001-0000', 'name' => 'DEALER', 'level' => '3', 'parent_code' => '03-03-0000-0000' ],
-            [ 'code' => '03-04-0000-0000', 'name' => 'STAFF', 'level' => '2', 'parent_code' => '03-00-0000-0000' ],
-            [ 'code' => '03-04-0001-0000', 'name' => 'STAFF', 'level' => '3', 'parent_code' => '03-04-0000-0000' ],
+            [ 'code' => '01-01-0001-0000', 'name' => 'OFFICE EQUIPMENT', 'level' => '3', 'parent_code' => '01-01-0000-0000' ],
+            [ 'code' => '01-01-0002-0000', 'name' => 'PROPERTY PLANT & EQUIPMENT', 'level' => '3', 'parent_code' => '01-01-0000-0000' ],
 
-            [ 'code' => '04-00-0000-0000', 'name' => 'ASSETS', 'level' => '1', 'parent_code' => 'NULL' ],
-            [ 'code' => '04-01-0000-0000', 'name' => 'FIXED ASSETS', 'level' => '2', 'parent_code' => '04-00-0000-0000' ],
-            [ 'code' => '04-01-0001-0000', 'name' => 'BUILDING A/C', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
-            [ 'code' => '04-01-0002-0000', 'name' => 'VEHICLE A/C', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
-            [ 'code' => '04-01-0003-0000', 'name' => 'COLD STORAGE A/C', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
-            [ 'code' => '04-01-0004-0000', 'name' => 'OFFICE EQUIPMENT A/C', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
-            [ 'code' => '04-01-0005-0000', 'name' => 'FURNITURE & FITTINGS A/C', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
-            [ 'code' => '04-01-0006-0000', 'name' => 'LAND', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+            [ 'code' => '01-02-0001-0000', 'name' => 'CASH & CASH EQUIVALENT', 'level' => '3', 'parent_code' => '01-02-0000-0000' ],
+            [ 'code' => '01-02-0002-0000', 'name' => 'ACCOUNTS RECEIVABLE', 'level' => '3', 'parent_code' => '01-02-0000-0000' ],
+            [ 'code' => '01-02-0003-0000', 'name' => 'PREPAID EXPENSES', 'level' => '3', 'parent_code' => '01-02-0000-0000' ],
+            [ 'code' => '01-02-0004-0000', 'name' => 'ADVANCE PAYMENTS', 'level' => '3', 'parent_code' => '01-02-0000-0000' ],
+            //              ::::::::::ASSET SECTION EDNDS::::::::::
 
-            [ 'code' => '05-00-0000-0000', 'name' => 'CURRENT ASSETS', 'level' => '1', 'parent_code' => 'NULL' ],
-            // [ 'code' => '05-01-0000-0000', 'name' => 'STOCK', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
-            // [ 'code' => '05-01-0001-0000', 'name' => 'STOCK A/C', 'level' => '3', 'parent_code' => '05-01-0000-0000' ],
-            // [ 'code' => '05-03-0000-0000', 'name' => 'TRADE RECEIVABLES', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
-            // [ 'code' => '05-03-0001-0000', 'name' => 'PALM VILAS CUSTOMERS', 'level' => '3', 'parent_code' => '05-03-0000-0000' ],
-            // [ 'code' => '05-03-0002-0000', 'name' => 'GAWADAR CUSTOMERS', 'level' => '3', 'parent_code' => '05-03-0000-0000' ],
-            // [ 'code' => '05-03-0003-0000', 'name' => 'RENTAL PARTIES', 'level' => '3', 'parent_code' => '05-03-0000-0000' ],
-            // [ 'code' => '05-05-0000-0000', 'name' => 'CASH AND BANK GROUP A/C', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
-            // [ 'code' => '05-05-0001-0000', 'name' => 'CASH GROUP A/C', 'level' => '3', 'parent_code' => '05-05-0000-0000' ],
-            // [ 'code' => '05-05-0002-0000', 'name' => 'BANK GROUP A/C', 'level' => '3', 'parent_code' => '05-05-0000-0000' ],
-            // [ 'code' => '05-07-0000-0000', 'name' => 'RECEIVABLES TAXES', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
-            // [ 'code' => '05-07-0001-0000', 'name' => 'RECEIVABLES TAXES', 'level' => '3', 'parent_code' => '05-07-0000-0000' ],
+            //              ::::::::::LIABILITIES SECTION STARTS::::::::::
+            [ 'code' => '02-00-0000-0000', 'name' => 'LIABILITIES', 'level' => '1', 'parent_code' => 'NULL' ],
+
+            [ 'code' => '02-01-0000-0000', 'name' => 'CURRENT LIABILITIES', 'level' => '2', 'parent_code' => '02-00-0000-0000' ],
+            [ 'code' => '02-02-0000-0000', 'name' => 'LONG LIABILITIES', 'level' => '2', 'parent_code' => '02-00-0000-0000' ],
+
+            [ 'code' => '02-01-0001-0000', 'name' => 'ACCOUNTS PAYABLE', 'level' => '3', 'parent_code' => '02-01-0000-0000' ],
+            [ 'code' => '02-01-0002-0000', 'name' => 'SHORT-TERM LOAN', 'level' => '3', 'parent_code' => '02-01-0000-0000' ],
+
+            [ 'code' => '02-02-0001-0000', 'name' => 'LONG TERM LOAN', 'level' => '3', 'parent_code' => '02-02-0000-0000' ],
+            [ 'code' => '02-02-0002-0000', 'name' => 'LEASE', 'level' => '3', 'parent_code' => '02-02-0000-0000' ],
+            //              ::::::::::LIABILITIES SECTION ENDS::::::::::
+
+            //              ::::::::::EQUITY SECTION STARTS::::::::::
+            [ 'code' => '03-00-0000-0000', 'name' => 'EQUITY', 'level' => '1', 'parent_code' => 'NULL' ],
+
+            [ 'code' => '03-01-0000-0000', 'name' => 'OWNER CAPITAL', 'level' => '2', 'parent_code' => '03-00-0000-0000' ],
+            [ 'code' => '03-02-0000-0000', 'name' => 'RETAINED EARNINGS', 'level' => '2', 'parent_code' => '03-00-0000-0000' ],
+
+            [ 'code' => '03-01-0001-0000', 'name' => 'OPENING BALANCE', 'level' => '3', 'parent_code' => '03-01-0000-0000' ],
+            [ 'code' => '03-01-0002-0000', 'name' => 'LESS WITHDRAW', 'level' => '3', 'parent_code' => '03-01-0000-0000' ],
+
+            [ 'code' => '03-02-0001-0000', 'name' => 'BALANCE C/F', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
+            [ 'code' => '03-02-0002-0000', 'name' => 'ADD/LESS - INCOME OF CURRENT PERIOD', 'level' => '3', 'parent_code' => '03-02-0000-0000' ],
+            //              ::::::::::EQUITY SECTION ENDS::::::::::
+
+            //              ::::::::::REVENUE SECTION STARTS::::::::::
+            [ 'code' => '04-00-0000-0000', 'name' => 'REVENUE', 'level' => '1', 'parent_code' => 'NULL' ],
+
+            [ 'code' => '04-01-0000-0000', 'name' => 'DIRECT SALES', 'level' => '2', 'parent_code' => '04-00-0000-0000' ], // CUSTOMERS
+            [ 'code' => '04-02-0000-0000', 'name' => 'OTHER', 'level' => '2', 'parent_code' => '04-00-0000-0000' ],
+
+            [ 'code' => '04-01-0001-0000', 'name' => 'PKR SALES', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+            [ 'code' => '04-01-0002-0000', 'name' => 'AED SALES', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+            [ 'code' => '04-01-0003-0000', 'name' => 'EURO SALES', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+            [ 'code' => '04-01-0004-0000', 'name' => 'DOLLAR SALES', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+            [ 'code' => '04-01-0005-0000', 'name' => 'TRY SALES', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+            [ 'code' => '04-01-0006-0000', 'name' => 'CUSTOMERS', 'level' => '3', 'parent_code' => '04-01-0000-0000' ],
+
+            [ 'code' => '04-02-0001-0000', 'name' => 'OTHER INCOME', 'level' => '3', 'parent_code' => '04-02-0000-0000' ],
+            [ 'code' => '04-02-0002-0000', 'name' => 'COMMISSIONS', 'level' => '3', 'parent_code' => '04-02-0000-0000' ],
+            //              ::::::::::REVENUE SECTION ENDS::::::::::
+
+            //              ::::::::::EXPENSE SECTION STARTS::::::::::
+            [ 'code' => '05-00-0000-0000', 'name' => 'EXPENSES', 'level' => '1', 'parent_code' => 'NULL' ],
+
+            [ 'code' => '05-01-0000-0000', 'name' => 'COST OF GOOD SOLD', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
+            [ 'code' => '05-02-0000-0000', 'name' => 'ADMINISTRATIVE EXPENSES', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
+            [ 'code' => '05-03-0000-0000', 'name' => 'FINANCIAL EXPENSES', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
+
+            [ 'code' => '05-01-0001-0000', 'name' => 'OPENING STOCK', 'level' => '3', 'parent_code' => '05-01-0000-0000' ],
+            [ 'code' => '05-01-0002-0000', 'name' => 'PURCHASE', 'level' => '3', 'parent_code' => '05-01-0000-0000' ],
+            [ 'code' => '05-01-0003-0000', 'name' => 'CLOSING INVENTORY', 'level' => '3', 'parent_code' => '05-01-0000-0000' ],
+            [ 'code' => '05-01-0004-0000', 'name' => 'CHARGES', 'level' => '3', 'parent_code' => '05-01-0000-0000' ],
+
+            [ 'code' => '05-02-0001-0000', 'name' => 'SALARY & WAGES', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0002-0000', 'name' => 'REMUNERATION', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0003-0000', 'name' => 'OFFICE RENT', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0004-0000', 'name' => 'HOUSE RENT', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0005-0000', 'name' => 'WATER BILL', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0006-0000', 'name' => 'ELECTRICITY BILL', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0007-0000', 'name' => 'POSTAGE, PRINTING, STATIONARY', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0008-0000', 'name' => 'TELEPHONE/MOBILE BILL', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0009-0000', 'name' => 'CLEANING & WASTE BILL', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0010-0000', 'name' => 'PREOFESSION FEE', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0011-0000', 'name' => 'MARKETING & ADVERTISEMENT', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0012-0000', 'name' => 'INSURANCE PREMIUM', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0013-0000', 'name' => 'LICENSE & RENEWAL', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0014-0000', 'name' => 'REPAIR & MAINTENANCE', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0015-0000', 'name' => 'EQUIPMENT & TOOL PURCHASE', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0016-0000', 'name' => 'DEPRICIATION & AMORTIZATION', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+            [ 'code' => '05-02-0017-0000', 'name' => 'VENDORS', 'level' => '3', 'parent_code' => '05-02-0000-0000' ],
+
+            [ 'code' => '05-03-0001-0000', 'name' => 'BANK CHARGES', 'level' => '3', 'parent_code' => '05-03-0000-0000' ],
+            [ 'code' => '05-03-0002-0000', 'name' => 'CREDIT CARD CHARGES', 'level' => '3', 'parent_code' => '05-03-0000-0000' ],
+            [ 'code' => '05-03-0003-0000', 'name' => 'FOREIGN EX ADJ(GAIN/LOSS)', 'level' => '3', 'parent_code' => '05-03-0000-0000' ],
+            //              ::::::::::EXPENSE SECTION ENDS::::::::::
 
             // [ 'code' => '06-00-0000-0000', 'name' => 'INVESTMENTS', 'level' => '1', 'parent_code' => 'NULL' ],
             // [ 'code' => '06-01-0000-0000', 'name' => 'INVESTMENTS', 'level' => '2', 'parent_code' => '05-00-0000-0000' ],
@@ -108,7 +152,7 @@ class ChartOfAccountSeeder extends Seeder
         ];
 
         $comp = Company::first();
-        $project = Project::first();
+        // $project = Project::first();
         $user = User::first();
         foreach ($charts as $chart){
 
@@ -130,7 +174,8 @@ class ChartOfAccountSeeder extends Seeder
                     'parent_account_code' => $parent_account_code,
                     'status' => 1,
                     'company_id' => $comp->id,
-                    'project_id' => $project->id,
+                    'project_id' => 1,
+                    'branch_id' => 1,
                     'user_id' => $user->id,
                 ]);
             }

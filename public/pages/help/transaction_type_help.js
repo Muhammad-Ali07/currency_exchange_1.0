@@ -1,17 +1,17 @@
-var help_product_url = '/help/productHelp';
-var help_product_id = 'product_name';
-var help_product_surname = 'productHelp';
+var help_transaction_type_url = '/help/transactionTypeHelp';
+var help_transaction_type_id = 'transaction_type';
+var help_transaction_type_surname = 'transactionTypeHelp';
 
 $(document).on('click','.data_tbody_row',function(e){
     var thix = $(this);
-    var valid = thix.parents('.inLineHelp').find('#'+help_product_surname).length;
+    var valid = thix.parents('.inLineHelp').find('#'+help_transaction_type_surname).length;
     if(valid) {
-        var product_code = thix.find('td[data-field="product_code"]').text();
-        var product_name = thix.find('td[data-field="product_name"]').text();
-        var product_id = thix.find('td[data-field="product_id"]').text();
+        var transaction_type = thix.find('td[data-field="transaction_type"]').text();
+        // var transaction_type_name = thix.find('td[data-field="transaction_type_name"]').text();
+        // var transaction_type_id = thix.find('td[data-field="transaction_type_id"]').text();
 
-        $('form').find('#product_name').val(product_name);
-        $('form').find('#product_id').val(product_id);
+        $('form').find('#transaction_type').val(transaction_type);
+        // $('form').find('#transaction_type_id').val(transaction_type_id);
 
         if($('#form_type').val() !== undefined){
             if($('#form_type').val() == 'sale_invoice'){
@@ -23,7 +23,7 @@ $(document).on('click','.data_tbody_row',function(e){
     }
 });
 
-$('#'+help_product_id).on('focusin keyup',function(e){
+$('#'+help_transaction_type_id).on('focusin keyup',function(e){
     $('#inLineHelp').remove();
     var validate = true;
     var project_id = 1;
@@ -46,7 +46,7 @@ $('#'+help_product_id).on('focusin keyup',function(e){
             // var setval = "?project_id="+project_id
             // setval += "&search="+val
             // var url2 = help_product_url +'/'+setval
-            var url2 = help_product_url
+            var url2 = help_transaction_type_url
 
             inLineHelp.load(url2);
             var offsetTop = 30;
@@ -58,8 +58,8 @@ $('#'+help_product_id).on('focusin keyup',function(e){
 });
 
 $(document).on('click',function(e){
-    if($(e.target).attr('id') != help_product_id) {
-        $("#inLineHelp[data-id='product']").remove();
+    if($(e.target).attr('id') != help_transaction_type_id) {
+        $("#inLineHelp[data-id='transaction_type']").remove();
     }
 });
 

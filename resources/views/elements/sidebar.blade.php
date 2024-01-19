@@ -52,7 +52,7 @@
                             </svg> --}}
                             @php $root = \Illuminate\Support\Facades\Request::root();
                                 $company = \App\Models\Company::first();
-                                $image_url = $company->company_image;
+                                $image_url = isset($company->company_image) ? $company->company_image : '';
                             @endphp
                             @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
                                 @php $img = $root.'/uploads/'.$image_url; @endphp
@@ -136,6 +136,23 @@
                     @endpermission
                 </ul>
             </li>
+            <li id="transaction_nav" class="nav-item has-sub {{ ($prefix == '/transaction')?'open':'' }}">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather='shopping-bag'></i>
+                    <span class="menu-title text-truncate">Transaction</span>
+                </a>
+                <ul class="menu-content" id="transaction_nav_ul">
+                    @permission('sale'.$sidebar_menu)
+                    <li class="{{ ($path == 'transaction/sale')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('transaction.sale.index') }}">
+                        {{-- <a class="d-flex align-items-center" href="#"> --}}
+                                <span class="menu-item text-truncate">Sale</span>
+                        </a>
+                    </li>
+                    @endpermission
+                </ul>
+            </li>
+
             <li id="accounts_nav" class="nav-item has-sub {{ ($prefix == '/accounts')?'open':'' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather='book-open'></i>
