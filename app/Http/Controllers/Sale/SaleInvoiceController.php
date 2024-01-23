@@ -234,7 +234,7 @@ class SaleInvoiceController extends Controller
                 'chart_account_id' => $cst_account->id,
                 'chart_account_name' => $cst_account->name,
                 'chart_account_code' => $cst_account->code,
-                'debit' => Utilities::NumFormat($request->amount),
+                'debit' => Utilities::NumFormat($request->sale_price),
                 'credit' => Utilities::NumFormat(0),
                 'description' => 'dummy',
                 'remarks' => 'dummy remarks',
@@ -434,7 +434,6 @@ class SaleInvoiceController extends Controller
         }else{
             abort('404');
         }
- //       dd($data['current']->product->toArray());
         return view('sale.sale_invoice.print', compact('data'));
     }
 
