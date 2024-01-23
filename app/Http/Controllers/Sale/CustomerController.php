@@ -163,15 +163,15 @@ class CustomerController extends Controller
             $req = [
                 'name' => $request->name,
                 'level' => 4,
-                'parent_account' => '04-01-0006-0000',
+                'parent_account' => '01-02-0003-0000',
             ];
 
             $r = Utilities::createCOA($req);
+            // dd($r->id);
             if(isset($r['status']) && $r['status'] == 'error'){
                 return $this->jsonErrorResponse($data, $r['message']);
             }
-
-            $customer = Customer::create([
+            Customer::create([
                 'uuid' => self::uuid(),
                 'name' => self::strUCWord($request->name),
                 'code' => $data['code'],
@@ -181,8 +181,10 @@ class CustomerController extends Controller
                 'cnic_no' => $request->cnic_no,
                 'email' => $request->email,
                 'address' => $request->address,
-                'coa_id' => $r['uuid'],
-                'coa_code' => $r['code'],
+                'form_type' => 'customer',
+                'coa_id' => $r->id,
+                'coa_uuid' => $r->uuid,
+                'coa_code' => $r->code,
                 'status' => isset($request->status) ? "1" : "0",
 
                 'company_id' => auth()->user()->company_id,
@@ -190,6 +192,7 @@ class CustomerController extends Controller
                 'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ]);
+
 
         }catch (Exception $e) {
             DB::rollback();

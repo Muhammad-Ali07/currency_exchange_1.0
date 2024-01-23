@@ -232,50 +232,58 @@
                     </li>
                     @endpermission
                 </ul>
-            </li>
+            </li> --}}
             <li id="report_nav" class="nav-item has-sub {{ ($prefix == '/reports')?'open':'' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather='clipboard'></i>
-                    <span class="menu-title text-truncate">Report</span>
+                    <span class="menu-title text-truncate">Reports</span>
                 </a>
                 <ul class="menu-content" id="report_nav_ul">
-                    @permission('department'.$sidebar_menu)
+                    @permission('customer'.$sidebar_menu)
+                    <li class="{{ ($path == 'reports/customer/ledger')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('reports.customer.ledger') }}">
+                            <span class="menu-item text-truncate">Customer Ledger</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                    {{-- @permission('department'.$sidebar_menu)
                     <li class="{{ ($path == 'reports/Listing')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.department.index') }}">
                             <span class="menu-item text-truncate">Lisitng Report</span>
                         </a>
                     </li>
-                    @endpermission
-                    @permission('staff'.$sidebar_menu)
+                    @endpermission --}}
+                    {{-- @permission('staff'.$sidebar_menu)
                     <li class="{{ ($path == 'reports/Inventory')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.staff.index') }}">
                             <span class="menu-item text-truncate">Inventory Report</span>
                         </a>
                     </li>
-                    @endpermission
-                    @permission('staff'.$sidebar_menu)
+                    @endpermission --}}
+                    {{-- @permission('staff'.$sidebar_menu)
                     <li class="{{ ($path == 'reports/Purchase')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.staff.index') }}">
                             <span class="menu-item text-truncate">Purchase Report</span>
                         </a>
                     </li>
-                    @endpermission
-                    @permission('staff'.$sidebar_menu)
+                    @endpermission --}}
+                    {{-- @permission('staff'.$sidebar_menu)
                     <li class="{{ ($path == 'reports/Sale')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.staff.index') }}">
                             <span class="menu-item text-truncate">Sale Report</span>
                         </a>
                     </li>
-                    @endpermission
-                    @permission('staff'.$sidebar_menu)
+                    @endpermission --}}
+                    {{-- @permission('staff'.$sidebar_menu)
                     <li class="{{ ($path == 'reports/Listing')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.staff.index') }}">
                             <span class="menu-item text-truncate">Accounts Report</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                 </ul>
-            </li> --}}
+            </li>
             <li id="setting_nav" class="nav-item has-sub {{ ($prefix == '/setting')?'open':'' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="settings"></i>

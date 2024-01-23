@@ -75,12 +75,12 @@
                 cursor: pointer;
             }
         </style>
-        <div class="data_thead_row" id="productHelp">
+        <div class="data_thead_row" id="toProductHelp">
             <table border="1" class="" width="100%">
                 <thead>
                 <tr>
-                    <th data-field="Product Code" width="10%">Product Code</th>
-                    <th data-field="Product Name" width="10%">Product Name</th>
+                    <th data-field="Product Code" width="25%">Product Code</th>
+                    <th data-field="Product Name" width="50%">Product Name</th>
                 </tr>
                 </thead>
             </table>
@@ -101,12 +101,12 @@
                 <table border="1" class="val_table" width="100%">
                     <tbody>
                     <tr class="data-dtl">
-                        <td data-field="product_code" width="10%">{{$product->code}}</td>
-                        <td data-view="show" data-field="product_name" width="10%">{{$product->name}}</td>
+                        <td data-field="to_product_code" width="25%">{{$product->code}}</td>
+                        <td data-view="show" data-field="to_product_name" width="50%">{{$product->name}}</td>
                     </tr>
                     <tr class="d-none">
-                        <td data-field="product_id">{{$product->id}}</td>
-                        <td data-field="stock_in">{{$product->stock_in}}</td>
+                        <td data-field="to_product_id">{{$product->id}}</td>
+                        <td data-field="to_stock_in">{{$product->stock_in}}</td>
                     </tr>
                     </tbody>
                 </table>

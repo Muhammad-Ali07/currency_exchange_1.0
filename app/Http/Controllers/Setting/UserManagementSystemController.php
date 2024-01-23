@@ -184,6 +184,11 @@ class UserManagementSystemController extends Controller
                         'name' => 'profit_loss_statement',
                         'action' => [ $view ]
                     ],
+                    [
+                        'dname' => 'Customer Ledger',
+                        'name' => 'customer_legder',
+                        'action' => [ $view ]
+                    ],
                 ]
             ],
             // setting

@@ -148,6 +148,18 @@ class ProductController extends Controller
             return $this->jsonErrorResponse($data, $err);
         }
 
+        $req = [
+            'name' => $request->name,
+            'level' => 3,
+            'parent_account' => '04-01-0000-0000',
+        ];
+
+        $r = Utilities::createCOA($req);
+        if(isset($r['status']) && $r['status'] == 'error'){
+            return $this->jsonErrorResponse($data, $r['message']);
+        }
+
+        // dd($r);
         DB::beginTransaction();
         try {
             $doc_data = [
@@ -173,6 +185,8 @@ class ProductController extends Controller
                 'code' => $data['code'],
                 'product_form_type' => 'currency',
                 'status' => isset($request->status) ? "1" : "0",
+                'coa_id' => $r['uuid'],
+                'coa_code' => $r['code'],
                 // 'external_item_id' => $request->external_item_id,
                 // 'default_sale_price' => $request->default_sale_price,
                 'company_id' => auth()->user()->company_id,

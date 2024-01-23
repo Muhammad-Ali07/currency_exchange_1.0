@@ -116,11 +116,33 @@ class HelpController extends Controller
             $product = $product->orWhere('name','like',"%$val%");
         }
 
-        $product = $product->select('id','code','name')->get();
+        $product = $product->select('id','code','name','stock_in')->get();
         //dd($chart);
         $data['product'] =  $product;
 
         return view('helps.product_help',compact('data'));
+    }
+
+    public function toProductHelp(Request $request)
+    {
+        // dd('in help');
+        // $sale = Sale::where('project_id',$request->project_id)->pluck('product_id')->unique()->toArray();
+
+        $data = [];
+        // $product = Product::whereNotIn('id',$sale)->where('product_form_type','property');
+        $product = Product::where(Utilities::CurrentBC())->where('product_form_type','currency');
+
+        if(!empty($val)){
+            $val = (string)$val;
+            $product = $product->where('code','like',"%$val%");
+            $product = $product->orWhere('name','like',"%$val%");
+        }
+
+        $product = $product->select('id','code','name','stock_in')->get();
+        //dd($chart);
+        $data['product'] =  $product;
+
+        return view('helps.product_help_new',compact('data'));
     }
 
     public function transactionTypeHelp(Request $request)

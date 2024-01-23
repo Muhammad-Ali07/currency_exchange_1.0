@@ -158,10 +158,10 @@ class SupplierController extends Controller
             $req = [
                 'name' => $request->name,
                 'level' => 4,
-                'parent_account' => '05-02-0017-0000',
+                'parent_account' => '02-01-0001-0000',
             ];
             $r = Utilities::createCOA($req);
-
+            // dd($r);
             if(isset($r['status']) && $r['status'] == 'error'){
                 return $this->jsonErrorResponse($data, $r['message']);
             }
@@ -175,8 +175,9 @@ class SupplierController extends Controller
                 'status' => isset($request->status) ? "1" : "0",
                 'form_type' => 'supplier',
                 'address' => $request->address,
-                'coa_id' => $r['coa_id'],
-                'coa_code' => $r['coa_code'],
+                'coa_id' => $r->coa_id,
+                'coa_uuid' => $r->coa_uuid,
+                'coa_code' => $r->coa_code,
 
                 'company_id' => auth()->user()->company_id,
                 'project_id' => auth()->user()->project_id,

@@ -1,21 +1,19 @@
-var help_product_url = '/help/productHelp';
-var help_product_id = 'product_name';
-var help_product_surname = 'productHelp';
+var help_to_product_url = '/help/toProductHelp';
+var help_to_product_id = 'to_product_name';
+var help_to_product_surname = 'toProductHelp';
 
 $(document).on('click','.data_tbody_row',function(e){
     var thix = $(this);
-    var valid = thix.parents('.inLineHelp').find('#'+help_product_surname).length;
+    var valid = thix.parents('.inLineHelp').find('#'+help_to_product_surname).length;
     if(valid) {
-        var product_code = thix.find('td[data-field="product_code"]').text();
-        var product_name = thix.find('td[data-field="product_name"]').text();
-        var product_id = thix.find('td[data-field="product_id"]').text();
-        var stock_in = thix.find('td[data-field="stock_in"]').text();
+        var to_product_code = thix.find('td[data-field="to_product_code"]').text();
+        var to_product_name = thix.find('td[data-field="to_product_name"]').text();
+        var to_product_id = thix.find('td[data-field="to_product_id"]').text();
+        var to_stock_in = thix.find('td[data-field="to_stock_in"]').text();
 
-        console.log(stock_in);
-
-        $('form').find('#product_name').val(product_name);
-        $('form').find('#product_id').val(product_id);
-        $('form').find('#stock_in').val(stock_in);
+        $('form').find('#to_product_name').val(to_product_name);
+        $('form').find('#to_product_id').val(to_product_id);
+        $('form').find('#to_stock_in').val(to_stock_in);
 
         if($('#form_type').val() !== undefined){
             if($('#form_type').val() == 'sale_invoice'){
@@ -27,7 +25,7 @@ $(document).on('click','.data_tbody_row',function(e){
     }
 });
 
-$('#'+help_product_id).on('focusin keyup',function(e){
+$('#'+help_to_product_id).on('focusin keyup',function(e){
     $('#inLineHelp').remove();
     var validate = true;
     var project_id = 1;
@@ -49,8 +47,8 @@ $('#'+help_product_id).on('focusin keyup',function(e){
             val = val.replace(/\s/g,'%20');
             // var setval = "?project_id="+project_id
             // setval += "&search="+val
-            // var url2 = help_product_url +'/'+setval
-            var url2 = help_product_url
+            // var url2 = help_to_product_url +'/'+setval
+            var url2 = help_to_product_url
 
             inLineHelp.load(url2);
             var offsetTop = 30;
@@ -62,7 +60,7 @@ $('#'+help_product_id).on('focusin keyup',function(e){
 });
 
 $(document).on('click',function(e){
-    if($(e.target).attr('id') != help_product_id) {
+    if($(e.target).attr('id') != help_to_product_id) {
         $("#inLineHelp[data-id='product']").remove();
     }
 });

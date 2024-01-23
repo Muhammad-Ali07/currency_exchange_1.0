@@ -57,98 +57,196 @@
                     </div>
                     <div class="card-body mt-2">
                         <div class="row">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3">
-                                    <b>{{$data['code']}}</b>
-                                </div>
-                            </div>
-                            <div class="mb-1 row">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Entry Date</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" id="entry_date" name="entry_date" class="form-control form-control-sm" value="{{date('d-m-Y', strtotime($entry_date))}}" />
-                                        </div>
+                            <div class="col-lg-6">
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <h4><b>{{$data['code']}}</b></h4>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Type <span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="input-group eg_help_block">
-                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                <input id="transaction_type" name="transaction_type" type="text" placeholder="Click here..." class="transaction_type form-control form-control-sm text-left">
-                                                {{-- <input id="transaction_type_id" type="hidden" name="transaction_type_id"> --}}
+                                <div class="mb-1 row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Entry Date</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="entry_date" name="entry_date" class="form-control form-control-sm" value="{{date('d-m-Y', strtotime($entry_date))}}" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="mb-1 row">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Product <span class="required">*</span></label>
+                                <div class="mb-1 row">
+                                    <h6>Buy</h6>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Product<span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="input-group eg_help_block">
+                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                    <input id="product_name" type="text" placeholder="Click here..." class="product_name form-control form-control-sm text-left">
+                                                    <input id="product_id" type="hidden" name="product_id">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-9">
-                                            <div class="input-group eg_help_block">
-                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                <input id="product_name" type="text" placeholder="Click here..." class="product_name form-control form-control-sm text-left">
-                                                <input id="product_id" type="hidden" name="product_id">
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Balance<span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input id="stock_in" type="text" disabled class="stock_in form-control form-control-sm text-left">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Rate<span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input id="buy_rate" type="text" class="buy_rate form-control form-control-sm text-left">
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Quantity</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Type <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="input-group eg_help_block">
+                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                    <input id="transaction_type" name="transaction_type" type="text" placeholder="Click here..." class="transaction_type form-control form-control-sm text-left">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                                <div class="mb-1 row">
+                                    <h6>Sell</h6>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Product <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="input-group eg_help_block">
+                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                    <input id="to_product_name" type="text" placeholder="Click here..." class="to_product_name form-control form-control-sm text-left">
+                                                    <input id="to_product_id" type="hidden" name="to_product_id">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Balance<span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input id="to_stock_in" type="text" disabled class="to_stock_in form-control form-control-sm text-left">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Rate/Unit</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control form-control-sm" id="sell_rate" name="sell_rate" aria-invalid="false">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="mb-1 row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Customer <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="input-group eg_help_block">
+                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                    <input id="customer_name" type="text" placeholder="Click here..." class="customer_name form-control form-control-sm text-left">
+                                                    <input id="customer_id" type="hidden" name="customer_id">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Customer <span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="input-group eg_help_block">
-                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                <input id="customer_name" type="text" placeholder="Click here..." class="customer_name form-control form-control-sm text-left">
-                                                <input id="customer_id" type="hidden" name="customer_id">
+                                {{-- <div class="mb-1 row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Amount</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control form-control-sm" id="amount" name="amount" aria-invalid="false">
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
-                            <div class="mb-1 row">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Price</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control form-control-sm" id="sale_price" name="sale_price" aria-invalid="false">
-                                        </div>
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <div class="row"> <div class="col-lg-12 mb-2"></div></div>
+
+                                <div class="card card-payment">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Amount to be Paid</h4>
+                                        <h4 class="card-title text-primary" id="amount">$0.00</h4>
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Quantity</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-1 row">
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label class="col-form-label">Amount</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control form-control-sm" id="amount" name="amount" aria-invalid="false">
-                                        </div>
+                                    <div class="card-body">
+                                        <form action="javascript:void(0);" class="form">
+                                            <div class="row">
+                                                {{-- <div class="col-12">
+                                                    <div class="mb-2">
+                                                        <label class="form-label" for="payment-card-number">Card Number</label>
+                                                        <input type="number" id="payment-card-number" class="form-control" placeholder="2133 3244 4567 8921">
+                                                    </div>
+                                                </div> --}}
+                                                <div class="col-sm-6 col-12">
+                                                    <div class="mb-2">
+                                                        <label class="form-label" for="payment-expiry">Payment Type</label>
+                                                        <select class="select2 form-select" id="payment_type" name="payment_type">
+                                                            <option value="cash" selected>Cash</option>
+                                                            <option value="bank" selected>Bank</option>
+                                                        </select>
+                                                        {{-- <input type="number" id="payment-expiry" class="form-control" placeholder="MM / YY"> --}}
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="col-sm-6 col-12">
+                                                    <div class="mb-2">
+                                                        <label class="form-label" for="payment-cvv">CVV / CVC</label>
+                                                        <input type="number" id="payment-cvv" class="form-control" placeholder="123">
+                                                    </div>
+                                                </div> --}}
+                                                {{-- <div class="col-12">
+                                                    <div class="mb-2">
+                                                        <label class="form-label" for="payment-input-name">Input Name</label>
+                                                        <input type="text" id="payment-input-name" class="form-control" placeholder="Curtis Stone">
+                                                    </div>
+                                                </div> --}}
+                                                {{-- <div class="d-grid col-12">
+                                                    <button type="button" class="btn btn-primary waves-effect waves-float waves-light">Make Payment</button>
+                                                </div> --}}
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -196,6 +294,7 @@
 @section('script')
     <script src="{{asset('/pages/help/customer_help.js')}}"></script>
     <script src="{{asset('/pages/help/product_help.js')}}"></script>
+    <script src="{{asset('/pages/help/product_help_new.js')}}"></script>
     <script src="{{asset('/pages/help/transaction_type_help.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
@@ -224,14 +323,24 @@
         });
       </script>
       <script>
-        $(document).on('keyup','#quantity',function(){
-            var qty = $('#quantity').val();
-            var price = $('#sale_price').val();
-            var amount = 0;
-            console.log(qty);
-            amount = qty * price;
-            console.log(amount);
-            $('#amount').val(amount);
+        // $(document).on('keyup','#quantity',function(){
+        //     var qty = $('#quantity').val();
+        //     var price = $('#sale_price').val();
+        //     var amount = 0;
+        //     console.log(qty);
+        //     amount = qty * price;
+        //     console.log(amount);
+        //     $('#amount').val(amount);
+        // });
+
+        $(document).on('keyup','#sell_rate',function(){
+            var buy_qty = $('#quantity').val();
+            var sell_rate = $('#sell_rate').val();
+
+            var total_amount_to_paid = parseFloat(buy_qty) * parseFloat(sell_rate);
+            var total_amount = '$' + total_amount_to_paid;
+            $('#amount').text(total_amount);
+
         });
       </script>
     @yield('scriptCustom')

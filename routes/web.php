@@ -32,6 +32,7 @@ use App\Http\Controllers\Purchase\InventoryController;
 use App\Http\Controllers\Purchase\ProductPropertyController;
 use App\Http\Controllers\Purchase\BuyableTypeController;
 use App\Http\Controllers\Purchase\ProductVariationController;
+use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Sale\BookingTransferController;
 use App\Http\Controllers\Sale\DealerController;
 use App\Http\Controllers\Sale\CustomerController;
@@ -90,6 +91,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('property-product/{str?}', [HelpController::class, 'propertyProduct'])->name('propertyProduct');
             // Route::get('product/{str?}', [HelpController::class, 'product'])->name('product');
             Route::get('productHelp', [HelpController::class, 'productHelp'])->name('product');
+            Route::get('toProductHelp', [HelpController::class, 'toProductHelp'])->name('to_product');
             Route::get('transactionTypeHelp', [HelpController::class, 'transactionTypeHelp'])->name('transactionType');
 
             Route::get('supplier/{str?}', [HelpController::class, 'supplier'])->name('supplier');
@@ -163,6 +165,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::prefix('user-management')->name('user-management.')->group(function () {
                 Route::get('form/{id?}', [UserManagementSystemController::class, 'create'])->name('create');
                 Route::post('form/{id?}', [UserManagementSystemController::class, 'store'])->name('store');
+            });
+        });
+
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::prefix('customer')->name('customer.')->controller(ReportController::class)->group(function(){
+                Route::get('ledger', 'customerLedger')->name('ledger');
+                Route::post('cstLedgerReport', 'store')->name('store');
+
             });
         });
 

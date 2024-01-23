@@ -227,7 +227,7 @@ class SaleInvoiceController extends Controller
             Voucher::create([
                 'voucher_id' => $voucher_id,
                 'uuid' => self::uuid(),
-                'date' => date('Y-m-d', strtotime($request->date)),
+                'date' => date('Y-m-d', strtotime($request->entry_date)),
                 'type' => 'CPV',
                 'voucher_no' => $voucher_no,
                 'sr_no' => 1,
