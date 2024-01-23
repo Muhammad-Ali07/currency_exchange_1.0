@@ -219,8 +219,8 @@ class SaleInvoiceController extends Controller
             $product->stock_in = $balance_qty;
             $product->save();
 
-            $max = Voucher::withTrashed()->where('type','CST')->max('voucher_no');
-            $voucher_no = self::documentCode('CST',$max);
+            $max = Voucher::withTrashed()->where('type','SI')->max('voucher_no');
+            $voucher_no = self::documentCode('SI',$max);
             $voucher_id = self::uuid();
             $posted = $request->current_action_id == 'post'?1:0;
             // dd($voucher_no);
@@ -228,7 +228,7 @@ class SaleInvoiceController extends Controller
                 'voucher_id' => $voucher_id,
                 'uuid' => self::uuid(),
                 'date' => date('Y-m-d', strtotime($request->entry_date)),
-                'type' => 'CPV',
+                'type' => 'SI',
                 'voucher_no' => $voucher_no,
                 'sr_no' => 1,
                 'chart_account_id' => $cst_account->id,
@@ -293,6 +293,7 @@ class SaleInvoiceController extends Controller
      */
     public function edit(Request $request,$id)
     {
+        // dd('in edit func');
         $data = [];
         $data['id'] = $id;
         $data['title'] = self::Constants()['title'];
