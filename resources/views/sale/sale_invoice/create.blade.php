@@ -168,7 +168,7 @@
                                                 <label class="col-form-label">Rate/Unit</label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm" id="sell_rate" name="sell_rate" aria-invalid="false">
+                                                <input type="text" class="form-control form-control-sm" id="sell_rate" name="sale_price" aria-invalid="false">
                                             </div>
                                         </div>
                                     </div>

@@ -192,10 +192,10 @@ class SaleInvoiceController extends Controller
                 'code_prefix'       => strtoupper('si'),
             ];
             $code = Utilities::documentCode($doc_data);
-            // dd($request->all());
+            dd($request->all());
             $customer = Customer::where('id',$request->customer_id)->first();
-            $cst_account = ChartOfAccount::where('uuid',$customer->coa_id)->first();
-
+            $cst_account = ChartOfAccount::where('id',$customer->coa_id)->first();
+            // dd($cst_account);
             $sale = Sale::create([
                 'uuid' => self::uuid(),
                 'code' => $code,
@@ -219,11 +219,11 @@ class SaleInvoiceController extends Controller
             $product->stock_in = $balance_qty;
             $product->save();
 
-            $max = Voucher::withTrashed()->where('type','CPV')->max('voucher_no');
-            $voucher_no = self::documentCode('CPV',$max);
+            $max = Voucher::withTrashed()->where('type','CST')->max('voucher_no');
+            $voucher_no = self::documentCode('CST',$max);
             $voucher_id = self::uuid();
             $posted = $request->current_action_id == 'post'?1:0;
-
+            // dd($voucher_no);
             Voucher::create([
                 'voucher_id' => $voucher_id,
                 'uuid' => self::uuid(),
@@ -244,26 +244,26 @@ class SaleInvoiceController extends Controller
                 'user_id' => auth()->user()->id,
                 'posted' => 0,
             ]);
-            Voucher::create([
-                'voucher_id' => $voucher_id,
-                'uuid' => self::uuid(),
-                'date' => date('Y-m-d', strtotime($request->date)),
-                'type' => 'CPV',
-                'voucher_no' => $voucher_no,
-                'sr_no' => 1,
-                'chart_account_id' => 182,
-                'chart_account_name' => 'Pkr Sales',
-                'chart_account_code' => '04-01-0001-0000',
-                'debit' => Utilities::NumFormat(0),
-                'credit' => Utilities::NumFormat($request->amount),
-                'description' => 'dummy',
-                'remarks' => 'dummy remarks',
-                'company_id' => auth()->user()->company_id,
-                'project_id' => auth()->user()->project_id,
-                'branch_id' => auth()->user()->branch_id,
-                'user_id' => auth()->user()->id,
-                'posted' => 0,
-            ]);
+            // Voucher::create([
+            //     'voucher_id' => $voucher_id,
+            //     'uuid' => self::uuid(),
+            //     'date' => date('Y-m-d', strtotime($request->date)),
+            //     'type' => 'CPV',
+            //     'voucher_no' => $voucher_no,
+            //     'sr_no' => 1,
+            //     'chart_account_id' => 182,
+            //     'chart_account_name' => 'Pkr Sales',
+            //     'chart_account_code' => '04-01-0001-0000',
+            //     'debit' => Utilities::NumFormat(0),
+            //     'credit' => Utilities::NumFormat($request->amount),
+            //     'description' => 'dummy',
+            //     'remarks' => 'dummy remarks',
+            //     'company_id' => auth()->user()->company_id,
+            //     'project_id' => auth()->user()->project_id,
+            //     'branch_id' => auth()->user()->branch_id,
+            //     'user_id' => auth()->user()->id,
+            //     'posted' => 0,
+            // ]);
 }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());
