@@ -192,7 +192,7 @@ class SaleInvoiceController extends Controller
                 'code_prefix'       => strtoupper('si'),
             ];
             $code = Utilities::documentCode($doc_data);
-            dd($request->all());
+            // dd($request->all());
             $customer = Customer::where('id',$request->customer_id)->first();
             $cst_account = ChartOfAccount::where('id',$customer->coa_id)->first();
             // dd($cst_account);
