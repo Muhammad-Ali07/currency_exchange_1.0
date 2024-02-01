@@ -240,6 +240,7 @@ class CompanyController extends Controller
 
         DB::beginTransaction();
         try {
+            // dd($request->all());
             $company_filename = '';
             // $om_filename = '';
             if ($request->has('company_image')) {

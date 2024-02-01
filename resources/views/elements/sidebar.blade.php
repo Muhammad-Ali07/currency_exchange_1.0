@@ -174,6 +174,13 @@
                     </li>
                     @endpermission
                     @permission('bank-payment'.$sidebar_menu)
+                    <li class="{{ ($path == 'accounts/opening-balance')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('accounts.opening-balance.index') }}">
+                            <span class="menu-item text-truncate">Opening Balance</span>
+                        </a>
+                    </li>
+                    @endpermission
+                    @permission('bank-payment'.$sidebar_menu)
                     <li class="{{ ($path == 'accounts/bank-payment')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('accounts.bank-payment.index') }}">
                             <span class="menu-item text-truncate">Bank Payment</span>
@@ -239,7 +246,29 @@
                     <span class="menu-title text-truncate">Reports</span>
                 </a>
                 <ul class="menu-content" id="report_nav_ul">
-                    @permission('customer'.$sidebar_menu)
+                    @permission('currency-ledger-view')
+                    <li class="{{ ($path == 'reports/currency/ledger')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('reports.currency.ledger') }}">
+                            <span class="menu-item text-truncate">Cash Currency Ledger</span>
+                        </a>
+                    </li>
+                    @endpermission
+                    @permission('bank-currency-ledger-view')
+                    <li class="{{ ($path == 'reports/bank_currency/ledger')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('reports.bank_currency.ledger') }}">
+                            <span class="menu-item text-truncate">Bank Currency Ledger</span>
+                        </a>
+                    </li>
+                    @endpermission
+                    @permission('vouchers-list-view')
+                    <li class="{{ ($path == 'reports/vouchers/list')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('reports.vouchers.list') }}">
+                            <span class="menu-item text-truncate">Vouchers List</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                    @permission('customer_legder-view')
                     <li class="{{ ($path == 'reports/customer/ledger')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('reports.customer.ledger') }}">
                             <span class="menu-item text-truncate">Customer Ledger</span>

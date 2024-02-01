@@ -65,7 +65,7 @@
                                     <div class="dropdown chart-dropdown" style="display: inline-block;">
                                         <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
                                         @php
-                                            $headings = ['Sr','Account Code','Account Name','Description','Debit','Credit'];
+                                            $headings = ['Sr','Account Code','Account Name','Description','Quantity','Rate/Unit','Debit','Credit'];
                                         @endphp
                                         <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
                                             @foreach($headings as $key=>$heading)
@@ -92,6 +92,9 @@
                                                     <th width="20%">Account Code</th>
                                                     <th width="22%">Account Name</th>
                                                     <th width="22%">Description</th>
+                                                    <th width="22%">Quantity</th>
+                                                    <th width="22%">Rate/Unit</th>
+
                                                     <th width="16%">Debit</th>
                                                     <th width="16%">Credit</th>
                                                     <th width="13%" class="text-center">Action</th>
@@ -109,6 +112,12 @@
                                                     </td>
                                                     <td>
                                                         <input id="egt_description" type="text" class="form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_quantity" type="text" class="form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_rate_per_unit" type="text" class="form-control form-control-sm">
                                                     </td>
                                                     <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
@@ -141,6 +150,13 @@
                                                                 <input type="text" data-id="egt_description" name="pd[{{$loop->iteration}}][egt_description]" value="{{$dtl->description}}"  class="form-control form-control-sm">
                                                             </td>
                                                             <td>
+                                                                <input type="text" data-id="egt_quantity" name="pd[{{$loop->iteration}}][egt_quantity]" value="{{$dtl->amount}}"  class="form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" data-id="egt_rate_per_unit" name="pd[{{$loop->iteration}}][egt_buy_rate]" value="{{$dtl->rate_per_unit}}"  class="form-control form-control-sm">
+                                                            </td>
+
+                                                            <td>
                                                                 <input data-id="egt_debit" type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
                                                             </td>
                                                             <td>
@@ -163,6 +179,9 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
                                                     <td class="voucher-total-debit text-end">
                                                         <span id="tot_debit"></span>
                                                         <input id="tot_voucher_debit" name="tot_voucher_debit" type="hidden" >

@@ -32,9 +32,15 @@ class Voucher extends Model
         'invoice_id',
         'invoice_no',
         'company_id',
+        'branch_id',
         'project_id',
         'user_id',
         'posted',
+        'form_id',
+        'amount',
+        'rate_per_unit',
+        'balance_amount',
+
     ];
 
 }

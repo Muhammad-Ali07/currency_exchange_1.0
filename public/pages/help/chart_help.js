@@ -12,6 +12,7 @@ $(document).on('click','.data_tbody_row',function(e){
     $('.egt_form_header_input').find('.chart_name').val(chart_name);
     $('.egt_form_header_input').find('.chart_id').val(chart_id);
 
+    
 });
 
 $('#'+id).keyup(function(e){

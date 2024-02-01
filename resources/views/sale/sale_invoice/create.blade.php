@@ -38,6 +38,7 @@
     @permission($data['permission'])
     @php
         $entry_date = date('Y-m-d');
+        $code = '';
     @endphp
 
     <form id="sale_invoice_create" class="sale_invoice_create" action="{{route('transaction.sale.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -49,7 +50,7 @@
                     <div class="card-header border-bottom">
                         <div class="card-left-side">
                             <h4 class="card-title">{{$data['title']}}</h4>
-                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-float waves-light">Save</button>
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-float waves-light transaction_save_btn" id="transaction_save_btn">Save</button>
                         </div>
                         <div class="card-link">
                             <a href="{{$data['list_url']}}" class="btn btn-secondary btn-sm waves-effect waves-float waves-light">Back</a>
@@ -75,10 +76,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 row">
+                                <div class="mb-1 row" id="buy">
                                     <h6>Buy</h6>
                                     <div class="col-lg-12">
-                                        <div class="row">
+                                        {{-- <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="col-form-label">Product<span class="required">*</span></label>
                                             </div>
@@ -89,6 +90,18 @@
                                                     <input id="product_id" type="hidden" name="product_id">
                                                 </div>
                                             </div>
+                                        </div> --}}
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">CIH code <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="input-group eg_help_block w-100">
+                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                    <input id="buy_cash_chart_name" type="text" placeholder="Click here..." class="buy_cash_chart_name form-control form-control-sm text-left">
+                                                    <input id="buy_cash_chart_id" type="hidden" name="buy_cash_chart_id">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
@@ -97,20 +110,20 @@
                                                 <label class="col-form-label">Balance<span class="required">*</span></label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <input id="stock_in" type="text" disabled class="stock_in form-control form-control-sm text-left">
+                                                <input id="stock_in" readonly name="total_balance" type="text" class="stock_in form-control form-control-sm text-left">
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-12">
+                                    <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
-                                                <label class="col-form-label">Rate<span class="required">*</span></label>
+                                                <label class="col-form-label">Rate/Unit<span class="required">*</span></label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <input id="buy_rate" type="text" class="buy_rate form-control form-control-sm text-left">
+                                                <input id="buy_rate" type="text" name="buy_rate" class="buy_rate form-control form-control-sm text-left">
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -137,6 +150,21 @@
                                     </div> --}}
                                 </div>
                                 <div class="mb-1 row">
+                                    <div class="col-lg-4">
+                                        <label class="col-form-label">Payment Currency<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="payment_currency" id="home_currency" value="home_currency" checked="">
+                                            <label class="form-check-label" for="inlineRadio1">Home Currency(PKR)</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="payment_currency" id="other_currency" value="other_currency">
+                                            <label class="form-check-label" for="inlineRadio2">Other Currency</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-1 row" id="sell" style="display: none">
                                     <h6>Sell</h6>
                                     <div class="col-lg-12">
                                         <div class="row">
@@ -204,49 +232,83 @@
                                 </div> --}}
                             </div>
                             <div class="col-lg-6 col-md-6 col-12">
-                                <div class="row"> <div class="col-lg-12 mb-2"></div></div>
-
                                 <div class="card card-payment">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Amount to be Paid</h4>
-                                        <h4 class="card-title text-primary" id="amount">$0.00</h4>
-                                    </div>
                                     <div class="card-body">
-                                        <form action="javascript:void(0);" class="form">
-                                            <div class="row">
-                                                {{-- <div class="col-12">
-                                                    <div class="mb-2">
-                                                        <label class="form-label" for="payment-card-number">Card Number</label>
-                                                        <input type="number" id="payment-card-number" class="form-control" placeholder="2133 3244 4567 8921">
+                                        <div class="row mb-2">
+                                            <div class="col-lg-6">
+                                                <label class="form-label" for="payment-expiry">Payment Type</label>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <select class="select2 form-select" id="payment_type" name="payment_type">
+                                                    <option value="">--Select--</option>
+
+                                                    <option value="cash">Cash</option>
+                                                    <option value="bank">Bank</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-1 row" id="cash_code" style="display: none;">
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">CIH code <span class="required">*</span></label>
                                                     </div>
-                                                </div> --}}
-                                                <div class="col-sm-6 col-12">
-                                                    <div class="mb-2">
-                                                        <label class="form-label" for="payment-expiry">Payment Type</label>
-                                                        <select class="select2 form-select" id="payment_type" name="payment_type">
-                                                            <option value="cash" selected>Cash</option>
-                                                            <option value="bank" selected>Bank</option>
-                                                        </select>
-                                                        {{-- <input type="number" id="payment-expiry" class="form-control" placeholder="MM / YY"> --}}
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group eg_help_block w-100">
+                                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                            <input id="cash_chart_name" type="text" placeholder="Click here..." class="cash_chart_name form-control form-control-sm text-left">
+                                                            <input id="cash_chart_id" type="hidden" name="cash_chart_id">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="col-sm-6 col-12">
-                                                    <div class="mb-2">
-                                                        <label class="form-label" for="payment-cvv">CVV / CVC</label>
-                                                        <input type="number" id="payment-cvv" class="form-control" placeholder="123">
-                                                    </div>
-                                                </div> --}}
-                                                {{-- <div class="col-12">
-                                                    <div class="mb-2">
-                                                        <label class="form-label" for="payment-input-name">Input Name</label>
-                                                        <input type="text" id="payment-input-name" class="form-control" placeholder="Curtis Stone">
-                                                    </div>
-                                                </div> --}}
-                                                {{-- <div class="d-grid col-12">
-                                                    <button type="button" class="btn btn-primary waves-effect waves-float waves-light">Make Payment</button>
-                                                </div> --}}
                                             </div>
-                                        </form>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">CIH Balance <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input id="cih_balance" readonly name="cih_balance" type="text" placeholder="Click here..." value="" class="cih_balance form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-1 row" id="bank_code" style="display: none;">
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Bank code <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group eg_help_block w-100">
+                                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                            <input id="bank_chart_name" type="text" placeholder="Click here..." class="bank_chart_name form-control form-control-sm text-left">
+                                                            <input id="bank_chart_id" type="hidden" name="bank_chart_id">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Bank Balance <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input id="bank_balance" readonly name="bank_balance" type="text" placeholder="Click here..." value="" class="bank_balance form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-1 row">
+                                            <div class="col-lg-6">
+                                                <h4 class="card-title">Amount to be Paid</h4>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h4 class="card-title text-primary float-end" id="amount">$0.00</h4>
+                                                <input type="hidden" name="amount" class="amount form-control form-control-sm text-left">
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -296,6 +358,7 @@
     <script src="{{asset('/pages/help/product_help.js')}}"></script>
     <script src="{{asset('/pages/help/product_help_new.js')}}"></script>
     <script src="{{asset('/pages/help/transaction_type_help.js')}}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
       <script>
@@ -340,8 +403,36 @@
             var total_amount_to_paid = parseFloat(buy_qty) * parseFloat(sell_rate);
             var total_amount = '$' + total_amount_to_paid;
             $('#amount').text(total_amount);
+            $('.amount').val(total_amount_to_paid);
 
         });
-      </script>
+        $(document).on('change','#payment_type',function(){
+            var payment_type = $('#payment_type').val();
+            // console.log(payment_type);
+            if(payment_type == 'cash'){
+                $('#bank_code').css('display','none');
+                $('#cash_code').show();
+            }else{
+                $('#cash_code').css('display','none');
+                $('#bank_code').show();
+            }
+        });
+        // $(document).on('click','#other_currency',function(){
+        //     // var other_currency = $('#other_currency').val();
+        //     $('#sell').show();
+        // });
+        // $(document).on('click','#home_currency',function(){
+        //     // var other_currency = $('#other_currency').val();
+        //     $('#sell').hide();
+        // });
+
+
+        </script>
+
+        <script src="{{asset('/pages/help/bank_currency_help.js')}}"></script>
+
+        <script src="{{asset('/pages/help/cash_currency_help.js')}}"></script>
+
+        <script src="{{asset('/pages/help/buy_cash_currency_help.js')}}"></script>
     @yield('scriptCustom')
 @endsection

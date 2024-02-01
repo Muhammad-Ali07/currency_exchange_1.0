@@ -9,18 +9,26 @@ class ProductQuantity extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'uuid',
+        'entry_date',
         'code',
         'name',
         'quantity',
+        'balance_quantity',
         'form_type',
         'product_id',
         'company_id',
         'project_id',
         'branch_id',
         'user_id',
-        // 'is_taxable',
-        // 'status',
+        'buying_rate',
+        'coa_id',
+        'coa_uuid',
+        'coa_name',
+        'coa_code',
+        'transaction_type',
+
         // 'supplier_id',
         // 'manufacturer_id',
         // 'brand_id',

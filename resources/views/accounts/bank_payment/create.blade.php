@@ -49,7 +49,7 @@
                                     <div class="dropdown chart-dropdown" style="display: inline-block;">
                                         <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
                                         @php
-                                            $headings = ['Sr','Account Code','Account Name','Cheque No','Cheque Date','Description','Debit','Credit'];
+                                            $headings = ['Sr','Account Code','Account Name','Cheque No','Cheque Date','Description','Quantity','Rate/Unit','Debit(PKR)','Credit(PKR)'];
                                         @endphp
                                         <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
                                             @foreach($headings as $key=>$heading)
@@ -78,8 +78,10 @@
                                                     <th width="22%">Cheque No</th>
                                                     <th width="22%">Cheque Date</th>
                                                     <th width="22%">Description</th>
-                                                    <th width="16%">Debit</th>
-                                                    <th width="16%">Credit</th>
+                                                    <th width="22%">Quantity</th>
+                                                    <th width="22%">Rate/Unit</th>
+                                                    <th width="16%">Debit(PKR)</th>
+                                                    <th width="16%">Credit(PKR)</th>
                                                     <th width="13%" class="text-center">Action</th>
                                                 </tr>
                                                 <tr class="egt_form_header_input">
@@ -103,6 +105,13 @@
                                                         <input id="egt_description" type="text" class="form-control form-control-sm">
                                                     </td>
                                                     <td>
+                                                        <input id="egt_amount" type="text" class="form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_rate" type="text" class="form-control form-control-sm">
+                                                    </td>
+
+                                                    <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
                                                     </td>
                                                     <td>
@@ -120,6 +129,8 @@
                                                 <tfoot class="egt_form_footer">
                                                 <tr class="egt_form_footer_total">
                                                     <td class="voucher-total-title">Total</td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -176,6 +187,10 @@
             {
                 'id' : 'egt_amount',
                 'message' : 'Amount is required'
+            }
+            {
+                'id' : 'egt_rate',
+                'message' : 'Rate is required'
             }
 
         ];

@@ -9,7 +9,7 @@
     <meta name="keywords" content="">
     <meta name="author" content="PIXINVENT">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title') - {{ config('app.name', 'KSD') }}</title>
+    <title>@yield('title') - {{ config('app.name', 'HZ Traders') }}</title>
     <link rel="apple-touch-icon" href="{{asset('assets/images/ico/apple-icon-120.png')}}">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/ico/favicon.ico')}}">
     <!-- BEGIN: Custom CSS-->
@@ -51,7 +51,7 @@
                     </g>
                 </g>
             </svg>
-            <div class="fz-26 pt-15">{{auth()->user()->project->name}}</div>
+            <div class="fz-26 pt-15">{{auth()->user()->company->name}}</div>
         </td>
     </tr>
     </tbody>

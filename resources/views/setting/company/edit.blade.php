@@ -51,7 +51,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 {{-- <div class="col-sm-4"> --}}
+
                                 <div class="col-sm-12 mb-1">
+                                    {{-- <label class="col-form-label">Avatar: </label> --}}
+                                    {{-- @php $img = asset('assets/images/avatars/blank-img.png') @endphp --}}
                                     @php $root = \Illuminate\Support\Facades\Request::root(); $image_url = $current->company_image;@endphp
                                     @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
                                         @php $img = $root.'/uploads/'.$image_url; @endphp
@@ -77,14 +80,12 @@
                                         }
                                     </style>
                                     <div style="position: relative;">
-                                        {{-- @dd($img) --}}
-                                        <a onclick="document.getElementById('company_image_showImage').src='{{ $img }}'" class="close AClass" id="company_image_resetInput">
+                                        <a onclick="document.getElementById('company_showImage').src='{{ $img }}'" class="close AClass" id="company_resetInput">
                                             <span class="img_remove">&times;</span>
                                         </a>
-                                        <img id="company_image_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float:right;">
+                                        <img id="company_showImage" class="mb-1" src="{{ $img }}" style="width: 123px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};">
                                     </div>
-                                    <input class="form-control form-control-sm" type="file"  id="company_image_image_url" name="company_image_image"/>
-                                    <input type="hidden" value="{{ $image_url }}" name="company_image_hidden_image" id="company_image_hidden_avatar">
+                                    <input class="form-control form-control-sm" type="file" value="{{ $img }}" id="company_image_url" name="company_image"/>
                                 </div>
                             </div>
                                 {{-- @include('partials.address') --}}
@@ -103,16 +104,16 @@
 @endsection
 
 @section('script')
-<script>
+{{-- <script>
     //Reset Image on Cross Click
-    $(document).ready(function() {
-        $('#company_image_resetInput').on('click', function() {
-            var src = "{{ asset('assets/images/avatars/blank-img.png') }}";
-            $('#company_image_image_url').val('');
-            $('#company_image_showImage').attr('src', src );
-            $('#company_image_hidden_avatar').val('');
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#company_image_resetInput').on('click', function() {
+    //         var src = "{{ asset('assets/images/avatars/blank-img.png') }}";
+    //         $('#company_image_image_url').val('');
+    //         $('#company_image_showImage').attr('src', src );
+    //         $('#company_image_hidden_avatar').val('');
+    //     });
+    // });
     //Show image on change picture
     $(document).ready(function() {
             $('#company_image_image_url').change(function(e) {
@@ -124,5 +125,24 @@
             });
         });
 
+</script> --}}
+<script>
+    //Show image on change picture
+    $(document).ready(function() {
+        $('#company_image_url').change(function(e) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#company_showImage').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(e.target.files['0']);
+        });
+    });
+    //Reset Image on Cross Click
+    $(document).ready(function() {
+        $('#company_resetInput').on('click', function() {
+            $('#company_image_url').val('');
+        });
+    });
 </script>
+
 @endsection

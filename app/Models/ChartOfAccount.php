@@ -25,6 +25,8 @@ class ChartOfAccount extends Model
         'project_id',
         'branch_id',
         'user_id',
+        'product_id',
+
     ];
 
 

@@ -9,20 +9,21 @@
         border: 1px solid #d8d6de !important;
     }
 </style>
+
 @endsection
 
 @section('content')
 
     <!-- search header -->
     <section id="faq-search-filter">
-        <form id="customer_ledger_report" class="customer_ledger_report faq-search-input" action="{{route('reports.customer.store')}}" method="post" autocomplete="off">
+        <form id="vouchers_report" target="_blank" class="vouchers_report faq-search-input" action="{{route('reports.vouchers.voucherLedger')}}" method="post" autocomplete="off">
             @method('post')
             @csrf
             <div class="card faq-search" style="background-image: url('{{ asset('assets/images/banner/banner.png') }}')">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12 text-center">
-                            <h2 class="text-danger">Customer Ledger Report</h2>
+                            <h2 class="text-danger">{{ $data['report_name'] }}</h2>
                         </div>
                     </div>
                     <div class="row">
@@ -37,7 +38,7 @@
                     <!-- search input -->
                     <div class="row">
                         <div class="col-lg-12">
-                            {{-- <form id="customer_ledger_report" class="customer_ledger_report faq-search-input" action="{{route('reports.customer.customerLedgerReport')}}" method="post" enctype="multipart/form-data" autocomplete="off"> --}}
+                            {{-- <form id="currency_ledger_report" class="currency_ledger_report faq-search-input" action="{{route('reports.currency.currencyLedgerReport')}}" method="post" enctype="multipart/form-data" autocomplete="off"> --}}
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="row">
@@ -56,14 +57,42 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="row">
-                                            <label class="form-label" for="basic-default-password1"><b>Customer</b></label>
-                                                <div class="col-sm-12">
+                                            <label class="form-label" for="basic-default-password1"><b>All Vouchers</b></label>
+                                            <select class="select2 form-select voucher_name" id="voucher_type" name="voucher_type">
+                                                <option value=""> --Select--</option>
+
+                                                @foreach ($data['vouchers'] as $v )
+                                                    @php
+                                                        $voucher_name = '';
+                                                        if($v->type == 'CPV'){
+                                                            $voucher_name = 'Cash Payment Voucher';
+                                                        }else if($v->type == 'CRV'){
+                                                            $voucher_name = 'Cash Receive Voucher';
+                                                        }else if($v->type == 'BRV'){
+                                                            $voucher_name = 'Bank Receive Voucher';
+                                                        }else if($v->type == 'BPV'){
+                                                            $voucher_name = 'Bank Payment Voucher';
+                                                        }else if($v->type == 'SIV'){
+                                                            $voucher_name = 'Sale Invoice Voucher';
+                                                        }else if($v->type == 'OBV'){
+                                                            $voucher_name = 'Opening Balance Voucher';
+                                                        }else if($v->type == 'CST'){
+                                                            $voucher_name = 'Customer Voucher';
+                                                        }else{
+                                                            $voucher_name = 'Other Voucher';
+                                                        }
+                                                    @endphp
+                                                    <option value="{{ $v->type }}"> {{  $v->type }}-{{ $voucher_name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                                {{-- <div class="col-sm-12">
                                                     <div class="input-group eg_help_block w-100">
                                                         <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                        <input id="customer_name" type="text" placeholder="Click here..." class="customer_name form-control form-control-sm text-left">
-                                                        <input id="customer_id" type="hidden" name="customer_id">
+                                                        <input id="chart_name" type="text" placeholder="Click here..." class="chart_name form-control form-control-sm text-left">
+                                                        <input id="chart_id" type="hidden" name="chart_id">
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 {{-- <div class="w-100 input-group mb-2">
 
                                                 </div> --}}
@@ -100,6 +129,5 @@
           }
 
 </script>
-<script src="{{asset('/pages/help/customer_help.js')}}"></script>
-
+    <script src="{{asset('/pages/help/currency_help.js')}}"></script>
 @endsection

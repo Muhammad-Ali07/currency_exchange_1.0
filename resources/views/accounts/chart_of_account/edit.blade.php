@@ -7,6 +7,11 @@
     @permission($data['permission'])
     @php
         $current = $data['current'];
+        $product = false;
+        if($current->parent_account_code == '01-02-0002-0000' || $current->parent_account_code == '01-02-0001-0000' ){
+            $product = true;
+        }
+        // dump($product);
         if(!$data['view']){
             $url = route('accounts.chart-of-account.update',$data['id']);
         }
@@ -92,6 +97,24 @@
                                         <input type="text" class="form-control form-control-sm" value="{{$current->name}}" id="name" name="name" />
                                     </div>
                                 </div>
+                                @if ($product == true)
+                                    <div class="mb-1 row" id="product_row">
+                                        <div class="col-sm-3">
+                                            <label class="col-form-label">Product <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group eg_help_block">
+                                                @php
+                                                    $product = \App\Models\Product::where('id',$current->product_id)->first();
+                                                @endphp
+                                                <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                <input id="to_product_name" type="text" value="{{ isset($product->name) ? $product->name : '' }}" placeholder="Click here..." class="to_product_name form-control form-control-sm text-left">
+                                                <input id="to_product_id" type="hidden" value="{{ isset($current->product_id) ? $current->product_id : '' }}" name="to_product_id">
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
                                         <label class="col-form-label">Status</label>
@@ -114,6 +137,8 @@
 
 @section('pageJs')
     <script src="{{ asset('/pages/accounts/chart_of_account/edit.js') }}"></script>
+    <script src="{{asset('/pages/help/product_help_new.js')}}"></script>
+
 @endsection
 
 @section('script')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Accounts;
 
 use App\Http\Controllers\Controller;
 use App\Models\ChartOfAccount;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -216,7 +217,7 @@ class ChartOfAccountController extends Controller
             $data['permission'] = self::Constants()['view'];
             $data['permission_edit'] = self::Constants()['edit'];
         }
-
+        $data['products'] = Product::get();
         return view('accounts.chart_of_account.edit', compact('data'));
     }
 
@@ -251,6 +252,7 @@ class ChartOfAccountController extends Controller
                 ->update([
                     'name' => self::strUCWord($request->name),
                     'status' => isset($request->status) ? "1" : "0",
+                    'product_id' => $request->to_product_id,
                     'company_id' => auth()->user()->company_id,
                     'project_id' => auth()->user()->project_id,
                     'user_id' => auth()->user()->id,

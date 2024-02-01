@@ -5,16 +5,33 @@
 
 @section('content')
     @permission($data['permission'])
-    <form id="cash_receive_create" class="cash_receive_create" action="{{route('accounts.cash-receive.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
-        @csrf
+    @php
+        $current = $data['current'];
+        if(!$data['view']){
+            $url = route('accounts.opening-balance.update',$data['id']);
+        }
+    @endphp
+    <form id="opening_balance_edit" class="opening_balance_edit" action="{{isset($url)?$url:""}}"  method="post" enctype="multipart/form-data" autocomplete="off">
+        @if(!$data['view'])
+            @csrf
+            @method('patch')
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header border-bottom">
                         <div class="card-left-side">
                             <h4 class="card-title">{{$data['title']}}</h4>
-                            <button type="submit" name="current_action_id" value="store" class="btn btn-success btn-sm waves-effect waves-float waves-light">Save</button>
-                            <button type="submit" name="current_action_id" value="post" class="btn btn-warning btn-sm waves-effect waves-float waves-light">Post</button>
+                            @if($data['view'])
+                                @if(!$data['posted'])
+                                    @permission($data['permission_edit'])
+                                    <a href="{{route('accounts.opening-balance.edit',$data['id'])}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Edit</a>
+                                    @endpermission
+                                @endif
+                            @else
+                                <button type="submit" name="current_action_id" value="update" class="btn btn-success btn-sm waves-effect waves-float waves-light">Update</button>
+                                <button type="submit" name="current_action_id" value="post" class="btn btn-warning btn-sm waves-effect waves-float waves-light">Post</button>
+                            @endif
                         </div>
                         <div class="card-link">
                             <a href="{{$data['list_url']}}" class="btn btn-secondary btn-sm waves-effect waves-float waves-light">Back</a>
@@ -23,7 +40,7 @@
                     <div class="card-body mt-2">
                         <div class="mb-1 row">
                             <div class="col-sm-12">
-                                <h6>{{$data['voucher_no']}}</h6>
+                                <h6>{{$current->voucher_no}}</h6>
                             </div>
                         </div>
                         <div class="row">
@@ -33,12 +50,11 @@
                                         <label class="col-form-label">Date <span class="required">*</span></label>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input type="text" id="date" name="date" class="form-control form-control-sm flatpickr-basic flatpickr-input" placeholder="YYYY-MM-DD" value="{{date('Y-m-d')}}" />
+                                        <input type="text" id="date" name="date" class="form-control form-control-sm flatpickr-basic flatpickr-input" placeholder="YYYY-MM-DD" value="{{date('Y-m-d',strtotime($current->date))}}" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
-
                             </div>
                         </div>
                         <div class="row">
@@ -49,7 +65,7 @@
                                     <div class="dropdown chart-dropdown" style="display: inline-block;">
                                         <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
                                         @php
-                                            $headings = ['Sr','Account Code','Account Name','Description','Quantity','Rate/Unit','Debit','Credit'];
+                                            $headings = ['Sr','Account Code','Account Name','Cheque No','Cheque Date','Description','Debit','Credit'];
                                         @endphp
                                         <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
                                             @foreach($headings as $key=>$heading)
@@ -75,11 +91,11 @@
                                                     <th width="7%">Sr</th>
                                                     <th width="20%">Account Code</th>
                                                     <th width="22%">Account Name</th>
+                                                    <th width="22%">Cheque No</th>
+                                                    <th width="22%">Cheque Date</th>
                                                     <th width="22%">Description</th>
-                                                    <th width="22%">Quantity</th>
-                                                    <th width="22%">Rate/Unit</th>
-                                                    <th width="16%">Debit(PKR)</th>
-                                                    <th width="16%">Credit(PKR)</th>
+                                                    <th width="16%">Debit</th>
+                                                    <th width="16%">Credit</th>
                                                     <th width="13%" class="text-center">Action</th>
                                                 </tr>
                                                 <tr class="egt_form_header_input">
@@ -94,15 +110,14 @@
                                                         <input id="egt_chart_name" type="text" class="chart_name form-control form-control-sm" readonly>
                                                     </td>
                                                     <td>
+                                                        <input id="egt_cheque_no" type="text" class="cheque_no form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_cheque_date" type="text" class="cheque_date form-control form-control-sm flatpickr-basic flatpickr-input" placeholder="Click & Select Date">
+                                                    </td>
+                                                    <td>
                                                         <input id="egt_description" type="text" class="form-control form-control-sm">
                                                     </td>
-                                                    <td>
-                                                        <input id="egt_amount" type="text" class="form-control form-control-sm">
-                                                    </td>
-                                                    <td>
-                                                        <input id="egt_rate" type="text" class="form-control form-control-sm">
-                                                    </td>
-
                                                     <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
                                                     </td>
@@ -117,6 +132,44 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody class="egt_form_body">
+                                                @if(isset( $data['dtl']) && count( $data['dtl']) > 0)
+                                                    @foreach($data['dtl'] as $dtl)
+                                                        <tr>
+                                                            <td class="handle"><i data-feather="move" class="handle egt_handle"></i>
+                                                                <input type="text" data-id="egt_sr_no" name="pd[{{$loop->iteration}}][egt_sr_no]"  value="{{$loop->iteration}}" class="form-control form-control-sm" readonly>
+                                                                <input type="hidden" data-id="chart_id" name="pd[{{$loop->iteration}}][chart_id]" value="{{$dtl->chart_account_id}}" class="chart_id form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" data-id="egt_chart_code" name="pd[{{$loop->iteration}}][egt_chart_code]" value="{{$dtl->chart_account_code}}" class=" chart_code form-control form-control-sm text-left" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" data-id="egt_chart_name" name="pd[{{$loop->iteration}}][egt_chart_name]" value="{{$dtl->chart_account_name}}" class="chart_name form-control form-control-sm" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input id="egt_cheque_no" type="text" name="pd[{{$loop->iteration}}][egt_cheque_no]" value="{{$dtl->cheque_no}}" class="cheque_no form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input id="egt_cheque_date" type="text" name="pd[{{$loop->iteration}}][egt_cheque_date]" value="{{$dtl->cheque_date}}" class="cheque_date form-control form-control-sm flatpickr-basic flatpickr-input"  placeholder="Click & Select Date" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" data-id="egt_description" name="pd[{{$loop->iteration}}][egt_description]" value="{{$dtl->description}}"  class="form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input data-id="egt_debit" type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input data-id="egt_credit" type="text" name="pd[{{$loop->iteration}}][egt_credit]" value="{{number_format($dtl->credit,3)}}" class="FloatValidate credit form-control form-control-sm">
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <div class="egt_btn-group">
+                                                                    <button type="button" class="btn btn-danger btn-sm egt_del">
+                                                                        <i data-feather="trash-2"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                                 </tbody>
                                                 <tfoot class="egt_form_footer">
                                                 <tr class="egt_form_footer_total">
@@ -148,7 +201,7 @@
                                 <div class="row">
                                     <label class="col-form-label col-lg-2">Remarks:</label>
                                     <div class="col-lg-10">
-                                        <textarea class="form-control form-control-sm" rows="3" name="remarks" id="remarks"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="3" name="remarks" id="remarks">{{$current->remarks}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +214,7 @@
     @endpermission
 @endsection
 @section('pageJs')
-    <script src="{{ asset('/pages/accounts/cash_receive/create.js') }}"></script>
+    <script src="{{ asset('/pages/accounts/opening_balance/edit.js') }}"></script>
 @endsection
 
 @section('script')
@@ -178,10 +231,6 @@
                 'id' : 'egt_amount',
                 'message' : 'Amount is required'
             }
-            {
-                'id' : 'egt_rate',
-                'message' : 'Rate/Unit is required'
-            }
 
         ];
         var var_egt_readonly_fields = ['egt_chart_code','egt_chart_name'];
@@ -190,15 +239,4 @@
     <script src="{{asset('/pages/common/erp_grid.js')}}"></script>
     <script src="{{asset('/pages/help/chart_help.js')}}"></script>
     <script src="{{asset('/pages/common/account-calculations.js')}}"></script>
-    <script>
-        // $(document).on('keyup','#egt_rate',function(){
-        //     var egt_amount = $('#egt_amount').val();
-        //     var egt_rate = $(this).val();
-
-        //     var credit = egt_amount * egt_rate;
-        //     credit = parseFloat(credit);
-        //     $('#egt_credit').val(credit.toFixed(3));
-
-        // });
-    </script>
 @endsection

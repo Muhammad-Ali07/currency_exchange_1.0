@@ -75,6 +75,11 @@ class UserManagementSystemController extends Controller
                         'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
                     ],
                     [
+                        'dname' => 'Opening Balance',
+                        'name' => 'opening-balance',
+                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    ],
+                    [
                         'dname' => 'Bank Receive',
                         'name' => 'bank-receive',
                         'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
@@ -125,7 +130,7 @@ class UserManagementSystemController extends Controller
             ],
             // Transactional Forms
             [
-                'name' => 'Invoice',
+                'name' => 'Transaction',
                 'icon' => 'icon-xl la la-shopping-cart',
                 'child' => [
                     [
@@ -189,6 +194,22 @@ class UserManagementSystemController extends Controller
                         'name' => 'customer_legder',
                         'action' => [ $view ]
                     ],
+                    [
+                        'dname' => 'Currency Ledger',
+                        'name' => 'currency-ledger',
+                        'action' => [ $view ]
+                    ],
+                    [
+                        'dname' => 'Bank Currency Ledger',
+                        'name' => 'bank-currency-ledger',
+                        'action' => [ $view ]
+                    ],
+                    [
+                        'dname' => 'Vouchers List',
+                        'name' => 'vouchers-list',
+                        'action' => [ $view ]
+                    ],
+
                 ]
             ],
             // setting

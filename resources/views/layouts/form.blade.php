@@ -41,7 +41,6 @@
 
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
-    {{-- <link href="{{ asset('assets/summernote-0.8.18-dist/summernote.css') }}" rel="stylesheet"> --}}
     <!-- END: Custom CSS-->
     @if(isset($data['view']) && $data['view'])
     <style>
@@ -78,12 +77,16 @@
 
 <script>
     // route('sale.sale-invoice.getProductDetail')
-    var routeGetProductDetail = '';
+    var routeGetProductDetail = '{{ route('transaction.cash-chart.getCashChart') }}';
+    var routeGetBuyProductDetail = '{{ route('transaction.cash-chart.getCashChart') }}';
+    var routeGetBankProductDetail = '{{ route('transaction.cash-chart.getCashChart') }}';
+    var routeGetProductQtyDetail = '{{ route('transaction.cash-chart.getProductQtyDtl') }}';
 
 </script>
 <!-- BEGIN: Vendor JS-->
 <script src="{{asset('assets/vendors/js/vendors.min.js')}}"></script>
 <!-- BEGIN Vendor JS-->
+<script src="{{asset('assets/vendors/js/jquery/jquery.min.js')}}"></script>
 
 <!-- BEGIN: Page Vendor JS-->
 <script src="{{asset('assets/vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>
@@ -93,7 +96,6 @@
 <script src="{{asset('assets/vendors/js/pickers/pickadate/picker.time.js')}}"></script>
 <script src="{{asset('assets/vendors/js/pickers/pickadate/legacy.js')}}"></script>
 <!-- END: Page Vendor JS-->
-<script src="{{asset('assets/vendors/js/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('assets/vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
 <script src="{{asset('assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
 <script src="{{asset('assets/vendors/js/extensions/toastr.min.js')}}"></script>
@@ -115,9 +117,7 @@
 
 @yield('script')
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.summernote').summernote();
-    });
+
 </script>
 <script>
     $(window).on('load', function() {
@@ -273,7 +273,6 @@
 @include('layouts.commonJSFunc')
 
 <script src="{{asset('/pages/common/validateInputFields.js')}}"></script>
-{{-- <script src="{{ asset('assets/summernote-0.8.18-dist/summernote.js') }}"></script> --}}
 </body>
 <!-- END: Body-->
 

@@ -1,6 +1,6 @@
-var help_customer_url = '/help/customer';
-var help_customer_id = 'customer_name';
-var help_customer_surname = 'customerHelp';
+var help_customer_url = '/help/currencyChartHelp';
+var help_customer_id = 'chart_name';
+var help_customer_surname = 'currencyChartHelp';
 
 $(document).on('click','.data_tbody_row',function(e){
     var thix = $(this);
@@ -14,12 +14,12 @@ $(document).on('click','.data_tbody_row',function(e){
             var name = $(document).find('#customer_name').val();
             $(document).find('#customer_create #name').val(name);
         }else{
-            var customer_name = thix.find('td[data-field="customer_name"]').text();
-            var customer_phone = thix.find('td[data-field="customer_phone"]').text();
-            var customer_id = thix.find('td[data-field="customer_id"]').text();
-            $('form').find('#customer_name').val(customer_name);
-            $('form').find('#customer_id').val(customer_id);
-            $('#customer_name').focus();
+            var chart_name = thix.find('td[data-field="chart_name"]').text();
+            // var customer_phone = thix.find('td[data-field="customer_phone"]').text();
+            var chart_id = thix.find('td[data-field="chart_id"]').text();
+            $('form').find('#chart_name').val(chart_name);
+            $('form').find('#chart_id').val(chart_id);
+            $('#chart_name').focus();
 
         }
         $('#inLineHelp').remove();
@@ -49,7 +49,7 @@ $('#'+help_customer_id).on('focusin keyup',function(e){
 });
 $(document).on('click',function(e){
     if($(e.target).attr('id') != help_customer_id) {
-        $("#inLineHelp[data-id='customer']").remove();
+        $("#inLineHelp[data-id='chart_help_for_report']").remove();
     }
 });
 

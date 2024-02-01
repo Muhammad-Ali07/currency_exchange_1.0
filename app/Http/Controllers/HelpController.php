@@ -169,4 +169,112 @@ class HelpController extends Controller
         return view('helps.transaction_type_help',compact('data'));
     }
 
+    public function currencyChartHelp($val = null)
+    {
+        //cash currency ledger
+        $data = [];
+        $chart = ChartOfAccount::where('level',4)
+                // ->where('parent_account_code','01-02-0001-0000');
+                ->where('parent_account_code','01-02-0002-0000');
+
+        if(!empty($val)){
+            $val = (string)$val;
+            $chart = $chart->where('code','like',"%$val%");
+            $chart = $chart->orWhere('name','like',"%$val%");
+        }
+
+        $chart = $chart->select('id','code','name')->get();
+        //dd($chart);
+        $data['chart'] =  $chart;
+
+        return view('helps.chart_help_for_report',compact('data'));
+    }
+
+    public function bankCurrencyChartHelp($val = null)
+    {
+        // dd('in help');
+        //cash currency ledger
+        $data = [];
+        $chart = ChartOfAccount::where('level',4)
+                ->where('parent_account_code','01-02-0001-0000');
+                // ->where('parent_account_code','01-02-0002-0000');
+
+        if(!empty($val)){
+            $val = (string)$val;
+            $chart = $chart->where('code','like',"%$val%");
+            $chart = $chart->orWhere('name','like',"%$val%");
+        }
+
+        $chart = $chart->select('id','code','name')->get();
+        // dd($chart);
+        $data['chart'] =  $chart;
+
+        return view('helps.bank_currency_chart',compact('data'));
+    }
+
+    public function bankCurrencyHelp($val = null)
+    {
+        // dd('in help');
+        //cash currency ledger
+        $data = [];
+        $chart = ChartOfAccount::where('level',4)
+                ->where('parent_account_code','01-02-0001-0000');
+                // ->where('parent_account_code','01-02-0002-0000');
+
+        if(!empty($val)){
+            $val = (string)$val;
+            $chart = $chart->where('code','like',"%$val%");
+            $chart = $chart->orWhere('name','like',"%$val%");
+        }
+
+        $chart = $chart->select('id','code','name','product_id')->get();
+        // dd($chart);
+        $data['chart'] =  $chart;
+
+        return view('helps.bank_currency_help',compact('data'));
+    }
+
+    public function cashCurrencyHelp($val = null)
+    {
+        //cash currency ledger
+        $data = [];
+        $chart = ChartOfAccount::where('level',4)
+                // ->where('parent_account_code','01-02-0001-0000');
+                ->where('parent_account_code','01-02-0002-0000');
+
+        if(!empty($val)){
+            $val = (string)$val;
+            $chart = $chart->where('code','like',"%$val%");
+            $chart = $chart->orWhere('name','like',"%$val%");
+        }
+
+        $chart = $chart->select('id','code','name','product_id')->get();
+        //dd($chart);
+        $data['chart'] =  $chart;
+
+        return view('helps.cash_currency_help',compact('data'));
+    }
+
+    public function buyCashCurrencyHelp($val = null)
+    {
+        //cash currency ledger
+        $data = [];
+        $chart = ChartOfAccount::where('level',4)
+                // ->where('parent_account_code','01-02-0001-0000');
+                ->where('parent_account_code','01-02-0002-0000');
+
+        if(!empty($val)){
+            $val = (string)$val;
+            $chart = $chart->where('code','like',"%$val%");
+            $chart = $chart->orWhere('name','like',"%$val%");
+        }
+
+        $chart = $chart->select('id','code','name','product_id')->get();
+        //dd($chart);
+        $data['chart'] =  $chart;
+
+        return view('helps.buy_cash_currency_help',compact('data'));
+    }
+
+
 }

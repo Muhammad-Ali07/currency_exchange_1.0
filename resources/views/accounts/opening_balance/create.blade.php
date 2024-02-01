@@ -5,7 +5,7 @@
 
 @section('content')
     @permission($data['permission'])
-    <form id="cash_receive_create" class="cash_receive_create" action="{{route('accounts.cash-receive.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
+    <form id="opening_balance_create" class="opening_balance_create" action="{{route('accounts.opening-balance.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
         @csrf
         <div class="row">
             <div class="col-12">
@@ -49,7 +49,7 @@
                                     <div class="dropdown chart-dropdown" style="display: inline-block;">
                                         <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
                                         @php
-                                            $headings = ['Sr','Account Code','Account Name','Description','Quantity','Rate/Unit','Debit','Credit'];
+                                            $headings = ['Sr','Account Code','Account Name','Description','Debit','Credit'];
                                         @endphp
                                         <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
                                             @foreach($headings as $key=>$heading)
@@ -74,12 +74,13 @@
                                                 <tr class="egt_form_header_title">
                                                     <th width="7%">Sr</th>
                                                     <th width="20%">Account Code</th>
-                                                    <th width="22%">Account Name</th>
-                                                    <th width="22%">Description</th>
-                                                    <th width="22%">Quantity</th>
-                                                    <th width="22%">Rate/Unit</th>
-                                                    <th width="16%">Debit(PKR)</th>
-                                                    <th width="16%">Credit(PKR)</th>
+                                                    <th width="12%">Account Name</th>
+                                                    {{-- <th width="22%">Cheque No</th>
+                                                    <th width="22%">Cheque Date</th> --}}
+                                                    <th width="32%">Description</th>
+                                                    <th width="16%">Quantity</th>
+                                                    <th width="16%">Rate/Unit</th>
+                                                    <th width="16%">Credit</th>
                                                     <th width="13%" class="text-center">Action</th>
                                                 </tr>
                                                 <tr class="egt_form_header_input">
@@ -93,18 +94,20 @@
                                                     <td>
                                                         <input id="egt_chart_name" type="text" class="chart_name form-control form-control-sm" readonly>
                                                     </td>
+                                                    {{-- <td>
+                                                        <input id="egt_cheque_no" type="text" class="cheque_no form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_cheque_date" type="text" class="cheque_date form-control form-control-sm flatpickr-basic flatpickr-input" placeholder="Click & Select Date">
+                                                    </td> --}}
                                                     <td>
                                                         <input id="egt_description" type="text" class="form-control form-control-sm">
                                                     </td>
                                                     <td>
-                                                        <input id="egt_amount" type="text" class="form-control form-control-sm">
+                                                        <input id="egt_amount" type="text" class="FloatValidate quantity form-control form-control-sm">
                                                     </td>
                                                     <td>
-                                                        <input id="egt_rate" type="text" class="form-control form-control-sm">
-                                                    </td>
-
-                                                    <td>
-                                                        <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
+                                                        <input id="egt_rate" type="text" class="FloatValidate rate form-control form-control-sm">
                                                     </td>
                                                     <td>
                                                         <input id="egt_credit" type="text" class="FloatValidate credit form-control form-control-sm">
@@ -126,10 +129,10 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td class="voucher-total-debit text-end">
+                                                    {{-- <td class="voucher-total-debit text-end">
                                                         <span id="tot_debit"></span>
                                                         <input id="tot_voucher_debit" name="tot_voucher_debit" type="hidden" >
-                                                    </td>
+                                                    </td> --}}
                                                     <td class="voucher-total-credit text-end">
                                                         <span id="tot_credit"></span>
                                                         <input id="tot_voucher_credit" name="tot_voucher_credit" type="hidden" >
@@ -161,7 +164,7 @@
     @endpermission
 @endsection
 @section('pageJs')
-    <script src="{{ asset('/pages/accounts/cash_receive/create.js') }}"></script>
+    <script src="{{ asset('/pages/accounts/opening_balance/create.js') }}"></script>
 @endsection
 
 @section('script')
@@ -179,26 +182,30 @@
                 'message' : 'Amount is required'
             }
             {
+                'id' : 'egt_quantity',
+                'message' : 'Quantity is required'
+            }
+            {
                 'id' : 'egt_rate',
                 'message' : 'Rate/Unit is required'
             }
-
         ];
         var var_egt_readonly_fields = ['egt_chart_code','egt_chart_name'];
     </script>
+
     <script src="{{asset('/js/jquery-12.js')}}"></script>
     <script src="{{asset('/pages/common/erp_grid.js')}}"></script>
     <script src="{{asset('/pages/help/chart_help.js')}}"></script>
-    <script src="{{asset('/pages/common/account-calculations.js')}}"></script>
+    <script src="{{asset('/pages/common/obv-calculations.js')}}"></script>
     <script>
-        // $(document).on('keyup','#egt_rate',function(){
-        //     var egt_amount = $('#egt_amount').val();
-        //     var egt_rate = $(this).val();
+        $(document).on('keyup','#egt_rate',function(){
+            var egt_amount = $('#egt_amount').val();
+            var egt_rate = $(this).val();
 
-        //     var credit = egt_amount * egt_rate;
-        //     credit = parseFloat(credit);
-        //     $('#egt_credit').val(credit.toFixed(3));
+            var credit = egt_amount * egt_rate;
+            credit = parseFloat(credit);
+            $('#egt_credit').val(credit.toFixed(3));
 
-        // });
+        });
     </script>
 @endsection

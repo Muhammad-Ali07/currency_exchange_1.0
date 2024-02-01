@@ -13,6 +13,7 @@ use App\Http\Controllers\Accounts\BankReceiveController;
 use App\Http\Controllers\Accounts\CashPaymentController;
 use App\Http\Controllers\Accounts\CashReceiveController;
 use App\Http\Controllers\Accounts\JournalController;
+use App\Http\Controllers\Accounts\OpeningBalanceController;
 use App\Http\Controllers\Setting\CountryController;
 use App\Http\Controllers\Setting\RegionController;
 use App\Http\Controllers\Setting\CityController;
@@ -95,6 +96,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('transactionTypeHelp', [HelpController::class, 'transactionTypeHelp'])->name('transactionType');
 
             Route::get('supplier/{str?}', [HelpController::class, 'supplier'])->name('supplier');
+            // Route::get('reportChart/{str?}', [HelpController::class, 'reportChart'])->name('reportChart');
+
+            Route::get('currencyChartHelp/{str?}', [HelpController::class, 'currencyChartHelp'])->name('currency');
+            Route::get('bankCurrencyChartHelp/{str?}', [HelpController::class, 'bankCurrencyChartHelp'])->name('currency');
+            Route::get('bankCurrencyHelp/{str?}', [HelpController::class, 'bankCurrencyHelp'])->name('bankCurrencyHelp');
+            Route::get('cashCurrencyHelp/{str?}', [HelpController::class, 'cashCurrencyHelp'])->name('cashCurrencyHelp');
+            Route::get('buyCashCurrencyHelp/{str?}', [HelpController::class, 'buyCashCurrencyHelp'])->name('buyCashCurrencyHelp');
 
 
         });
@@ -111,6 +119,13 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::post('get-code-by-parent-account', 'getChildCodeByParentAccount')->name('getChildCodeByParentAccount');
 
             });
+            Route::prefix('opening-balance')->name('opening-balance.')->controller(OpeningBalanceController::class)->group(function(){
+                Route::get('print/{id}', 'printView')->name('print');
+                Route::get('revert-list', 'revertList')->name('revertList');
+                Route::post('revert/{id}', 'revert')->name('revert');
+            });
+            Route::prefix('opening-balance')->resource('opening-balance', OpeningBalanceController::class);
+
             Route::prefix('bank-payment')->name('bank-payment.')->controller(BankPaymentController::class)->group(function(){
                 Route::get('print/{id}', 'printView')->name('print');
                 Route::get('revert-list', 'revertList')->name('revertList');
@@ -169,11 +184,47 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::prefix('reports')->name('reports.')->group(function () {
+            // customer report
             Route::prefix('customer')->name('customer.')->controller(ReportController::class)->group(function(){
                 Route::get('ledger', 'customerLedger')->name('ledger');
-                Route::post('cstLedgerReport', 'store')->name('store');
-
+                Route::post('cstLedgerReport', 'customerLedgerReport')->name('store');
             });
+            // cash currency report
+            Route::prefix('currency')->name('currency.')->controller(ReportController::class)->group(function(){
+                Route::get('ledger', 'currencyLedger')->name('ledger');
+                Route::post('currencyLedgerReport', 'currencyLedgerReport')->name('currencyLedgerReport');
+            });
+            // bank currency report
+            Route::prefix('bank_currency')->name('bank_currency.')->controller(ReportController::class)->group(function(){
+                Route::get('ledger', 'bankCurrencyLedger')->name('ledger');
+                Route::post('bankCurrencyLedgerReport', 'bankCurrencyLedgerReport')->name('currencyLedgerReport');
+            });
+
+            Route::prefix('vouchers')->name('vouchers.')->controller(ReportController::class)->group(function(){
+                Route::get('list', 'vouchersList')->name('list');
+                Route::post('voucherLedger', 'voucherLedger')->name('voucherLedger');
+            });
+        });
+
+        Route::prefix('master')->name('master.')->group(function () {
+            Route::prefix('product')->resource('product', ProductController::class);
+            Route::prefix('customer')->resource('customer', CustomerController::class);
+            Route::prefix('supplier')->resource('supplier', SupplierController::class);
+            Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
+        });
+        Route::prefix('transaction')->name('transaction.')->group(function () {
+            Route::prefix('sale')->resource('sale', SaleInvoiceController::class);
+            Route::prefix('cash-chart')->name('cash-chart.')->controller(SaleInvoiceController::class)->group(function(){
+                Route::post('get-cash-cash', 'getCashChart')->name('getCashChart');
+                Route::post('get-product-detail', 'getProductQtyDtl')->name('getProductQtyDtl');
+                // Route::get('print/{id}', 'printView')->name('print');
+                // Route::post('get-cash-chart-id', 'getCashChart')->name('getCashChart');
+            });
+
+            // Route::prefix('product')->resource('sale', ProductController::class);
+            // Route::prefix('customer')->resource('customer', CustomerController::class);
+            // Route::prefix('supplier')->resource('supplier', SupplierController::class);
+            // Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
         });
 
         Route::prefix('purchase')->name('purchase.')->group(function () {
@@ -192,20 +243,6 @@ Route::group(['middleware' => 'auth'], function () {
                 //     Route::post('get-product-variation-by-buyable-type', 'getProductVariations')->name('getProductVariations');
                 // });
 
-            });
-            Route::prefix('master')->name('master.')->group(function () {
-                Route::prefix('product')->resource('product', ProductController::class);
-                Route::prefix('customer')->resource('customer', CustomerController::class);
-                Route::prefix('supplier')->resource('supplier', SupplierController::class);
-                Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
-            });
-            Route::prefix('transaction')->name('transaction.')->group(function () {
-                Route::prefix('sale')->resource('sale', SaleInvoiceController::class);
-
-                // Route::prefix('product')->resource('sale', ProductController::class);
-                // Route::prefix('customer')->resource('customer', CustomerController::class);
-                // Route::prefix('supplier')->resource('supplier', SupplierController::class);
-                // Route::prefix('product-quantity')->resource('product-quantity', ProductPropertyController::class);
             });
 
             Route::prefix('invoice')->name('invoice.')->group(function () {
