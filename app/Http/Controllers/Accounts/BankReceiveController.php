@@ -176,6 +176,7 @@ class BankReceiveController extends Controller
             foreach ($request->pd as $pd){
                 $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
                 if(!empty($account)){
+                    $balance_amount = $pd['egt_amount'] * $pd['egt_rate'] ;
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -190,6 +191,8 @@ class BankReceiveController extends Controller
                         'cheque_date' => $pd['egt_cheque_date'],
                         'amount' => $pd['egt_amount'],
                         'rate_per_unit' => $pd['egt_rate'],
+                        'balance_amount' => $balance_amount,
+
                         'debit' => Utilities::NumFormat($pd['egt_debit']),
                         'credit' => Utilities::NumFormat($pd['egt_credit']),
                         'description' => $pd['egt_description'],

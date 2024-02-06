@@ -224,7 +224,7 @@ class SaleInvoiceController extends Controller
                     'payment_type' => $request->payment_type,
 
                     'buy_chart_id' => $request->buy_cash_chart_id,
-                    'buy_rate_per_unit' => $request->buy_rate,
+                    'buy_rate_per_unit' => $request->cih_sell_rate,
                     'cash_chart_id' => $cash_chart_id,
                     'bank_chart_id' => $bank_chart_id,
 
@@ -237,15 +237,20 @@ class SaleInvoiceController extends Controller
                 $buy_rate_per_unit = 0;
                 $balance_amount = 0;
                 $qty = $request->quantity;
-                $buy_rate_per_unit = $request->buy_rate;
+                $buy_rate_per_unit = $request->cih_sell_rate;
                 $balance_amount = $qty * $buy_rate_per_unit;
-                // dump($buy_rate_per_unit);
-                // dd($balance_amount);
+                $total_amount = $balance_amount - $request->gain_amount;
+                $gain_amount = $request->gain_amount;
+                // $total_amount = $
+                // dump($total_amount);
+                // dd($gain_amount);
 
 
                 if($payment_type == 'cash'){
                     $cr_receive_account = ChartOfAccount::where('id',$request->buy_cash_chart_id)->first();
                     $cr_gave_account = ChartOfAccount::where('id',$request->cash_chart_id)->first();
+                    $gain_account = ChartOfAccount::where('id',579)->first();
+
                     // dd($request->all());
 
                     //for sale invoice  CRV voucher
@@ -253,6 +258,7 @@ class SaleInvoiceController extends Controller
                     $voucher_no = self::documentCode('CRV',$max);
                     $voucher_id = self::uuid();
                     $posted = $request->current_action_id == 'post'?1:0;
+
                     //credit voucher
                     Voucher::create([
                         'voucher_id' => $voucher_id,
@@ -262,9 +268,9 @@ class SaleInvoiceController extends Controller
                         'voucher_no' => $voucher_no,
                         'sr_no' => 1,
                         'form_id' => $sale->uuid,
-                        'chart_account_id' => $cr_receive_account->id,
-                        'chart_account_name' => $cr_receive_account->name,
-                        'chart_account_code' => $cr_receive_account->code,
+                        'chart_account_id' => $cst_account->id,
+                        'chart_account_name' => $cst_account->name,
+                        'chart_account_code' => $cst_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
                         'debit' => Utilities::NumFormat(0),
@@ -278,7 +284,7 @@ class SaleInvoiceController extends Controller
                         'user_id' => auth()->user()->id,
                         'posted' => 0,
                     ]);
-                    //debit voucher
+                    //debit voucher for amount
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -287,14 +293,14 @@ class SaleInvoiceController extends Controller
                         'voucher_no' => $voucher_no,
                         'sr_no' => 2,
                         'form_id' => $sale->uuid,
-                        'chart_account_id' => $cst_account->id,
-                        'chart_account_name' => $cst_account->name,
-                        'chart_account_code' => $cst_account->code,
+                        'chart_account_id' => $cr_receive_account->id,
+                        'chart_account_name' => $cr_receive_account->name,
+                        'chart_account_code' => $cr_receive_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
-                        'debit' => Utilities::NumFormat($balance_amount),
+                        'debit' => Utilities::NumFormat($total_amount),
                         'credit' => Utilities::NumFormat(0),
-                        'balance_amount' => Utilities::NumFormat($balance_amount),
+                        'balance_amount' => Utilities::NumFormat($total_amount),
                         'description' => 'dummy',
                         'remarks' => 'dummy remarks',
                         'company_id' => auth()->user()->company_id,
@@ -303,6 +309,32 @@ class SaleInvoiceController extends Controller
                         'user_id' => auth()->user()->id,
                         'posted' => 0,
                     ]);
+                    //debit voucher for gain amount
+                    Voucher::create([
+                        'voucher_id' => $voucher_id,
+                        'uuid' => self::uuid(),
+                        'date' => date('Y-m-d', strtotime($request->entry_date)),
+                        'type' => 'G/L',
+                        'voucher_no' => $voucher_no,
+                        'sr_no' => 3,
+                        'form_id' => $sale->uuid,
+                        'chart_account_id' => $gain_account->id,
+                        'chart_account_name' => $gain_account->name,
+                        'chart_account_code' => $gain_account->code,
+                        'rate_per_unit' => $buy_rate_per_unit,
+                        'amount' => $qty,
+                        'debit' => Utilities::NumFormat($gain_amount),
+                        'credit' => Utilities::NumFormat(0),
+                        'balance_amount' => Utilities::NumFormat($gain_amount),
+                        'description' => 'dummy',
+                        'remarks' => 'dummy remarks',
+                        'company_id' => auth()->user()->company_id,
+                        'project_id' => auth()->user()->project_id,
+                        'branch_id' => auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'posted' => 0,
+                    ]);
+
 
                     //for sale invoice  CPV voucher
                     $max = Voucher::withTrashed()->where('type','CPV')->max('voucher_no');
@@ -319,9 +351,9 @@ class SaleInvoiceController extends Controller
                         'voucher_no' => $voucher_no,
                         'sr_no' => 1,
                         'form_id' => $sale->uuid,
-                        'chart_account_id' => $cst_account->id,
-                        'chart_account_name' => $cst_account->name,
-                        'chart_account_code' => $cst_account->code,
+                        'chart_account_id' => $cr_gave_account->id,
+                        'chart_account_name' => $cr_gave_account->name,
+                        'chart_account_code' => $cr_gave_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
                         'debit' => Utilities::NumFormat(0),
@@ -344,9 +376,9 @@ class SaleInvoiceController extends Controller
                         'voucher_no' => $voucher_no,
                         'sr_no' => 2,
                         'form_id' => $sale->uuid,
-                        'chart_account_id' => $cr_gave_account->id,
-                        'chart_account_name' => $cr_gave_account->name,
-                        'chart_account_code' => $cr_gave_account->code,
+                        'chart_account_id' => $cst_account->id,
+                        'chart_account_name' => $cst_account->name,
+                        'chart_account_code' => $cst_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
                         'debit' => Utilities::NumFormat($balance_amount),
@@ -360,7 +392,7 @@ class SaleInvoiceController extends Controller
                         'user_id' => auth()->user()->id,
                         'posted' => 0,
                     ]);
-                                    // buy product section and create new product quantity , Incresing currency
+                    // buy product section and create new product quantity , Incresing currency
                     $product = Product::where('id',$cr_receive_account->product_id)->first();
                     $balance_qty = $product->stock_in + $request->quantity;
                     $product->stock_in = $balance_qty;
@@ -409,11 +441,19 @@ class SaleInvoiceController extends Controller
                             $balance_qty = $pq->balance_quantity - $request->amount;
                             $pq->balance_quantity = $balance_qty;
                             $pq->save();
+                            break;
                         }
                     }
                 }else if($payment_type == 'bank'){
+                    $buy_rate_per_unit = $request->bank_sell_rate;
+                    $balance_amount = $qty * $buy_rate_per_unit;
+                    $total_amount = $balance_amount - $request->gain_amount;
+                    $gain_amount = $request->gain_amount;
+
                     $receive_account = ChartOfAccount::where('id',$request->buy_cash_chart_id)->first();
                     $gave_account = ChartOfAccount::where('id',$request->bank_chart_id)->first();
+                    $gain_account = ChartOfAccount::where('id',579)->first();
+
                     // dd($request->all());
 
                     //for sale invoice  CRV voucher
@@ -421,6 +461,11 @@ class SaleInvoiceController extends Controller
                     $voucher_no = self::documentCode('CRV',$max);
                     $voucher_id = self::uuid();
                     $posted = $request->current_action_id == 'post'?1:0;
+                    // dump($buy_rate_per_unit);
+                    // dump($total_amount);
+                    // dump($gain_amount);
+                    // dd($balance_amount);
+
                     // CRV debit credit entry
                     //credit voucher
                     Voucher::create([
@@ -431,9 +476,9 @@ class SaleInvoiceController extends Controller
                         'voucher_no' => $voucher_no,
                         'sr_no' => 1,
                         'form_id' => $sale->uuid,
-                        'chart_account_id' => $receive_account->id,
-                        'chart_account_name' => $receive_account->name,
-                        'chart_account_code' => $receive_account->code,
+                        'chart_account_id' => $cst_account->id,
+                        'chart_account_name' => $cst_account->name,
+                        'chart_account_code' => $cst_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
                         'debit' => Utilities::NumFormat(0),
@@ -456,14 +501,39 @@ class SaleInvoiceController extends Controller
                         'voucher_no' => $voucher_no,
                         'sr_no' => 2,
                         'form_id' => $sale->uuid,
-                        'chart_account_id' => $cst_account->id,
-                        'chart_account_name' => $cst_account->name,
-                        'chart_account_code' => $cst_account->code,
+                        'chart_account_id' => $receive_account->id,
+                        'chart_account_name' => $receive_account->name,
+                        'chart_account_code' => $receive_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
-                        'debit' => Utilities::NumFormat($balance_amount),
+                        'debit' => Utilities::NumFormat($total_amount),
                         'credit' => Utilities::NumFormat(0),
-                        'balance_amount' => Utilities::NumFormat($balance_amount),
+                        'balance_amount' => Utilities::NumFormat($total_amount),
+                        'description' => 'dummy',
+                        'remarks' => 'dummy remarks',
+                        'company_id' => auth()->user()->company_id,
+                        'project_id' => auth()->user()->project_id,
+                        'branch_id' => auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'posted' => 0,
+                    ]);
+                    //debit voucher for gain amount
+                    Voucher::create([
+                        'voucher_id' => $voucher_id,
+                        'uuid' => self::uuid(),
+                        'date' => date('Y-m-d', strtotime($request->entry_date)),
+                        'type' => 'G/L',
+                        'voucher_no' => $voucher_no,
+                        'sr_no' => 3,
+                        'form_id' => $sale->uuid,
+                        'chart_account_id' => $gain_account->id,
+                        'chart_account_name' => $gain_account->name,
+                        'chart_account_code' => $gain_account->code,
+                        'rate_per_unit' => $buy_rate_per_unit,
+                        'amount' => $qty,
+                        'debit' => Utilities::NumFormat($gain_amount),
+                        'credit' => Utilities::NumFormat(0),
+                        'balance_amount' => Utilities::NumFormat($gain_amount),
                         'description' => 'dummy',
                         'remarks' => 'dummy remarks',
                         'company_id' => auth()->user()->company_id,
@@ -479,7 +549,7 @@ class SaleInvoiceController extends Controller
                     $voucher_id = self::uuid();
                     $posted = $request->current_action_id == 'post'?1:0;
                     // BPV debit credit entry
-                    //credit voucher
+                    //debit voucher
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -493,8 +563,8 @@ class SaleInvoiceController extends Controller
                         'chart_account_code' => $cst_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
-                        'debit' => Utilities::NumFormat(0),
-                        'credit' => Utilities::NumFormat($balance_amount),
+                        'debit' => Utilities::NumFormat($balance_amount),
+                        'credit' => Utilities::NumFormat(0),
                         'balance_amount' => Utilities::NumFormat($balance_amount),
                         'description' => 'dummy',
                         'remarks' => 'dummy remarks',
@@ -504,7 +574,7 @@ class SaleInvoiceController extends Controller
                         'user_id' => auth()->user()->id,
                         'posted' => 0,
                     ]);
-                    //debit voucher
+                    //credit voucher
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -518,8 +588,8 @@ class SaleInvoiceController extends Controller
                         'chart_account_code' => $gave_account->code,
                         'rate_per_unit' => $buy_rate_per_unit,
                         'amount' => $qty,
-                        'debit' => Utilities::NumFormat($balance_amount),
-                        'credit' => Utilities::NumFormat(0),
+                        'debit' => Utilities::NumFormat(0),
+                        'credit' => Utilities::NumFormat($balance_amount),
                         'balance_amount' => Utilities::NumFormat($balance_amount),
                         'description' => 'dummy',
                         'remarks' => 'dummy remarks',
@@ -544,6 +614,7 @@ class SaleInvoiceController extends Controller
                         'form_type_value'       => 'product_quantity',
                     ];
                     $code = Utilities::documentCode($doc_data);
+
                     $product_quantity = ProductQuantity::create([
                         'uuid' => self::uuid(),
                         'entry_date' => date('Y-m-d', strtotime($request->date)),
@@ -771,9 +842,12 @@ class SaleInvoiceController extends Controller
                 // if($seller_type == 'dealer'){
                     //     $data['seller'] = Dealer::where(Utilities::CompanyProjectId())->OrderByName()->get();
                     // }
+                    // dump($request->all());
 
                 $chart_id = isset($request->chart_id)?$request->chart_id:"";
-                // dump($chart_id);
+                $product_id = isset($request->product_id)?$request->product_id:"";
+
+                // dd($chart_id);
                 $vouchers_sum = ProductQuantity::where('coa_id',$chart_id)->where(Utilities::CompanyProjectId())->sum('balance_quantity');
                 // $vouchers_sum = Voucher::where('chart_account_id',$chart_id)->where(Utilities::CompanyProjectId())->sum('balance_amount');
                 // dd($vouchers_sum);
@@ -822,7 +896,7 @@ class SaleInvoiceController extends Controller
             $conversion = 0;
 
             $productQty = ProductQuantity::where('coa_id',$chart_id)->where('balance_quantity' ,'>',0)->get();
-// dd($productQty);
+
             foreach($productQty as $pq){
                 if($pq->balance_quantity !=  0 ){
                     if($pq->balance_quantity > $total_amount){

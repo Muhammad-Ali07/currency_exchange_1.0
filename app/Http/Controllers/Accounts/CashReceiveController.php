@@ -176,6 +176,8 @@ class CashReceiveController extends Controller
             foreach ($request->pd as $pd){
                 $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
                 if(!empty($account)){
+
+                    $balance_amount = $pd['egt_amount'] * $pd['egt_rate'] ;
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -190,6 +192,7 @@ class CashReceiveController extends Controller
                         'rate_per_unit' => $pd['egt_rate'],
                         'debit' => Utilities::NumFormat($pd['egt_debit']),
                         'credit' => Utilities::NumFormat($pd['egt_credit']),
+                        'balance_amount' => Utilities::NumFormat($balance_amount),
                         'description' => $pd['egt_description'],
                         'remarks' => $request->remarks,
                         'company_id' => auth()->user()->company_id,

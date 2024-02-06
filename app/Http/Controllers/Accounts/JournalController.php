@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Accounts;
 use App\Http\Controllers\Controller;
 use App\Library\Utilities;
 use App\Models\ChartOfAccount;
+use App\Models\Product;
+use App\Models\ProductQuantity;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -164,7 +166,7 @@ class JournalController extends Controller
 
         DB::beginTransaction();
         try {
-//dd("sef");
+
             $max = Voucher::withTrashed()->where('type',self::Constants()['type'])->max('voucher_no');
             $voucher_no = self::documentCode(self::Constants()['type'],$max);
             $voucher_id = self::uuid();
@@ -174,6 +176,8 @@ class JournalController extends Controller
             foreach ($request->pd as $pd){
                 $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
                 if(!empty($account)){
+
+                    $balance_amount = $pd['egt_amount'] * $pd['egt_rate'] ;
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -184,8 +188,11 @@ class JournalController extends Controller
                         'chart_account_id' => $account->id,
                         'chart_account_name' => $account->name,
                         'chart_account_code' => $account->code,
+                        'amount' => $pd['egt_amount'],
+                        'rate_per_unit' => $pd['egt_rate'],
                         'debit' => Utilities::NumFormat($pd['egt_debit']),
                         'credit' => Utilities::NumFormat($pd['egt_credit']),
+                        'balance_amount' => Utilities::NumFormat($balance_amount),
                         'description' => $pd['egt_description'],
                         'remarks' => $request->remarks,
                         'company_id' => auth()->user()->company_id,
@@ -194,6 +201,43 @@ class JournalController extends Controller
                         'posted' => $posted,
                     ]);
                     $sr = $sr + 1;
+                }
+                if(!empty($account->product_id)){
+                    $product = Product::where('id',$account->product_id)->first();
+                    $balance_stock = $product->stock_in;
+                    $total_stock = $balance_stock + $pd['egt_amount'];
+                    $product->stock_in = $total_stock;
+                    $product->save();
+
+                    $doc_data = [
+                        'model'             => 'ProductQuantity',
+                        'code_field'        => 'code',
+                        'code_prefix'       => strtoupper('pq'),
+                        'form_type_field'        => 'form_type',
+                        'form_type_value'       => 'product_quantity',
+                    ];
+                    $code = Utilities::documentCode($doc_data);
+                    $product_quantity = ProductQuantity::create([
+                        'uuid' => self::uuid(),
+                        'entry_date' => date('Y-m-d', strtotime($request->date)),
+                        'name' => self::strUCWord($account->name),
+                        'code' => $code,
+                        'form_type' => 'product_quantity',
+                        'product_id' => $product->id,
+                        'quantity' => $pd['egt_amount'],
+                        'balance_quantity' => $pd['egt_amount'],
+                        'buying_rate' => $pd['egt_rate'],
+                        'coa_id' => $account->id,
+                        'coa_name' => $account->name,
+                        'coa_code' => $account->code,
+                        'coa_uuid' => $account->uuid,
+
+                        'company_id' => auth()->user()->company_id,
+                        'branch_id' => auth()->user()->branch_id,
+                        'project_id' => auth()->user()->project_id,
+                        'user_id' => auth()->user()->id,
+
+                    ]);
                 }
             }
 

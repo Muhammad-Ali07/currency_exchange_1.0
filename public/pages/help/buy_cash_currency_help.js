@@ -25,7 +25,7 @@ $(document).on('click','.data_tbody_row',function(e){
 
             if($('#form_type').val() !== undefined){
                 if($('#form_type').val() == 'sale_invoice'){
-                    funcGetBuyProductChartDetail(product_id);
+                    funcGetBuyProductChartDetail(product_id,chart_id);
                 }
             }
 
@@ -66,16 +66,18 @@ $(document).on('click','#addon_remove',function(e){
     $(this).parents('.eg_help_block').find('input').val('');
 });
 
-function funcGetBuyProductChartDetail(product_id) {
+function funcGetBuyProductChartDetail(product_id,chart_id) {
     var validate = true;
-    if(valueEmpty(product_id)){
+    if(valueEmpty(product_id,chart_id)){
         //  ntoastr.error("Select Any Product");
         validate = false;
         return false;
     }
     if(validate){
         var formData = {
-            product_id : product_id
+            product_id : product_id,
+            chart_id : chart_id
+
         };
         $.ajax({
             headers: {

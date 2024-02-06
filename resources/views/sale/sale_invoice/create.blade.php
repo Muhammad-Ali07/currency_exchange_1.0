@@ -114,7 +114,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
+                                    {{-- <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="col-form-label">Rate/Unit<span class="required">*</span></label>
@@ -123,7 +123,7 @@
                                                 <input id="buy_rate" type="text" name="buy_rate" class="buy_rate form-control form-control-sm text-left">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -190,7 +190,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
+                                    {{-- <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="col-form-label">Rate/Unit</label>
@@ -199,7 +199,7 @@
                                                 <input type="text" class="form-control form-control-sm" id="sell_rate" name="sale_price" aria-invalid="false">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                                 <div class="mb-1 row">
@@ -272,6 +272,26 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Market Rate <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input id="market_rate" name="market_rate" type="text" placeholder="Click here..." value="" class="market_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Sell Rate <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input id="cih_sell_rate" name="cih_sell_rate" type="text" placeholder="Click here..." value="" class="cih_sell_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="mb-1 row" id="bank_code" style="display: none;">
                                             <div class="col-lg-12">
@@ -298,16 +318,54 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Market Rate <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input name="market_rate" id="bank_market_rate" class="bank_market_rate" type="text" placeholder="Click here..." value="" class="bank_market_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Sell Rate <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input name="bank_sell_rate" id="bank_sell_rate"  type="text" placeholder="Click here..." value="" class="bank_sell_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="mb-1 row gain_row">
+                                            <div class="col-lg-6">
+                                                <h5 class="card-title">Gain Amount/Unit</h5>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h5 class="card-title text-primary float-end" id="gain_amount_per_unit"></h5>
+                                                <input type="hidden" name="gain_amount_per_unit" class="gain_amount_per_unit form-control form-control-sm text-left">
+                                            </div>
+                                        </div>
+                                        <div class="mb-1 row gain_row">
+                                            <div class="col-lg-6">
+                                                <h5 class="card-title">Total Gain Amount</h5>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h5 class="card-title text-primary float-end" id="total_gain_amount"></h5>
+                                                <input type="hidden" id="gain_amount" name="gain_amount" class="gain_amount form-control form-control-sm text-left">
+                                            </div>
                                         </div>
                                         <div class="mb-1 row">
                                             <div class="col-lg-6">
-                                                <h4 class="card-title">Amount to be Paid</h4>
+                                                <h5 class="card-title">Total Amount</h5>
                                             </div>
                                             <div class="col-lg-6">
-                                                <h4 class="card-title text-primary float-end" id="amount">$0.00</h4>
+                                                <h5 class="card-title text-primary float-end" id="amount">$0.00</h5>
                                                 <input type="hidden" name="amount" class="amount form-control form-control-sm text-left">
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -396,16 +454,16 @@
         //     $('#amount').val(amount);
         // });
 
-        $(document).on('keyup','#sell_rate',function(){
-            var buy_qty = $('#quantity').val();
-            var sell_rate = $('#sell_rate').val();
+        // $(document).on('keyup','#sell_rate',function(){
+        //     var buy_qty = $('#quantity').val();
+        //     var sell_rate = $('#sell_rate').val();
 
-            var total_amount_to_paid = parseFloat(buy_qty) * parseFloat(sell_rate);
-            var total_amount = '$' + total_amount_to_paid;
-            $('#amount').text(total_amount);
-            $('.amount').val(total_amount_to_paid);
+        //     var total_amount_to_paid = parseFloat(buy_qty) * parseFloat(sell_rate);
+        //     var total_amount = '$' + total_amount_to_paid;
+        //     $('#amount').text(total_amount);
+        //     $('.amount').val(total_amount_to_paid);
 
-        });
+        // });
         $(document).on('change','#payment_type',function(){
             var payment_type = $('#payment_type').val();
             // console.log(payment_type);
@@ -426,6 +484,53 @@
         //     $('#sell').hide();
         // });
 
+        $(document).on('keyup','#cih_sell_rate',function(){
+            var sell_rate = $(this).val();
+            var market_rate = $('#market_rate').val();
+
+            var gain_amount_per_unit = parseFloat(market_rate) - parseFloat(sell_rate);
+
+            $('#gain_amount_per_unit').text(gain_amount_per_unit);
+            $('.gain_amount_per_unit').val(gain_amount_per_unit);
+
+            var total_buy_qty = $('#quantity').val();
+
+            // functionality for calculation of gain amount
+            var gain_amount = parseFloat(total_buy_qty) * parseFloat(gain_amount_per_unit);
+            var total_gain_amount = '$' + gain_amount;
+            $('#gain_amount').val(gain_amount);
+            $('#total_gain_amount').text(total_gain_amount);
+
+            //functionality for calculating total amount to be paid
+            var amount = parseFloat(total_buy_qty) * parseFloat(sell_rate);
+            var total_amount = '$' + amount;
+            $('#amount').text(total_amount);
+            $('.amount').val(amount);
+        });
+
+        $(document).on('keyup','#bank_sell_rate',function(){
+            var sell_rate = $(this).val();
+            var market_rate = $('#bank_market_rate').val();
+
+            var gain_amount_per_unit = parseFloat(market_rate) - parseFloat(sell_rate);
+
+            $('#gain_amount_per_unit').text(gain_amount_per_unit);
+            $('.gain_amount_per_unit').val(gain_amount_per_unit);
+
+            var total_buy_qty = $('#quantity').val();
+
+            // functionality for calculation of gain amount
+            var gain_amount = parseFloat(total_buy_qty) * parseFloat(gain_amount_per_unit);
+            var total_gain_amount = '$' + gain_amount;
+            $('#gain_amount').val(gain_amount);
+            $('#total_gain_amount').text(total_gain_amount);
+
+            //functionality for calculating total amount to be paid
+            var amount = parseFloat(total_buy_qty) * parseFloat(sell_rate);
+            var total_amount = '$' + amount;
+            $('#amount').text(total_amount);
+            $('.amount').val(amount);
+        });
 
         </script>
 

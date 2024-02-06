@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Accounts;
 use App\Http\Controllers\Controller;
 use App\Library\Utilities;
 use App\Models\ChartOfAccount;
+use App\Models\Product;
+use App\Models\ProductQuantity;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -194,6 +196,40 @@ class CashPaymentController extends Controller
                         'posted' => $posted,
                     ]);
                     $sr = $sr + 1;
+                    if(!empty($account->product_id)){
+                        $product = Product::where('id',$account->product_id)->first();
+                        $balance_stock = $product->stock_in;
+                        $total_stock = $balance_stock - $pd['egt_amount'];
+                        $product->stock_in = $total_stock;
+                        $product->save();
+
+                        $pq = ProductQuantity::where('product_id',$account->product_id)
+                                    ->where('balance_quantity' ,'!=', 0)->first();
+                        if($pd['amount'] <= $pq->balance_quantity ){
+                            $balance_qty = $pq->balance_quantity;
+                            $total_qty = $balance_qty - $pd['egt_amount'];
+                            $pq->balance_quantity = $total_qty;
+                            $pq->save();
+                        }else{
+                            $pq = ProductQuantity::where('product_id',$account->product_id)
+                            ->where('balance_quantity' ,'!=', 0)->get();
+                            $bal_qty = 0;
+                            foreach($pq as $p){
+                                if($bal_qty != 0){
+                                    $balance_qty = $p->balance_quantity;
+                                    $balance_quantity = $balance_qty - $bal_qty;
+                                    $p->balance_quantity = $balance_quantity;
+                                    $p->save();
+                                }else{
+                                    $balance_qty = $p->balance_quantity;
+                                    $bal_qty = $pd['egt_amount'] - $balance_qty;
+                                    $p->balance_quantity = 0;
+                                    $p->save();
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
 

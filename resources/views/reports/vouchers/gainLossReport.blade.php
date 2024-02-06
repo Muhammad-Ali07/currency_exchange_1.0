@@ -123,12 +123,7 @@
                     <th class="py-1 ps-4">Date</th>
                     <th class="py-1">Account Code</th>
                     <th class="py-1">Account Head</th>
-                    {{-- <th class="py-1 ps-4">Voucher No.</th> --}}
-                    <th class="py-1">Amount</th>
-                    <th class="py-1">Rate/Unit</th>
-
-                    <th class="py-1">Debit(PKR)</th>
-                    <th class="py-1">Credit(PKR)</th>
+                    <th class="py-1">Amount(PKR)</th>
                 </tr>
             </thead>
             <tbody>
@@ -148,7 +143,7 @@
                             $credit_sum = 0;
                         @endphp
                             <tr class="bg-own">
-                                <td colspan="8"><strong>{{ $key }}</strong></td>
+                                <td colspan="5"><strong>{{ $key }}</strong></td>
                             </tr>
                         @foreach ( $vch as $v )
                             @php
@@ -173,54 +168,14 @@
                                 <td class="py-1">
                                     {{ $v->chart_account_name }}
                                 </td>
-                                {{-- <td class="py-1 ps-4">
-                                    @php
-                                        $form_id = isset($v->form_id) ? $v->form_id : '';
-                                        $type = $v->type;
-                                        $voucher =  \App\Models\Voucher::where('voucher_id',$v->voucher_id)->first();
-
-                                        if($v->type == 'CPV'){
-                                            $url = route('accounts.cash-payment.edit',$voucher->voucher_id);
-                                        }else if($v->type == 'CRV'){
-                                            $url = route('accounts.cash-receive.edit',$voucher->voucher_id);
-                                        }else if($v->type == 'BPV'){
-                                            $url = route('accounts.bank-payment.edit',$voucher->voucher_id);
-                                        }else if($v->type == 'BRV'){
-                                            $url = route('accounts.bank-receive.edit',$voucher->voucher_id);
-                                        }else if($v->type == 'SIV'){
-                                            $voucher_name = 'Sale Invoice Voucher';
-                                        }else if($v->type == 'OBV'){
-                                            $url = route('accounts.opening-balance.edit',$voucher->voucher_id);
-                                        }else if($v->type == 'CST'){
-                                            $voucher_name = 'Customer Voucher';
-                                        }else{
-                                            $url = route('accounts.journal.edit',$voucher->voucher_id);
-                                            $voucher_name = 'Other Voucher';
-                                        }
-                                        // dump($v);
-                                    @endphp
-                                    <a href="{{ $url }}" class="fw-semibold mb-25">{{ $v->voucher_no }}</a>
-                                </td> --}}
-                                <td class="py-1">
-                                    {{ $v->amount }}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->rate_per_unit }}
-                                </td>
-
                                 <td class="py-1">
                                     {{ $v->debit }}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->credit }}
-                                    {{-- <strong>0.00</strong> --}}
                                 </td>
                             </tr>
                         @endforeach
                             <tr class="bg-own">
-                                <td colspan="5"><strong>Total</strong></td>
-                                <td>{{ number_format($debit_sum,2) }}</td>
-                                <td>{{ number_format($credit_sum,2) }}</td>
+                                <td colspan="3"><strong>Total</strong></td>
+                                <td><strong>{{ number_format($debit_sum,2) }}</strong></td>
                             </tr>
                             @php
                                 $debit_sum_sum += $debit_sum;
@@ -228,9 +183,9 @@
                             @endphp
                     @endforeach
                     <tr class="bg-own">
-                        <td colspan="5"><strong>Grand Total</strong></td>
-                        <td style="color:red">{{ number_format($debit_sum_sum,2) }}</td>
-                        <td style="color:red">{{ number_format($credit_sum_sum,2) }}</td>
+                        <td colspan="3"><strong>Grand Total</strong></td>
+                        <td style="color:red"><strong>{{ number_format($debit_sum_sum,2) }}</strong></td>
+                        {{-- <td style="color:red">{{ number_format($credit_sum_sum,2) }}</td> --}}
                     </tr>
 
                 {{-- @else
