@@ -38,7 +38,7 @@
     @php
         $current = $data['current'];
         if(!$data['view']){
-            $url = route('sale.customer.update',$data['id']);
+            $url = route('master.customer.update',$data['id']);
         }
     @endphp
     <form id="customer_edit" class="customer_edit" action="{{isset($url)?$url:""}}" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -54,7 +54,7 @@
                             <h4 class="card-title">{{$data['title']}}</h4>
                             @if($data['view'])
                                 @permission($data['permission_edit'])
-                                <a href="{{route('sale.customer.edit',$data['id'])}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Edit</a>
+                                <a href="{{route('master.customer.edit',$data['id'])}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Edit</a>
                                 @endpermission
                             @else
                                 <button type="submit" class="btn btn-success btn-sm waves-effect waves-float waves-light">Update</button>
@@ -119,22 +119,6 @@
                             <div class="col-sm-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
-                                        <label class="col-form-label">Registration No.</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm"  value="{{$current->registration_no}}" id="registration_no" name="registration_no" />
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Membership No.</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm" disabled value="{{$current->membership_no}}" id="membership_no" name="registration_no" />
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
                                         <label class="col-form-label">Status</label>
                                     </div>
                                     <div class="col-sm-9">
@@ -144,10 +128,62 @@
                                         </div>
                                     </div>
                                 </div>
-                                @include('partials.address')
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Attachment</label>
+                                    </div>
+
+                                    <div class="col-sm-9">
+                                        <div class="col-sm-12 mb-1">
+                                            @php $root = \Illuminate\Support\Facades\Request::root(); $image_url = $current->image;@endphp
+                                            @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
+                                                @php $img = $root.'/uploads/'.$image_url; @endphp
+                                            @else
+                                                @php $img = asset('assets/images/avatars/blank-img.png') @endphp
+                                            @endif
+                                            <style>
+                                                .AClass {
+                                                    right: 100px;
+                                                    position: absolute;
+                                                    top: 77px;
+                                                    width: 1rem;
+                                                    font-size: larger;
+                                                    height: 1rem;
+                                                    background-color: crimson;
+                                                    border-radius: 20%;
+                                                }
+                                                .img_remove{
+                                                    position: absolute;
+                                                    top: -6px;
+                                                    left: 2px;
+                                                    color:white;
+                                                }
+                                            </style>
+                                            <div style="position: relative;">
+                                                <a onclick="document.getElementById('om_showImage').src='{{ $img }}'" class="close AClass" id="om_resetInput">
+                                                    <span class="img_remove">&times;</span>
+                                                </a>
+                                                <img id="om_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float:right;">
+                                            </div>
+                                            <input class="form-control form-control-sm" type="file"  id="om_image_url" name="om_image"/>
+                                            <input type="hidden" value="{{ $image_url }}" name="om_hidden_image" id="om_hidden_avatar">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Address</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-sm" id="address" name="address" value="{{ $current->address }}">
+                                    </div>
+                                </div>
+
+                                {{-- @include('partials.address') --}}
                             </div>
                         </div>
-                        <h3>Nominee Info</h3>
+                        {{-- <h3>Nominee Info</h3>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="mb-1 row">
@@ -203,7 +239,7 @@
                             </div>
                         </div>
                         <h3>Customer History </h3>
-                        @include('sale.customer.customerHistory')
+                        @include('sale.customer.customerHistory') --}}
                     </div>
                 </div>
             </div>

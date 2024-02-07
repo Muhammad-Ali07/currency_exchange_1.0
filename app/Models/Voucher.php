@@ -38,9 +38,14 @@ class Voucher extends Model
         'posted',
         'form_id',
         'amount',
+        'voucher_upload_id',
+
         'rate_per_unit',
         'balance_amount',
 
     ];
+    public function voucher_uploads(){
+        return $this->belongsTo(VoucherUpload::class,'voucher_upload_id');
+    }
 
 }

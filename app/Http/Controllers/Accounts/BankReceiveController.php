@@ -8,10 +8,12 @@ use App\Models\ChartOfAccount;
 use App\Models\Product;
 use App\Models\ProductQuantity;
 use App\Models\Voucher;
+use App\Models\VoucherUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class BankReceiveController extends Controller
@@ -166,6 +168,31 @@ class BankReceiveController extends Controller
 
         DB::beginTransaction();
         try {
+            // dd($request->all());
+            $om_filename = '';
+            $vu_id = '';
+            if ($request->has('om_image')) {
+
+                $file = $request->file('om_image');
+                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $om_filename);
+                // dd($om_filename);
+                $vu = VoucherUpload::create([
+                    'uuid' => self::uuid(),
+                    'name' => $om_filename,
+                    'slug' => $om_filename,
+                    'company_id' => auth()->user()->company_id,
+                    'branch_id' => auth()->user()->branch_id,
+                    'project_id' => auth()->user()->project_id,
+                    'user_id' => auth()->user()->id,
+                ]);
+                // dd($vu);
+                $vu_id = $vu->id;
+            }else{
+                $vu_id = '';
+            }
+
+
 
             $max = Voucher::withTrashed()->where('type',self::Constants()['type'])->max('voucher_no');
             $voucher_no = self::documentCode(self::Constants()['type'],$max);
@@ -192,7 +219,7 @@ class BankReceiveController extends Controller
                         'amount' => $pd['egt_amount'],
                         'rate_per_unit' => $pd['egt_rate'],
                         'balance_amount' => $balance_amount,
-
+                        'voucher_upload_id' => $vu_id,
                         'debit' => Utilities::NumFormat($pd['egt_debit']),
                         'credit' => Utilities::NumFormat($pd['egt_credit']),
                         'description' => $pd['egt_description'],
@@ -239,7 +266,6 @@ class BankReceiveController extends Controller
                             'user_id' => auth()->user()->id,
                         ]);
                     }
-
                 }
             }
 
@@ -278,9 +304,8 @@ class BankReceiveController extends Controller
         $data['permission'] = self::Constants()['edit'];
         if(Voucher::where('type',self::Constants()['type'])->where('voucher_id',$id)->exists()){
 
-            $data['current'] = Voucher::where('type',self::Constants()['type'])->where(['voucher_id'=>$id,'sr_no'=>1])->first();
-            $data['dtl'] = Voucher::where('type',self::Constants()['type'])->where('voucher_id',$id)->get();
-
+            $data['current'] = Voucher::where('type',self::Constants()['type'])->where(['voucher_id'=>$id,'sr_no'=>1])->with('voucher_uploads')->first();
+            $data['dtl'] = Voucher::where('type',self::Constants()['type'])->where('voucher_id',$id)->with('voucher_uploads')->get();
         }else{
             abort('404');
         }
@@ -349,6 +374,44 @@ class BankReceiveController extends Controller
             $voucher_id = $id;
             DB::select("delete FROM `vouchers` where voucher_id = '$voucher_id'");
 
+            $om_filename = '';
+            $vu_id = '';
+            if ($request->has('om_image')) {
+                $file = $request->file('om_image');
+                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $om_filename);
+
+                $vu = VoucherUpload::create([
+                    'uuid' => self::uuid(),
+                    'name' => $om_filename,
+                    'slug' => $om_filename,
+                    'company_id' => auth()->user()->company_id,
+                    'branch_id' => auth()->user()->branch_id,
+                    'project_id' => auth()->user()->project_id,
+                    'user_id' => auth()->user()->id,
+                ]);
+                $vu_id = $vu->id;
+            }
+            else{
+                if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){
+                    $om_filename = '';
+                    $vu_id = 0;
+                }else{
+                    $om_filename = $request->om_hidden_image;
+                    $vu_id = $request->om_hidden_image_upload_id;
+                }
+            }
+            $vu = VoucherUpload::where('id',$request->om_hidden_image_upload_id)
+                ->update([
+                'name' => $om_filename,
+                'slug' => $om_filename,
+                'company_id' => auth()->user()->company_id,
+                'branch_id' => auth()->user()->branch_id,
+                'project_id' => auth()->user()->project_id,
+                'user_id' => auth()->user()->id,
+            ]);
+
+
             $posted = $request->current_action_id == 'post'?1:0;
             $sr = 1;
             foreach ($request->pd as $pd){
@@ -368,9 +431,11 @@ class BankReceiveController extends Controller
                         'cheque_date' => $pd['egt_cheque_date'],
                         'debit' => Utilities::NumFormat($pd['egt_debit']),
                         'credit' => Utilities::NumFormat($pd['egt_credit']),
+                        'voucher_upload_id' => $vu_id,
                         'description' => $pd['egt_description'],
                         'remarks' => $request->remarks,
                         'company_id' => auth()->user()->company_id,
+                        'branch_id' => auth()->user()->branch_id,
                         'project_id' => auth()->user()->project_id,
                         'user_id' => auth()->user()->id,
                         'posted' => $posted,

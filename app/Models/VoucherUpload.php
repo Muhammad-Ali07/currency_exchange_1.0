@@ -11,17 +11,12 @@ class VoucherUpload extends Model
 
     protected $fillable = [
         'uuid',
-        'voucher_id',
-        'type',
-        'voucher_no',
-        'sr_no',
+        'name',
+        'slug',
         'company_id',
         'branch_id',
         'project_id',
         'user_id',
-        'posted',
-        'form_id',
-
     ];
 
 }

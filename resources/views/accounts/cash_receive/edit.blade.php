@@ -54,8 +54,55 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                             </div>
+                            <div class="col-sm-3">
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        {{-- <label class="col-form-label">Attachment</label> --}}
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <div class="float-end" id="img_div" data-bs-toggle="modal" data-bs-target="#imgModal">
+                                            <svg style="width:35px !important; height:30px !important" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- image modal  -->
+                                <div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-transparent">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body px-sm-5 mx-50 pb-5">
+                                                <h1 class="text-center mb-1" id="imgModalTitle">Journal Voucher</h1>
+                                                <p class="text-center">Attachment</p>
+                                                <div class="row">
+                                                    <div class="col-sm-12 mb-1">
+                                                        @php $root = \Illuminate\Support\Facades\Request::root(); $image_url = isset($current->voucher_uploads->name) ? $current->voucher_uploads->name : '';@endphp
+                                                        @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
+                                                            @php $img = $root.'/uploads/'.$image_url; @endphp
+                                                        @else
+                                                            @php $img = asset('assets/images/avatars/blank-img.png') @endphp
+                                                        @endif
+                                                        <img id="om_showImage" class="mb-1" src="{{ $img }}" style="width: 100%; height: 90%;">
+                                                        <input class="form-control form-control-sm" type="file"  id="om_image_url" name="om_image"/>
+                                                        <input type="hidden" value="{{ $image_url }}" name="om_hidden_image" id="om_hidden_avatar">
+                                                        <input type="hidden" value="{{ $current->voucher_upload_id }}" name="om_hidden_image_upload_id" id="om_hidden_image_upload_id">
+
+                                                    </div>
+                                                </div>
+                                                <!-- form -->
+                                                {{-- <form id="imgModalValidation" class="row gy-1 gx-2 mt-75" onsubmit="return false">
+                                                </form> --}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ image modal  -->
+
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-end">

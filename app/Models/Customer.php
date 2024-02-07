@@ -35,6 +35,7 @@ class Customer extends Model
         'nominee_cnic_no',
         'coa_id',
         'coa_code',
+        'image',
         'address',
         'form_type',
 

@@ -10,6 +10,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class CustomerController extends Controller
@@ -171,6 +172,13 @@ class CustomerController extends Controller
             if(isset($r['status']) && $r['status'] == 'error'){
                 return $this->jsonErrorResponse($data, $r['message']);
             }
+
+            $om_filename = '';
+            if ($request->has('om_image')) {
+                $file = $request->file('om_image');
+                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $om_filename);
+            }
             Customer::create([
                 'uuid' => self::uuid(),
                 'name' => self::strUCWord($request->name),
@@ -181,6 +189,7 @@ class CustomerController extends Controller
                 'cnic_no' => $request->cnic_no,
                 'email' => $request->email,
                 'address' => $request->address,
+                'image' => $om_filename,
                 'form_type' => 'customer',
                 'coa_id' => $r->id,
                 'coa_uuid' => $r->uuid,
@@ -192,7 +201,6 @@ class CustomerController extends Controller
                 'branch_id' => auth()->user()->branch_id,
                 'user_id' => auth()->user()->id,
             ]);
-
 
         }catch (Exception $e) {
             DB::rollback();
@@ -272,6 +280,19 @@ class CustomerController extends Controller
 
         DB::beginTransaction();
         try {
+            $om_filename = '';
+            if ($request->has('om_image')) {
+                $file = $request->file('om_image');
+                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $om_filename);
+            }
+            else{
+                if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){
+                    $om_filename = '';
+                }else{
+                    $om_filename = $request->om_hidden_image;
+                }
+            }
             Customer::where('uuid',$id)
                 ->update([
                 'name' => self::strUCWord($request->name),
@@ -280,20 +301,22 @@ class CustomerController extends Controller
                 'mobile_no' => $request->mobile_no,
                 'cnic_no' => $request->cnic_no,
                 'email' => $request->email,
+                'image' => $om_filename,
                 'address' => $request->address,
                 'status' => isset($request->status) ? "1" : "0",
                 'company_id' => auth()->user()->company_id,
+                'branch_id' => auth()->user()->branch_id,
                 'project_id' => auth()->user()->project_id,
                 'user_id' => auth()->user()->id,
             ]);
 
-            $dealer = Customer::where('uuid',$id)->first();
+            // $dealer = Customer::where('uuid',$id)->first();
 
-            $r = self::insertAddress($request,$dealer);
+            // $r = self::insertAddress($request,$dealer);
 
-            if(isset($r['status']) && $r['status'] == 'error'){
-                return $this->jsonErrorResponse($data, $r['message']);
-            }
+            // if(isset($r['status']) && $r['status'] == 'error'){
+            //     return $this->jsonErrorResponse($data, $r['message']);
+            // }
 
         }catch (Exception $e) {
             DB::rollback();

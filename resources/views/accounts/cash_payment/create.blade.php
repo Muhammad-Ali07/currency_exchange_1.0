@@ -37,8 +37,45 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
 
+
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Attachment</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @php $img = asset('assets/images/avatars/blank-img.png') @endphp
+                                        <style>
+                                            .AClass {
+                                                right: 100px;
+                                                position: absolute;
+                                                top: 77px;
+                                                width: 1rem;
+                                                font-size: larger;
+                                                height: 1rem;
+                                                background-color: crimson;
+                                                border-radius: 20%;
+                                            }
+                                            .img_remove{
+                                                position: absolute;
+                                                top: -6px;
+                                                left: 2px;
+                                                color:white;
+                                            }
+                                        </style>
+                                        <div style="position: relative;">
+                                            <a onclick="document.getElementById('om_showImage').src='{{ $img }}'" class="close AClass" id="om_resetInput">
+                                                <span class="img_remove">&times;</span>
+                                            </a>
+                                            {{-- @dd($img); --}}
+                                            {{-- <img id="om_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};"> --}}
+                                        </div>
+                                        <input class="form-control form-control-sm" type="file" id="om_image_url"  name="om_image"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
