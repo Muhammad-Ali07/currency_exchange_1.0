@@ -83,10 +83,10 @@
                         <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
-                                    <label class="col-form-label">CNIC No# <span class="required">*</span></label>
+                                    <label class="col-form-label">Passport No# <span class="required">*</span></label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control form-control-sm cnic" value="" id="cnic_no" name="cnic_no" />
+                                    <input type="text" class="form-control form-control-sm" value="" id="cnic_no" name="cnic_no" />
                                 </div>
                             </div>
                         </div>
