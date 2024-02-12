@@ -113,8 +113,10 @@
                                                     <th width="20%">Account Code</th>
                                                     <th width="22%">Account Name</th>
                                                     <th width="22%">Description</th>
-                                                    <th width="16%">Debit</th>
-                                                    <th width="16%">Credit</th>
+                                                    <th width="22%">Quantity</th>
+                                                    <th width="22%">Rate/Unit</th>
+                                                    <th width="16%">Debit(PKR)</th>
+                                                    <th width="16%">Credit(PKR)</th>
                                                     <th width="13%" class="text-center">Action</th>
                                                 </tr>
                                                 <tr class="egt_form_header_input">
@@ -128,9 +130,17 @@
                                                     <td>
                                                         <input id="egt_chart_name" type="text" class="chart_name form-control form-control-sm" readonly>
                                                     </td>
+
                                                     <td>
                                                         <input id="egt_description" type="text" class="form-control form-control-sm">
                                                     </td>
+                                                    <td>
+                                                        <input id="egt_amount" type="text" class="form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_rate" type="text" class="form-control form-control-sm">
+                                                    </td>
+
                                                     <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
                                                     </td>
@@ -149,6 +159,8 @@
                                                 <tfoot class="egt_form_footer">
                                                 <tr class="egt_form_footer_total">
                                                     <td class="voucher-total-title">Total</td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

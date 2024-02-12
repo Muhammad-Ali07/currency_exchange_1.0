@@ -21,6 +21,12 @@ $(document).on('click','.data_tbody_row',function(e){
             $('form').find('#customer_id').val(customer_id);
             $('#customer_name').focus();
 
+            if($('#form_type').val() !== undefined){
+                if($('#form_type').val() == 'sale_invoice'){
+                    funcGetCstVoucherDetail(customer_id);
+                }
+            }
+
         }
         $('#inLineHelp').remove();
     }
@@ -56,3 +62,38 @@ $(document).on('click',function(e){
 $(document).on('click','#addon_remove',function(e){
     $(this).parents('.eg_help_block').find('input').val('');
 });
+
+function funcGetCstVoucherDetail(customer_id) {
+    var validate = true;
+    if(valueEmpty(customer_id)){
+        //  ntoastr.error("Select Any Product");
+        validate = false;
+        return false;
+    }
+    if(validate){
+        var formData = {
+            customer_id : customer_id
+        };
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            url: routeGetCstVoucherDetail,
+            dataType	: 'json',
+            data        : formData,
+            success: function(response,data) {
+                if(response.status == 'success'){
+                    var balance_amount = response.data['balance_amount'];
+
+                    $('form').find('#customer_balance').val(balance_amount);
+                }else{
+                    ntoastr.error(response.message);
+                }
+            },
+            error: function(response,status) {
+                ntoastr.error('server error..404');
+            }
+        });
+    }
+}

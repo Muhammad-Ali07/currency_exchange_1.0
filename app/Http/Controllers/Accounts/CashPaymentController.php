@@ -192,8 +192,6 @@ class CashPaymentController extends Controller
                 $vu_id = '';
             }
 
-
-
             $max = Voucher::withTrashed()->where('type',self::Constants()['type'])->max('voucher_no');
             $voucher_no = self::documentCode(self::Constants()['type'],$max);
             $voucher_id = self::uuid();
@@ -234,7 +232,7 @@ class CashPaymentController extends Controller
 
                         $pq = ProductQuantity::where('product_id',$account->product_id)
                                     ->where('balance_quantity' ,'!=', 0)->first();
-                        if($pd['amount'] <= $pq->balance_quantity ){
+                        if($pd['egt_amount'] <= $pq->balance_quantity ){
                             $balance_qty = $pq->balance_quantity;
                             $total_qty = $balance_qty - $pd['egt_amount'];
                             $pq->balance_quantity = $total_qty;

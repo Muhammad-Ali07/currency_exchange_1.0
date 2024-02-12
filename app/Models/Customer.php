@@ -38,6 +38,8 @@ class Customer extends Model
         'image',
         'address',
         'form_type',
+        'remarks',
+
 
     ];
 

@@ -220,6 +220,9 @@ Route::group(['middleware' => 'auth'], function () {
                 // Route::get('print/{id}', 'printView')->name('print');
                 // Route::post('get-cash-chart-id', 'getCashChart')->name('getCashChart');
             });
+            Route::prefix('utilities')->name('utilities.')->controller(SaleInvoiceController::class)->group(function(){
+                Route::post('get-cst-vouchers', 'getCstVouchers')->name('getCstVouchers');
+            });
 
             // Route::prefix('product')->resource('sale', ProductController::class);
             // Route::prefix('customer')->resource('customer', CustomerController::class);

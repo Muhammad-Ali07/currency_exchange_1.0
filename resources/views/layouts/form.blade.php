@@ -81,6 +81,7 @@
     var routeGetBuyProductDetail = '{{ route('transaction.cash-chart.getCashChart') }}';
     var routeGetBankProductDetail = '{{ route('transaction.cash-chart.getCashChart') }}';
     var routeGetProductQtyDetail = '{{ route('transaction.cash-chart.getProductQtyDtl') }}';
+    var routeGetCstVoucherDetail = '{{ route('transaction.utilities.getCstVouchers') }}';
 
 </script>
 <!-- BEGIN: Vendor JS-->

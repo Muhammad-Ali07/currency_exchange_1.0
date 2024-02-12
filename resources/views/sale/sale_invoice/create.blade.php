@@ -149,22 +149,7 @@
                                         </div>
                                     </div> --}}
                                 </div>
-                                <div class="mb-1 row">
-                                    <div class="col-lg-4">
-                                        <label class="col-form-label">Payment Currency<span class="required">*</span></label>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="payment_currency" id="home_currency" value="home_currency" checked="">
-                                            <label class="form-check-label" for="inlineRadio1">Home Currency(PKR)</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="payment_currency" id="other_currency" value="other_currency">
-                                            <label class="form-check-label" for="inlineRadio2">Other Currency</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-1 row" id="sell" style="display: none">
+                                {{-- <div class="mb-1 row" id="sell" style="display: none">
                                     <h6>Sell</h6>
                                     <div class="col-lg-12">
                                         <div class="row">
@@ -190,18 +175,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Rate/Unit</label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm" id="sell_rate" name="sale_price" aria-invalid="false">
-                                            </div>
-                                        </div>
-                                    </div> --}}
-
-                                </div>
+                                </div> --}}
                                 <div class="mb-1 row">
                                     <div class="col-lg-12">
                                         <div class="row">
@@ -217,7 +191,35 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="col-form-label">Balance</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input id="customer_balance" type="text" readonly class="customer_balance form-control form-control-sm text-left">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="mb-1 row">
+                                    <div class="col-lg-4">
+                                        <label class="col-form-label">Payment<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input payment" type="radio" name="payment" id="completed" value="completed" checked="">
+                                            <label class="form-check-label" for="inlineRadio1">Complete</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input payment" type="radio" name="payment" id="partial" value="partial">
+                                            <label class="form-check-label" for="inlineRadio2">Partial</label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {{-- <div class="mb-1 row">
                                     <div class="col-lg-12">
                                         <div class="row">
@@ -241,9 +243,10 @@
                                             <div class="col-lg-6">
                                                 <select class="select2 form-select" id="payment_type" name="payment_type">
                                                     <option value="">--Select--</option>
-
                                                     <option value="cash">Cash</option>
                                                     <option value="bank">Bank</option>
+                                                    <option value="both">Both</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -272,6 +275,76 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-12" id="cih_amount" style="display: none">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Amount<span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input name="cih_amount" type="text" placeholder="Enter..." value="" class="cih_amount form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-1 row" id="bank_code" style="display: none;">
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Bank code <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group eg_help_block w-100">
+                                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                                            <input id="bank_chart_name" type="text" placeholder="Click here..." class="bank_chart_name form-control form-control-sm text-left">
+                                                            <input id="bank_chart_id" type="hidden" name="bank_chart_id">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Bank Bal <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input id="bank_balance" readonly name="bank_balance" type="text" placeholder="Click here..." value="" class="bank_balance form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12" id="bank_amount" style="display: none">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Amount<span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input id="bank_amount" name="bank_amount" type="text" placeholder="Enter..." value="" class="bank_amount form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Market Rate <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input name="market_rate" id="bank_market_rate" class="bank_market_rate" type="text" placeholder="Click here..." value="" class="bank_market_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label">Sell Rate <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <input name="bank_sell_rate" id="bank_sell_rate"  type="text" placeholder="Click here..." value="" class="bank_sell_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div> --}}
+
+                                        </div>
+                                        <div class="mb-1 row" >
                                             <div class="col-lg-12">
                                                 <div class="row">
                                                     <div class="col-sm-3">
@@ -292,53 +365,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-1 row" id="bank_code" style="display: none;">
-                                            <div class="col-lg-12">
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <label class="col-form-label">Bank code <span class="required">*</span></label>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <div class="input-group eg_help_block w-100">
-                                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                            <input id="bank_chart_name" type="text" placeholder="Click here..." class="bank_chart_name form-control form-control-sm text-left">
-                                                            <input id="bank_chart_id" type="hidden" name="bank_chart_id">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <label class="col-form-label">Bank Balance <span class="required">*</span></label>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input id="bank_balance" readonly name="bank_balance" type="text" placeholder="Click here..." value="" class="bank_balance form-control form-control-sm text-left">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <label class="col-form-label">Market Rate <span class="required">*</span></label>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input name="market_rate" id="bank_market_rate" class="bank_market_rate" type="text" placeholder="Click here..." value="" class="bank_market_rate form-control form-control-sm text-left">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <label class="col-form-label">Sell Rate <span class="required">*</span></label>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input name="bank_sell_rate" id="bank_sell_rate"  type="text" placeholder="Click here..." value="" class="bank_sell_rate form-control form-control-sm text-left">
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                         </div>
                                         <div class="mb-1 row gain_row">
                                             <div class="col-lg-6">
@@ -365,6 +391,14 @@
                                             <div class="col-lg-6">
                                                 <h5 class="card-title text-primary float-end" id="amount">$0.00</h5>
                                                 <input type="hidden" name="amount" class="amount form-control form-control-sm text-left">
+                                            </div>
+                                        </div>
+                                        <div class="mb-1 row" style="display:none" id="payment_method">
+                                            <div class="col-lg-6">
+                                                <label>Amount Paid to Customer</label>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input name="amt_paid_to_customer" id="amt_paid_to_customer"  type="text" placeholder="Enter Amount..." value="" class="amt_paid_to_customer form-control form-control-sm text-left">
                                             </div>
                                         </div>
                                     </div>
@@ -466,15 +500,32 @@
         // });
         $(document).on('change','#payment_type',function(){
             var payment_type = $('#payment_type').val();
-            // console.log(payment_type);
             if(payment_type == 'cash'){
                 $('#bank_code').css('display','none');
                 $('#cash_code').show();
-            }else{
+            }else if(payment_type == 'bank'){
                 $('#cash_code').css('display','none');
                 $('#bank_code').show();
+            }else{
+
+                $('#bank_code').show();
+                $('#cash_code').show();
+                $('#cih_amount').show();
+                $('#bank_amount').show();
+
             }
         });
+
+        $(document).on('change','.payment',function(){
+            var payment_method = $(this).val();
+            if(payment_method == 'completed'){
+                $('#payment_method').find('#amt_paid_to_customer').val('');
+                $('#payment_method').css('display','none');
+            }else{
+                $('#payment_method').show();
+            }
+        });
+
         // $(document).on('click','#other_currency',function(){
         //     // var other_currency = $('#other_currency').val();
         //     $('#sell').show();

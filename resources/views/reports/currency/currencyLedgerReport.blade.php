@@ -122,7 +122,7 @@
                                 @php
                                     $form_id = isset($v->form_id) ? $v->form_id : '';
                                     $type = $v->type;
-                                    // dump($type);
+                                    // dd($type);
                                     $voucher =  \App\Models\Voucher::where('voucher_id',$v->voucher_id)->first();
                                     if($type == 'CRV'){
                                         $url = route('accounts.cash-receive.edit',$voucher->voucher_id);
@@ -130,6 +130,8 @@
                                         $url = route('accounts.bank-receive.edit',$voucher->voucher_id);
                                     }else if($type == 'OBV'){
                                         $url = route('accounts.opening-balance.edit',$voucher->voucher_id);
+                                    }else{
+                                        $url = '';
                                     }
                                     // dump($v);
                                 @endphp

@@ -139,6 +139,7 @@ class CustomerController extends Controller
             'name' => 'required',
             'cnic_no' => 'required',
             'email' => 'nullable|email',
+            'om_image' => 'mimes:jpeg,png,jpg'
         ]);
         // dd($request->all());
         if ($validator->fails()) {
@@ -188,6 +189,8 @@ class CustomerController extends Controller
                 'mobile_no' => $request->mobile_no,
                 'cnic_no' => $request->cnic_no,
                 'email' => $request->email,
+                'remarks' => $request->remarks,
+
                 'address' => $request->address,
                 'image' => $om_filename,
                 'form_type' => 'customer',
@@ -280,43 +283,45 @@ class CustomerController extends Controller
 
         DB::beginTransaction();
         try {
-            $om_filename = '';
-            if ($request->has('om_image')) {
-                $file = $request->file('om_image');
-                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
-                $file->move(public_path('uploads'), $om_filename);
-            }
-            else{
-                if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){
-                    $om_filename = '';
-                }else{
-                    $om_filename = $request->om_hidden_image;
+                $om_filename = '';
+                if ($request->has('om_image')) {
+                    $file = $request->file('om_image');
+                    $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                    $file->move(public_path('uploads'), $om_filename);
                 }
-            }
-            Customer::where('uuid',$id)
-                ->update([
-                'name' => self::strUCWord($request->name),
-                'father_name' => $request->father_name,
-                'contact_no' => $request->contact_no,
-                'mobile_no' => $request->mobile_no,
-                'cnic_no' => $request->cnic_no,
-                'email' => $request->email,
-                'image' => $om_filename,
-                'address' => $request->address,
-                'status' => isset($request->status) ? "1" : "0",
-                'company_id' => auth()->user()->company_id,
-                'branch_id' => auth()->user()->branch_id,
-                'project_id' => auth()->user()->project_id,
-                'user_id' => auth()->user()->id,
-            ]);
+                else{
+                    if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){
+                        $om_filename = '';
+                    }else{
+                        $om_filename = $request->om_hidden_image;
+                    }
+                }
+                Customer::where('uuid',$id)
+                    ->update([
+                    'name' => self::strUCWord($request->name),
+                    'father_name' => $request->father_name,
+                    'contact_no' => $request->contact_no,
+                    'mobile_no' => $request->mobile_no,
+                    'cnic_no' => $request->cnic_no,
+                    'email' => $request->email,
+                    'image' => $om_filename,
+                    'remarks' => $request->remarks,
 
-            // $dealer = Customer::where('uuid',$id)->first();
+                    'address' => $request->address,
+                    'status' => isset($request->status) ? "1" : "0",
+                    'company_id' => auth()->user()->company_id,
+                    'branch_id' => auth()->user()->branch_id,
+                    'project_id' => auth()->user()->project_id,
+                    'user_id' => auth()->user()->id,
+                ]);
 
-            // $r = self::insertAddress($request,$dealer);
+                // $dealer = Customer::where('uuid',$id)->first();
 
-            // if(isset($r['status']) && $r['status'] == 'error'){
-            //     return $this->jsonErrorResponse($data, $r['message']);
-            // }
+                // $r = self::insertAddress($request,$dealer);
+
+                // if(isset($r['status']) && $r['status'] == 'error'){
+                //     return $this->jsonErrorResponse($data, $r['message']);
+                // }
 
         }catch (Exception $e) {
             DB::rollback();

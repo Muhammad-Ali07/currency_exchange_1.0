@@ -127,6 +127,8 @@
                                         $url = route('accounts.cash-receive.edit',$voucher->voucher_id);
                                     }else if($type == 'BRV'){
                                         $url = route('accounts.bank-receive.edit',$voucher->voucher_id);
+                                    }else{
+                                        $url = '';
                                     }
                                     // dump($v);
                                 @endphp

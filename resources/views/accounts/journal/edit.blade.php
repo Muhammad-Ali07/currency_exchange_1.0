@@ -89,7 +89,6 @@
                                                         <input class="form-control form-control-sm" type="file"  id="om_image_url" name="om_image"/>
                                                         <input type="hidden" value="{{ $image_url }}" name="om_hidden_image" id="om_hidden_avatar">
                                                         <input type="hidden" value="{{ $current->voucher_upload_id }}" name="om_hidden_image_upload_id" id="om_hidden_image_upload_id">
-
                                                     </div>
                                                 </div>
                                                 <!-- form -->

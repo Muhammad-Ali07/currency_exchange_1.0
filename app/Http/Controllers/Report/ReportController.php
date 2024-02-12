@@ -47,24 +47,39 @@ class ReportController extends Controller
         $data['to_date'] = $to_date;
 
         $cst = Customer::where('id',$request->customer_id)->first();
+        $data['cst'] = $cst;
         $sales = Sale::where('customer_id',$cst->id)->get();
+        $other_vouchers = Voucher::where('chart_account_id',$cst->coa_id)->where('form_id','=',null)->get();
+        // dd($other_vouchers);
         $result = [];
         foreach($sales as $s){
             $result[] = $s;
         }
         $vouchersArr = [];
         foreach($result as $r){
-            // dd($r->code);
             $vouchersArr[$r->code] = Voucher::where('form_id',$r->uuid)->where('chart_account_id' , '!=',$cst->coa_id)->get();
         }
-        // dd($vouchersArr);
+        foreach($other_vouchers as $r){
+            if($r->type == 'CPV'){
+                $type = 'Cash Paid';
+            }else if($r->type == 'BPV'){
+                $type = 'Bank Paid';
+            }else if($r->type == 'JV'){
+                $type = 'Journal';
+            }else{
+                $type = 'Others';
+            }
+            $vouchersArr[$type] = Voucher::where('voucher_id',$r->voucher_id)->where('chart_account_id','!=',$cst->coa_id)->get();
+        }
         // $cstvouchers = Voucher::where('chart_account_code',$cst->coa_code)->whereBetween('created_at', [$from_date, $to_date])->get();
-        // // dd($cstvouchers);
+
+        // dd($vouchersArr);
+        // dd($cstvouchers);
         // $vouchers = [];
         // foreach($cstvouchers as $cstV ){
         //     $vouchers[$cstV->voucher_no] = Voucher::where('voucher_id',$cstV->voucher_id)->get();
         // }
-        // // dd($vouchers);
+        // dd($vouchersArr);
         $data['vouchers'] = $vouchersArr;
         return view('reports.customer.customerLedgerReport',compact('data'));
     }
@@ -198,6 +213,7 @@ class ReportController extends Controller
         $data['title'] = $title;
         $data['company'] = Company::first();
         $type = $request->voucher_type;
+        // dd($type);
         $voucher_name = '';
         if($type == 'CPV'){
             $voucher_name = 'Cash Payment Vouchers';
@@ -230,11 +246,11 @@ class ReportController extends Controller
 
         $data['permission_view'] = $view;
         // dump($from_date);
-        // dd($to_date);
+        // dd($voucher_name);
 
         $vouchers = Voucher::where('type',$type)->whereBetween('created_at', [$from_date, $to_date])->get();
         $arr_vouchers = [];
-        if($voucher_name = 'Gain/Loss Voucher'){
+        if($voucher_name == 'Gain/Loss Voucher'){
             foreach($vouchers as $v){
                 $arr_vouchers[$v->date][] = $v;
             }
@@ -244,9 +260,9 @@ class ReportController extends Controller
                 $arr_vouchers[$v->voucher_no][] = $v;
             }
         }
-        // dd($arr_vouchers);
+        // dd($voucher_name);
         $data['vouchers'] = $arr_vouchers;
-        if($voucher_name = 'Gain/Loss Voucher'){
+        if($voucher_name == 'Gain/Loss Voucher'){
             return view('reports.vouchers.gainLossReport',compact('data'));
         }else{
             return view('reports.vouchers.voucherReport',compact('data'));

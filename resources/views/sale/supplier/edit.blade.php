@@ -36,11 +36,11 @@
                     </div>
                     <div class="card-body mt-2">
                         <div class="row">
-                            {{-- <div class="mb-1 row">
+                            <div class="mb-1 row">
                                 <div class="col-md-6">
-                                    <h5>{{$data['code']}} </h5>
+                                    <h5>{{$current->code}} </h5>
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="col-sm-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
@@ -51,6 +51,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label p-0">S/O,W/O Name</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-sm" value="{{ $current->father_name }}" id="father_name" name="father_name" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
@@ -58,6 +70,16 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="text-start form-control form-control-sm NumberValidate" value="{{ $current->contact_no }}" id="contact_no" name="contact_no" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Mobile No#</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="text-start form-control form-control-sm NumberValidate" value="{{ $current->mobile_no }}" id="mobile_no" name="mobile_no" />
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +95,18 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="col-lg-6">
+                                <div class="mb-1 row">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Passport No# <span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-sm" value="{{ $current->document_no }}" id="document_no" name="document_no" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="col-sm-12">
                                     <div class="mb-1 row">
@@ -86,8 +119,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
@@ -95,55 +126,46 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="form-check form-check-primary form-switch">
-                                            <input type="checkbox" class="form-check-input" id="status" name="status" checked>
+                                            <input type="checkbox" class="form-check-input" id="status" name="status" {{$current->status == 1?"checked":""}}>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        {{-- <div class="row">
-                            <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
-                                        <label class="col-form-label">Name <span class="required">*</span></label>
+                                        <label class="col-form-label">Attachment</label>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm" value="{{$current->name}}" id="name" name="name" />
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Contact No#</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm validate_number" value="{{$current->contact_no}}" id="contact_no" name="contact_no" />
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Email</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm" value="{{$current->email}}" id="email" name="email" />
-                                    </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <div class="col-sm-3">
-                                        <label class="col-form-label">Status</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <div class="form-check form-check-primary form-switch">
-                                            <input type="checkbox" class="form-check-input" id="status" name="status"
-                                                {{$current->status == 1?"checked":""}}>
-                                        </div>
+                                        @php $root = \Illuminate\Support\Facades\Request::root(); $image_url = isset($current->image) ? $current->image : '';@endphp
+                                        @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
+                                            @php $img = $root.'/uploads/'.$image_url; @endphp
+                                        @else
+                                            @php $img = asset('assets/images/avatars/blank-img.png') @endphp
+                                        @endif
+                                        <img id="om_showImage" class="mb-1 float-end" src="{{ $img }}" style="width: 30%; height: 50%;">
+                                        <input class="form-control form-control-sm" type="file"  id="om_image_url" name="om_image"/>
+                                        <input type="hidden" value="{{ $image_url }}" name="om_hidden_image" id="om_hidden_avatar">
+                                        <input type="hidden" value="{{ $current->image }}" name="om_hidden_image_upload_id" id="om_hidden_image_upload_id">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                @include('partials.address')
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{-- <div class="mb-1 row"> --}}
+                                    {{-- <div class="col-sm-2"> --}}
+                                        {{-- <label class="col-form-label">Registration No.</label> --}}
+                                        <label class="col-form-label">Remarks:</label>
+                                    {{-- </div> --}}
+                                    {{-- <div class="col-sm-10"> --}}
+                                        <textarea class="form-control form-control-sm" rows="3" name="remarks" id="remarks">{{ $current->remarks }}</textarea>
+                                    {{-- </div> --}}
+                                {{-- </div> --}}
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>

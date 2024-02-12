@@ -9,15 +9,20 @@
     .bg-own{
             background-color: #f3f2f7 !important;
         }
+        .table > :not(caption) > * > *{
+            padding:0 !important;
+        }
 </style>
 @endsection
-
+{{-- @dd($data) --}}
 @section('reportContent')
 
 <div class="invoice-print p-3">
     <div class="invoice-header d-flex justify-content-between flex-md-row flex-column pb-2">
         <div class="mt-md-0 mt-2">
             <h2 class="fw-bold text-end mb-1 txtcolor">{{ $data['report_name'] }}</h2>
+            <h4 class="fw-bold mb-1 text-primary">{{ $data['cst']->name }}</h4>
+
             <div class="invoice-date-wrapper mb-50">
                 <span class="invoice-date-title txtcolor">From Date:</span>
                 <span class="fw-bold text-primary"> {{ date('d-m-Y', strtotime($data['from_date'])) }}</span>
@@ -144,6 +149,7 @@
 
                     <th class="py-1">Debit</th>
                     <th class="py-1">Credit</th>
+                    <th class="py-1">Balance</th>
                 </tr>
             </thead>
             <tbody>
@@ -151,17 +157,19 @@
                     @php
                         $debit_sum_sum = 0;
                         $credit_sum_sum = 0;
+                        $balance_sum_sum = 0;
                         $transaction_type = '';
                         $form_id = '';
                         $sr = 1;
                         @endphp
                     @foreach ($data['vouchers'] as $key => $vch )
                         <tr class="bg-own">
-                            <td colspan="9"><strong>{{ $key }}</strong></td>
+                            <td colspan="10"><strong>{{ $key }}</strong></td>
                         </tr>
                         @php
                             $debit_sum = 0;
                             $credit_sum = 0;
+                            $balance_sum = 0;
                         @endphp
                         @foreach ($vch as $v )
                             @php
@@ -240,6 +248,10 @@
                                     {{ $v->credit }}
                                     {{-- <strong>0.00</strong> --}}
                                 </td>
+                                <td class="py-1">
+                                    -
+                                </td>
+
                             </tr>
 
                             @php
@@ -247,20 +259,27 @@
                                 $form_id = $v->form_id;
                             @endphp
                         @endforeach
+                        @php
+                            $balance = $debit_sum - $credit_sum;
+                        @endphp
                         <tr class="bg-own">
                             <td colspan="7"><strong>Total</strong></td>
                             <td ><strong>{{ $debit_sum }}</strong></td>
                             <td ><strong>{{ $credit_sum }}</strong></td>
+                            <td ><strong>{{ $balance }}</strong></td>
                         </tr>
                         @php
                             $debit_sum_sum += $debit_sum;
                             $credit_sum_sum += $credit_sum;
+                            $balance_sum_sum += $balance;
                         @endphp
                     @endforeach
                     <tr class="bg-own">
-                        <td colspan="7"><strong>Grand Total</strong></td>
+                        <td colspan="7" class="text-danger"><strong>Grand Total</strong></td>
                         <td class="text-danger"><strong>{{ $debit_sum_sum }}</strong></td>
                         <td class="text-danger"><strong>{{ $credit_sum_sum }}</strong></td>
+                        <td class="text-danger"><strong>{{ $balance_sum_sum }}</strong></td>
+
                     </tr>
 
                 {{-- @else

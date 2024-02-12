@@ -118,16 +118,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        {{-- <div class="col-lg-6">
-                            <div class="mb-1 row">
-                                <div class="col-sm-3">
-                                    <label class="col-form-label">Registration No.</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control form-control-sm" value="" id="registration_no" name="registration_no" />
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
@@ -163,6 +153,19 @@
                                     <input class="form-control form-control-sm" type="file" id="om_image_url"  name="om_image"/>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            {{-- <div class="mb-1 row"> --}}
+                                {{-- <div class="col-sm-2"> --}}
+                                    {{-- <label class="col-form-label">Registration No.</label> --}}
+                                    <label class="col-form-label">Remarks:</label>
+                                {{-- </div> --}}
+                                {{-- <div class="col-sm-10"> --}}
+                                    <textarea class="form-control form-control-sm" rows="3" name="remarks" id="remarks"></textarea>
+                                {{-- </div> --}}
+                            {{-- </div> --}}
                         </div>
                     </div>
                     {{--end row--}}

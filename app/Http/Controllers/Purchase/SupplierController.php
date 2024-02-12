@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class SupplierController extends Controller
@@ -132,6 +133,8 @@ class SupplierController extends Controller
             'name' => 'required',
             // 'cnic_no' => 'required',
             'email' => 'nullable|email',
+            'om_image' => 'mimes:jpeg,png,jpg'
+
         ]);
         // dd($request->all());
         if ($validator->fails()) {
@@ -166,6 +169,13 @@ class SupplierController extends Controller
                 return $this->jsonErrorResponse($data, $r['message']);
             }
 
+            $om_filename = '';
+            if ($request->has('om_image')) {
+                $file = $request->file('om_image');
+                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $om_filename);
+            }
+
             Supplier::create([
                 'uuid' => self::uuid(),
                 'name' => self::strUCWord($request->name),
@@ -174,6 +184,13 @@ class SupplierController extends Controller
                 'email' => $request->email,
                 'status' => isset($request->status) ? "1" : "0",
                 'form_type' => 'supplier',
+
+                'image' => $om_filename,
+                'father_name' => $request->father_name,
+                'mobile_no' => $request->mobile_no,
+                'document_no' => $request->document_no,
+                'remarks' => $request->remarks,
+
                 'address' => $request->address,
                 'coa_id' => $r->coa_id,
                 'coa_uuid' => $r->coa_uuid,
@@ -265,15 +282,33 @@ class SupplierController extends Controller
         // dd($request->all());
         DB::beginTransaction();
         try {
-            Supplier::where('uuid',$id)
-                ->update([
-                    'name' => self::strUCWord($request->name),
-                    'contact_no' => $request->contact_no,
-                    'email' => $request->email,
-                    'status' => isset($request->status) ? "1" : "0",
-                    'form_type' => 'supplier',
-                    'address' => $request->address,
 
+            $om_filename = '';
+                if ($request->has('om_image')) {
+                    $file = $request->file('om_image');
+                    $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                    $file->move(public_path('uploads'), $om_filename);
+                }
+                else{
+                    if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){
+                        $om_filename = '';
+                    }else{
+                        $om_filename = $request->om_hidden_image;
+                    }
+                }
+                Supplier::where('uuid',$id)
+                    ->update([
+                    'name' => self::strUCWord($request->name),
+                    'father_name' => $request->father_name,
+                    'contact_no' => $request->contact_no,
+                    'mobile_no' => $request->mobile_no,
+                    'document_no' => $request->document_no,
+                    'email' => $request->email,
+                    'image' => $om_filename,
+                    'address' => $request->address,
+                    'remarks' => $request->remarks,
+
+                    'status' => isset($request->status) ? "1" : "0",
                     'company_id' => auth()->user()->company_id,
                     'branch_id' => auth()->user()->branch_id,
                     'project_id' => auth()->user()->project_id,
