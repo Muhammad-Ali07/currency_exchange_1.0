@@ -73,6 +73,18 @@
                                         <input type="text" class="form-control form-control-sm" value="" id="name" name="name" />
                                     </div>
                                 </div>
+                                <div class="mb-1 row currency" style="display: none">
+                                    <div class="col-sm-3">
+                                        <label class="col-form-label">Product <span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <div class="input-group eg_help_block">
+                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                            <input id="product_name" type="text" placeholder="Click here..." name="product_name" class="product_name form-control form-control-sm text-left">
+                                            <input id="product_id" type="hidden" class="product_id" name="product_id">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
                                         <label class="col-form-label">Status</label>
@@ -95,6 +107,8 @@
 
 @section('pageJs')
     <script src="{{ asset('/pages/accounts/chart_of_account/create.js') }}"></script>
+    <script src="{{ asset('/pages/help/product_help.js')}}"></script>
+
 @endsection
 
 @section('script')
@@ -186,6 +200,15 @@
                         ntoastr.error('server error..404');
                     }
                 });
+            }
+            // console.log(val);
+            if(val == '01-02-0001-0000' || val == '01-02-0002-0000' ){
+                // $('#bank_code').css('display','none');
+                $('.currency').show();
+
+            }else{
+                $('.currency').hide();
+
             }
         });
     </script>

@@ -365,8 +365,8 @@
             }
         ];
         main_nav_ids.forEach(function(item){
-            console.log(item['nav_ul']);
-            console.log(document.getElementById(item['nav_ul']).getElementsByTagName("li").length);
+            // console.log(item['nav_ul']);
+            // console.log(document.getElementById(item['nav_ul']).getElementsByTagName("li").length);
             var d = document.getElementById(item['nav_ul']).getElementsByTagName("li").length;
             // console.log(d);
             // if(d == 0){

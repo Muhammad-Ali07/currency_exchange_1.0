@@ -142,33 +142,36 @@ class ChartOfAccountController extends Controller
         }
         DB::beginTransaction();
         try {
-            $code = self::coaDisplayMaxCode($request->level,$request->parent_account);
+                $code = self::coaDisplayMaxCode($request->level,$request->parent_account);
 
-            if($request->level == 1){
-                $parent_account_id = NULL;
-                $parent_account_code = NULL;
-            }else{
-                $chart = ChartOfAccount::where('code',$request->parent_account)->first();
-                if(empty($chart)){
-                    return $this->jsonErrorResponse($data, 'Parent account not correct');
+                if($request->level == 1){
+                    $parent_account_id = NULL;
+                    $parent_account_code = NULL;
+                }else{
+                    $chart = ChartOfAccount::where('code',$request->parent_account)->first();
+                    if(empty($chart)){
+                        return $this->jsonErrorResponse($data, 'Parent account not correct');
+                    }
+                    $parent_account_id = $chart->id;
+                    $parent_account_code = $request->parent_account;
                 }
-                $parent_account_id = $chart->id;
-                $parent_account_code = $request->parent_account;
-            }
 
-            ChartOfAccount::create([
-                'uuid' => self::uuid(),
-                'name' => self::strUCWord($request->name),
-                'code' => $code,
-                'level' => $request->level,
-                'group' => ($request->level < 4)?'G':'D',
-                'parent_account_id' => $parent_account_id,
-                'parent_account_code' => $parent_account_code,
-                'status' => isset($request->status) ? "1" : "0",
-                'company_id' => auth()->user()->company_id,
-                'project_id' => auth()->user()->project_id,
-                'user_id' => auth()->user()->id,
-            ]);
+                ChartOfAccount::create([
+                    'uuid' => self::uuid(),
+                    'name' => self::strUCWord($request->name),
+                    'code' => $code,
+                    'level' => $request->level,
+                    'group' => ($request->level < 4)?'G':'D',
+                    'parent_account_id' => $parent_account_id,
+                    'parent_account_code' => $parent_account_code,
+                    'status' => isset($request->status) ? "1" : "0",
+                    'product_id' => isset($request->product_id) ? $request->product_id : "",
+
+                    'company_id' => auth()->user()->company_id,
+                    'branch_id' => auth()->user()->branch_id,
+                    'project_id' => auth()->user()->project_id,
+                    'user_id' => auth()->user()->id,
+                ]);
 
         }catch (Exception $e) {
             DB::rollback();
