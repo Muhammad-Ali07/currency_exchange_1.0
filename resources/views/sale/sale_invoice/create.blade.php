@@ -404,7 +404,113 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col-lg-12 text-end">
+                                    <div class="data_entry_header">
+                                        <div class="hiddenFiledsCount" style="display: inline-block;"><span>0</span> fields hide</div>
+                                        <div style="display: inline-block;">
+                                            <a class="btn btn-sm btn-primary" id="gridAddBtn">Add</a>
+                                        </div>
+                                        <div class="dropdown chart-dropdown" style="display: inline-block;">
+                                            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
+                                            @php
+                                                $headings = ['Received Currency Code','Received','Exchange Rate','Paid Currency Code','Paid','Debit(LC)','Credit(LC)',];
+                                            @endphp
+                                            <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
+                                                @foreach($headings as $key=>$heading)
+                                                    <li class="dropdown-item">
+                                                        <label>
+                                                            <input value="{{$key}}" type="checkbox" checked> {{$heading}}
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-2">
+                                <div class="col-lg-12">
+                                    <div id="erp_grid_table" class="egt">
+                                        <div class="">
+                                            <div class="table-scroll ">
+                                                <table class="egt_form_table table table-bordered">
+                                                    <thead class="egt_form_header">
+                                                    <tr class="egt_form_header_title">
+                                                        <th width="20%">Received Currency Code</th>
+                                                        <th width="22%">Received</th>
+                                                        <th width="22%">Exchange Rate</th>
+                                                        <th width="20%">Paid Currency Code</th>
+                                                        <th width="22%">Paid</th>
+                                                        <th width="22%">Debit(LC)</th>
+                                                        <th width="22%">Credit(LC)</th>
+                                                        <th width="13%" class="text-center">Action</th>
+                                                    </tr>
+                                                    {{-- <tr class="egt_form_header_input">
+                                                        <td>
+                                                            <input id="egt_sr_no" readonly type="text" class="form-control form-control-sm">
+                                                            <input id="chart_id" type="hidden" class="chart_id form-control form-control-sm">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_chart_code" type="text" class="chart_code form-control form-control-sm text-left" placeholder="Press F2">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_chart_name" type="text" class="chart_name form-control form-control-sm" readonly>
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_cheque_no" type="text" class="cheque_no form-control form-control-sm">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_cheque_date" type="text" class="cheque_date form-control form-control-sm flatpickr-basic flatpickr-input" placeholder="Click & Select Date">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_description" type="text" class="form-control form-control-sm">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_amount" type="text" class="form-control form-control-sm">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_rate" type="text" class="form-control form-control-sm">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
+                                                        </td>
+                                                        <td>
+                                                            <input id="egt_credit" type="text" class="FloatValidate credit form-control form-control-sm">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" id="egt_add" class="egt_add btn btn-primary btn-sm">
+                                                                <i data-feather='plus'></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr> --}}
+                                                    </thead>
+                                                    <tbody class="egt_form_body">
+                                                    </tbody>
+                                                    <tfoot class="egt_form_footer">
+                                                    <tr class="egt_form_footer_total">
+                                                        <td class="voucher-total-title">Total</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="voucher-total-debit text-end">
+                                                            <span id="tot_debit"></span>
+                                                            <input id="tot_voucher_debit" name="tot_voucher_debit" type="hidden" >
+                                                        </td>
+                                                        <td class="voucher-total-credit text-end">
+                                                            <span id="tot_credit"></span>
+                                                            <input id="tot_voucher_credit" name="tot_voucher_credit" type="hidden" >
+                                                        </td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mb-1 row">
                                 <label class="col-form-label">Remarks</label>
                                 <div class="col-lg-12">
@@ -582,7 +688,85 @@
             $('#amount').text(total_amount);
             $('.amount').val(amount);
         });
+        //Grid Add Button working
+        $(document).on('click','#gridAddBtn',function(){
 
+            //cash to cash transaction
+            var rCurrencyChartName = $('#buy_cash_chart_name').val();
+            var rCurrencyChartId = $('#buy_cash_chart_id').val();
+
+            var pCurrencyChartName = $('#cash_chart_name').val();
+            var pCurrencyChartId = $('#cash_chart_id').val();
+
+            var qty = $('#quantity').val();
+            var cihSellRate = $('#cih_sell_rate').val();
+            var amount = $('.amount').val();
+
+
+            var tr = '';
+            tr = '<tr>'+
+                    '<td>'+
+                        '<input type="hidden" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
+                        '<input type="text" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
+                        '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" class="form-control form-control-sm" value="">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" class="form-control form-control-sm" value="">'+
+                    '</td>'+
+                    '<td>'+
+                        '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                    '</td>'+
+                '</tr>';
+                console.log(tr);
+            $('.egt_form_body').append(tr);
+
+            $('#buy_cash_chart_name').val('');
+            $('#buy_cash_chart_id').val('');
+
+            $('#cash_chart_name').val('');
+            $('#cash_chart_id').val('');
+
+            $('#quantity').val('');
+            $('#cih_sell_rate').val('');
+
+        });
+        $(document).on('click','.currencyRow',function(){
+            var tr = $(this).closest('tr');
+
+            var rowRecChartId = tr.find('.rowRecChartId').val();
+            var rowRecChartName = tr.find('.rowRecChartName').val();
+            $('#buy_cash_chart_id').val(rowRecChartId);
+            $('#buy_cash_chart_name').val(rowRecChartName);
+
+            var rowQty = tr.find('.rowQty').val();
+            var rowSellRate = tr.find('.rowSellRate').val();
+            $('#quantity').val(rowQty);
+            $('#cih_sell_rate').val(rowSellRate);
+
+            var rowPaidChartId = tr.find('.rowPaidChartId').val();
+            var rowPaidChartName = tr.find('.rowPaidChartName').val();
+            $('#cash_chart_name').val(rowPaidChartName);
+            $('#cash_chart_id').val(rowPaidChartId);
+
+            // var rowAmount = tr.find('.rowAmount').val();
+            tr.remove();
+
+        });
         </script>
 
         <script src="{{asset('/pages/help/bank_currency_help.js')}}"></script>
