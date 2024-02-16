@@ -654,9 +654,14 @@
 
             //functionality for calculating total amount to be paid
             var amount = parseFloat(total_buy_qty) * parseFloat(sell_rate);
-            var total_amount = '$' + amount;
-            $('#amount').text(total_amount);
-            $('.amount').val(amount);
+            // console.log(amount);
+            if(isNaN(amount)){
+                ntoastr.error('Error in amount...');
+            }else{
+                var total_amount = '$' + amount;
+                $('#amount').text(total_amount);
+                $('.amount').val(amount);
+            }
         });
 
         $(document).on('keyup','#bank_sell_rate',function(){
@@ -701,7 +706,7 @@
             var cihSellRate = $('#cih_sell_rate').val();
             var amount = $('.amount').val();
 
-            if(rCurrencyChartName != null && pCurrencyChartName != null && qty != '' && cihSellRate != '' ){
+            if(rCurrencyChartName != null && pCurrencyChartName != null && qty != '' && cihSellRate != '' && amount != 'NaN' ){
                 var tr = '';
 
                 tr = '<tr>'+
