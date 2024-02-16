@@ -213,8 +213,6 @@
                                     </div>
                                 </div>
                                 <div class="mb-1 row">
-                                    <h6>Paid</h6>
-
 
                                     <div class="col-lg-4">
                                         <label class="col-form-label">Payment<span class="required">*</span></label>
@@ -261,6 +259,9 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <h6>Paid</h6>
+
+
                                         <div class="mb-1 row" id="cash_code" style="display: none;">
                                             <div class="col-lg-12">
                                                 <div class="row">
