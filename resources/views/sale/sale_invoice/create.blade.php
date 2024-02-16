@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-1 row" id="buy">
-                                    <h6>Buy</h6>
+                                    <h6>Receive</h6>
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -172,6 +172,7 @@
                                     </div>
                                 </div> --}}
                                 <div class="mb-1 row" id="customerRow" style="display:none;">
+                                    <h6>Paid</h6>
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -200,6 +201,8 @@
                                     </div>
                                 </div>
                                 <div class="mb-1 row" id="supplierRow" style="display:none;">
+                                    <h6>Paid</h6>
+
                                     <div class="col-lg-3">
                                         <label class="col-form-label p-0">Supplier<span class="required">*</span></label>
                                     </div>
@@ -686,6 +689,11 @@
 
             var pCurrencyChartName = $('#cash_chart_name').val();
             var pCurrencyChartId = $('#cash_chart_id').val();
+            // console.log(pCurrencyChartId);
+            if(pCurrencyChartId == ''){
+                pCurrencyChartName = $('#bank_chart_name').val();
+                pCurrencyChartId = $('#bank_chart_id').val();
+            }
 
             var qty = $('#quantity').val();
             var cihSellRate = $('#cih_sell_rate').val();

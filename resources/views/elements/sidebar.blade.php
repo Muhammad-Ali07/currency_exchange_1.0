@@ -246,7 +246,7 @@
                     <span class="menu-title text-truncate">Reports</span>
                 </a>
                 <ul class="menu-content" id="report_nav_ul">
-                    @permission('currency-ledger-view')
+                    {{-- @permission('currency-ledger-view')
                     <li class="{{ ($path == 'reports/currency/ledger')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('reports.currency.ledger') }}">
                             <span class="menu-item text-truncate">Cash Currency Ledger</span>
@@ -266,7 +266,7 @@
                             <span class="menu-item text-truncate">Vouchers List</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
 
                     @permission('customer_legder-view')
                     <li class="{{ ($path == 'reports/customer/ledger')?'active':'' }}">
