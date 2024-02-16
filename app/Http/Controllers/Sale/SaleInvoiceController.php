@@ -640,7 +640,6 @@ class SaleInvoiceController extends Controller
                         return $this->jsonErrorResponse($data, $e->getMessage());
                     }
                     DB::commit();
-
                     return $this->jsonSuccessResponse($data, 'Successfully created');
 
     }

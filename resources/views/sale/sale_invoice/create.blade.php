@@ -74,10 +74,10 @@
                                             <input class="form-check-input form_type" type="radio" name="form_type" id="sell" value="sell">
                                             <label class="form-check-label" for="inlineRadio1">SELL</label>
                                         </div>
-                                        <div class="form-check form-check-inline">
+                                        {{-- <div class="form-check form-check-inline">
                                             <input class="form-check-input form_type" type="radio" name="form_type" id="buy" value="buy">
                                             <label class="form-check-label" for="inlineRadio2">BUY</label>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
