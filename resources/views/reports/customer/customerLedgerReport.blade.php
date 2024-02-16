@@ -142,11 +142,9 @@
                     <th class="py-1 ps-4">Date</th>
                     <th class="py-1">Account Code</th>
                     <th class="py-1">Account Head</th>
-                    <th class="py-1 ps-4">Voucher No.</th>
-                    <th class="py-1">Transaction</th>
-                    <th class="py-1">Quantity</th>
-                    <th class="py-1">Rate/Unit</th>
-
+                    <th class="py-1 ps-4">Received</th>
+                    <th class="py-1">Paid</th>
+                    <th class="py-1">Exchange Rate</th>
                     <th class="py-1">Debit</th>
                     <th class="py-1">Credit</th>
                     <th class="py-1">Balance</th>
@@ -164,7 +162,7 @@
                         @endphp
                     @foreach ($data['vouchers'] as $key => $vch )
                         <tr class="bg-own">
-                            <td colspan="10"><strong>{{ $key }}</strong></td>
+                            <td colspan="9"><strong>{{ $key }}</strong></td>
                         </tr>
                         @php
                             $debit_sum = 0;
@@ -196,50 +194,26 @@
 
                             <tr>
                                 {{-- <td>{{  }}</td> --}}
-                                <td>{{ date('d-m-Y', strtotime($v->date)) }}</td>
+                                @php
+                                    $sale = App\Models\Sale::where('id',$v->sale_invoice_id)->first();
+                                @endphp
+                                <td>{{ date('d-m-Y', strtotime($sale->entry_date)) }}</td>
                                 <td class="py-1">
-                                    {{ $v->chart_account_code }}
+                                    {{ $v->account_code }}
                                     {{-- <strong></strong> --}}
                                 </td>
                                 <td class="py-1">
-                                    {{ $v->chart_account_name }}
-                                </td>
-                                <td class="py-1 ps-4">
-                                    @php
-                                        $form_id = isset($v->form_id) ? $v->form_id : '';
-                                        $type = $v->type;
-                                        $voucher =  \App\Models\Voucher::where('voucher_id',$v->voucher_id)->first();
-                                        if($type == 'CRV'){
-                                            $transaction_type = 'Cash Receive';
-                                            $url = route('accounts.cash-receive.edit',$voucher->voucher_id);
-                                        }else if($type == 'BRV'){
-                                            $transaction_type = 'Bank Receive';
-                                            $url = route('accounts.bank-receive.edit',$voucher->voucher_id);
-                                        }else if($type == 'BPV'){
-                                            $transaction_type = 'Bank Paid';
-                                            $url = route('accounts.bank-payment.edit',$voucher->voucher_id);
-                                        }else if($type == 'CPV'){
-                                            $transaction_type = 'Cash Paid';
-                                            $url = route('accounts.cash-payment.edit',$voucher->voucher_id);
-                                        }else{
-                                            $url = '#';
-                                        }
-                                        // dump($v);
-                                    @endphp
-                                    <a href="{{ $url }}" class="fw-semibold mb-25">{{ $v->voucher_no }}</a>
+                                    {{ $v->account_name }}
                                 </td>
                                 <td class="py-1">
-                                    {{ $transaction_type }}
-                                    {{-- <strong>0.00</strong> --}}
+                                    {{ $v->received_fc }}
                                 </td>
 
                                 <td class="py-1">
-                                    {{ $v->amount }}
-                                    {{-- <strong>0.00</strong> --}}
+                                    {{ $v->paid_fc }}
                                 </td>
                                 <td class="py-1">
-                                    {{ $v->rate_per_unit }}
-                                    {{-- <strong>0.00</strong> --}}
+                                    {{ $v->exchange_rate }}
                                 </td>
                                 <td class="py-1">
                                     {{ $v->debit }}
@@ -263,7 +237,7 @@
                             $balance = $debit_sum - $credit_sum;
                         @endphp
                         <tr class="bg-own">
-                            <td colspan="7"><strong>Total</strong></td>
+                            <td colspan="6"><strong>Total</strong></td>
                             <td ><strong>{{ $debit_sum }}</strong></td>
                             <td ><strong>{{ $credit_sum }}</strong></td>
                             <td ><strong>{{ $balance }}</strong></td>
@@ -275,7 +249,7 @@
                         @endphp
                     @endforeach
                     <tr class="bg-own">
-                        <td colspan="7" class="text-danger"><strong>Grand Total</strong></td>
+                        <td colspan="6" class="text-danger"><strong>Grand Total</strong></td>
                         <td class="text-danger"><strong>{{ $debit_sum_sum }}</strong></td>
                         <td class="text-danger"><strong>{{ $credit_sum_sum }}</strong></td>
                         <td class="text-danger"><strong>{{ $balance_sum_sum }}</strong></td>

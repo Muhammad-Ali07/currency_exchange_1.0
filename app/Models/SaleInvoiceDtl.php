@@ -31,5 +31,7 @@ class SaleInvoiceDtl extends Model
         'branch_id',
         'user_id',
     ];
-
+    public function sale(){
+        return $this->belongsTo(Sale::class,'id');
+    }
 }

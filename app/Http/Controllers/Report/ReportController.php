@@ -7,6 +7,7 @@ use App\Models\ChartOfAccount;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Sale;
+use App\Models\SaleInvoiceDtl;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,66 @@ class ReportController extends Controller
     }
 
     public function customerLedgerReport(Request $request)
+    {
+
+        $name = 'customer';
+        $title = 'Customer Ledger Report';
+        // $list_url = route('master.customer.index');
+        $view = $name . "-view";
+
+        $data = [];
+        $data['company'] = Company::first();
+        $data['title'] = $title;
+        $data['report_name'] = $title;
+        $data['permission_view'] = $view;
+
+        $from_date = date('Y-m-d', strtotime($request->from_date));
+        $to_date = date('Y-m-d', strtotime($request->to_date));
+        $data['from_date'] = $from_date;
+        $data['to_date'] = $to_date;
+
+        $cst = Customer::where('id',$request->customer_id)->first();
+        $data['cst'] = $cst;
+        $sales = Sale::where('customer_id',$cst->id)->get();
+        // $sales_dtls = SaleInvoiceDtl::where('customer_id',$cst->coa_id)->where('form_id','=',null)->get();
+        // $other_vouchers = Voucher::where('chart_account_id',$cst->coa_id)->where('form_id','=',null)->get();
+        // dd($other_vouchers);
+        $salesResult = [];
+        foreach($sales as $s){
+            $salesResult[] = $s;
+        }
+        $salesResultDtlArr = [];
+        foreach($salesResult as $r){
+            $salesResultDtlArr[$r->code] = SaleInvoiceDtl::where('sale_invoice_id',$r->id)->where('customer_id',null)->get();
+        }
+        // dd($salesResultDtlArr);
+
+        // foreach($other_vouchers as $r){
+        //     if($r->type == 'CPV'){
+        //         $type = 'Cash Paid';
+        //     }else if($r->type == 'BPV'){
+        //         $type = 'Bank Paid';
+        //     }else if($r->type == 'JV'){
+        //         $type = 'Journal';
+        //     }else{
+        //         $type = 'Others';
+        //     }
+        //     $vouchersArr[$type] = Voucher::where('voucher_id',$r->voucher_id)->where('chart_account_id','!=',$cst->coa_id)->get();
+        // }
+        // $cstvouchers = Voucher::where('chart_account_code',$cst->coa_code)->whereBetween('created_at', [$from_date, $to_date])->get();
+
+        // dd($vouchersArr);
+        // dd($cstvouchers);
+        // $vouchers = [];
+        // foreach($cstvouchers as $cstV ){
+        //     $vouchers[$cstV->voucher_no] = Voucher::where('voucher_id',$cstV->voucher_id)->get();
+        // }
+        // dd($vouchersArr);
+        $data['vouchers'] = $salesResultDtlArr;
+        return view('reports.customer.customerLedgerReport',compact('data'));
+    }
+
+    public function customerLedgerReportOld(Request $request)
     {
 
         $name = 'customer';
