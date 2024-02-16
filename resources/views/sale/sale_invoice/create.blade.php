@@ -786,11 +786,7 @@
             }else{
                 ntoastr.error('Fields are empty...');
             }
-
                 // console.log(tr);
-
-
-
         });
 
         $(document).on('click','.currencyRow',function(){

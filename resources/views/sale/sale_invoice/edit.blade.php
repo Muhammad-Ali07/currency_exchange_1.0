@@ -185,6 +185,10 @@
                                         <div class="">
                                             <div class="table-scroll ">
                                                 <table class="egt_form_table table table-bordered">
+                                                    @php
+                                                        $debit_sum = 0;
+                                                        $credit_sum = 0;
+                                                    @endphp
                                                     <thead class="egt_form_header">
                                                     <tr class="egt_form_header_title">
                                                         <th width="20%">Account Code</th>
@@ -235,6 +239,11 @@
                                                                         </div>
                                                                     </td>
                                                                 </tr>
+                                                                @php
+                                                                    $debit_sum += $dtl->debit;
+                                                                    $credit_sum += $dtl->credit;
+
+                                                                @endphp
                                                             @endif
                                                         @endforeach
                                                     @endif
@@ -248,11 +257,11 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td class="voucher-total-debit text-end">
-                                                            <span id="tot_debit"></span>
+                                                            <span id="tot_debit">{{ number_format($debit_sum,3) }}</span>
                                                             <input id="tot_voucher_debit" name="tot_voucher_debit" type="hidden" >
                                                         </td>
                                                         <td class="voucher-total-credit text-end">
-                                                            <span id="tot_credit"></span>
+                                                            <span id="tot_credit"> {{ number_format($credit_sum,3) }}</span>
                                                             <input id="tot_voucher_credit" name="tot_voucher_credit" type="hidden" >
                                                         </td>
                                                         <td></td>
