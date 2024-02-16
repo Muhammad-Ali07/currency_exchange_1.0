@@ -52,7 +52,7 @@
                                 <a href="{{route('sale.sale-invoice.edit',$data['id'])}}" class="btn btn-primary btn-sm waves-effect waves-float waves-light">Edit</a>
                                 @endpermission
                             @else --}}
-                                <button type="submit" class="btn btn-success btn-sm waves-effect waves-float waves-light">Update</button>
+                                <button type="submit" disabled class="btn btn-success btn-sm waves-effect waves-float waves-light">Update</button>
                             {{-- @endif --}}
                         </div>
                         <div class="card-link">
