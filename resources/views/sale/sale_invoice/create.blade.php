@@ -701,91 +701,95 @@
             var cihSellRate = $('#cih_sell_rate').val();
             var amount = $('.amount').val();
 
+            if(rCurrencyChartName != null && pCurrencyChartName != null && qty != '' && cihSellRate != '' ){
+                var tr = '';
 
-            var tr = '';
-
-            tr = '<tr>'+
-                    '<td>'+
-                        '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
-                        '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
-                    '</td>'+
-                    // '<td>'+
+                tr = '<tr>'+
+                        '<td>'+
+                            '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
+                            '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
+                        '</td>'+
+                        // '<td>'+
+                            //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
+                            //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                            // '</td>'+
+                        '<td>'+
+                            '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="0">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="'+amount+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
+                        '</td>'+
+                        '<td>'+
+                            '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                        '</td>'+
+                    '</tr>';
+                    tr += '<tr>'+
+                        '<td>'+
+                            '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+pCurrencyChartId+'">'+
+                            '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+
+                        '</td>'+
+                        // '<td>'+
                         //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
                         //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
                         // '</td>'+
-                    '<td>'+
-                        '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="0">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="'+amount+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
-                    '</td>'+
-                    '<td>'+
-                        '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
-                    '</td>'+
-                '</tr>';
-                tr += '<tr>'+
-                    '<td>'+
-                        '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+pCurrencyChartId+'">'+
-                        '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+
-                    '</td>'+
-                    // '<td>'+
-                    //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
-                    //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
-                    // '</td>'+
-                    '<td>'+
-                        '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" readonly value="1">'+
-                    '</td>'+
+                        '<td>'+
+                            '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" readonly value="1">'+
+                        '</td>'+
 
-                    '<td>'+
-                        '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="0">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
-                    '</td>'+
-                '</tr>';
+                        '<td>'+
+                            '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="0">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                        '</td>'+
+                    '</tr>';
+                    $('.egt_form_body').append(tr);
+                    $('#buy_cash_chart_name').val('');
+                    $('#buy_cash_chart_id').val('');
+
+                    $('#cash_chart_name').val('');
+                    $('#cash_chart_id').val('');
+
+                    $('#quantity').val('');
+                    $('#cih_sell_rate').val('');
+
+                    var debit_sum = 0;
+                    var credit_sum = 0;
+
+                    $('.egt_form_table > tbody  > tr').each(function(index, tr) {
+
+                        console.log(debit_sum);
+                        debit_sum += parseFloat($(this).find(".rowDebit").val());
+                        credit_sum += parseFloat($(this).find(".rowCredit").val());
+                    });
+                    // console.log(credit_sum);
+                    $('#tot_debit').text(debit_sum);
+                    $('#tot_credit').text(credit_sum);
+            }else{
+                ntoastr.error('Fields are empty...');
+            }
+
                 // console.log(tr);
 
-                $('.egt_form_body').append(tr);
 
-            $('#buy_cash_chart_name').val('');
-            $('#buy_cash_chart_id').val('');
-
-            $('#cash_chart_name').val('');
-            $('#cash_chart_id').val('');
-
-            $('#quantity').val('');
-            $('#cih_sell_rate').val('');
-
-            var debit_sum = 0;
-            var credit_sum = 0;
-
-            $('.egt_form_table > tbody  > tr').each(function(index, tr) {
-
-                console.log(debit_sum);
-                debit_sum += parseFloat($(this).find(".rowDebit").val());
-                credit_sum += parseFloat($(this).find(".rowCredit").val());
-            });
-            // console.log(credit_sum);
-            $('#tot_debit').text(debit_sum);
-            $('#tot_credit').text(credit_sum);
 
         });
 

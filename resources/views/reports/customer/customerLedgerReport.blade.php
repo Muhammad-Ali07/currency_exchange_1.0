@@ -160,93 +160,98 @@
                         $form_id = '';
                         $sr = 1;
                         @endphp
+                        {{-- @dd($data['vouchers']); --}}
                     @foreach ($data['vouchers'] as $key => $vch )
-                        <tr class="bg-own">
-                            <td colspan="9"><strong>{{ $key }}</strong></td>
-                        </tr>
-                        @php
-                            $debit_sum = 0;
-                            $credit_sum = 0;
-                            $balance_sum = 0;
-                        @endphp
-                        @foreach ($vch as $v )
+                        {{-- @if ($vch->count() > 0) --}}
+                            <tr class="bg-own">
+                                <td colspan="9"><strong>{{ $key }}</strong></td>
+                            </tr>
                             @php
-                                $debit_sum += $v->debit;
-                                $credit_sum += $v->credit;
-                                // dump($v);
-                                if( $form_id  == $v->form_id ){
-                                    $hr = false;
-                                }else{
-                                    // dump($form_id);
-                                    if($form_id == ''){
+                                $debit_sum = 0;
+                                $credit_sum = 0;
+                                $balance_sum = 0;
+                            @endphp
+                            @foreach ($vch as $v )
+                                @php
+                                    $debit_sum += $v->debit;
+                                    $credit_sum += $v->credit;
+                                    // dump($v);
+                                    if( $form_id  == $v->form_id ){
                                         $hr = false;
                                     }else{
-                                        $hr = true;
-                                        $sr = 1;
-                                    }
-                                };
-                            @endphp
-                            {{-- @if($hr == true)
-                                <tr>
-                                    <td colspan="8"><hr style="color:#7367f0 !important" /></td>
-                                </tr>
-                            @endif --}}
-
-                            <tr>
-                                {{-- <td>{{  }}</td> --}}
-                                @php
-                                    $sale = App\Models\Sale::where('id',$v->sale_invoice_id)->first();
+                                        // dump($form_id);
+                                        if($form_id == ''){
+                                            $hr = false;
+                                        }else{
+                                            $hr = true;
+                                            $sr = 1;
+                                        }
+                                    };
                                 @endphp
-                                <td>{{ date('d-m-Y', strtotime($sale->entry_date)) }}</td>
-                                <td class="py-1">
-                                    {{ $v->account_code }}
-                                    {{-- <strong></strong> --}}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->account_name }}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->received_fc }}
-                                </td>
+                                {{-- @if($hr == true)
+                                    <tr>
+                                        <td colspan="8"><hr style="color:#7367f0 !important" /></td>
+                                    </tr>
+                                @endif --}}
 
-                                <td class="py-1">
-                                    {{ $v->paid_fc }}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->exchange_rate }}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->debit }}
-                                </td>
-                                <td class="py-1">
-                                    {{ $v->credit }}
-                                    {{-- <strong>0.00</strong> --}}
-                                </td>
-                                <td class="py-1">
-                                    -
-                                </td>
+                                <tr>
+                                    {{-- <td>{{  }}</td> --}}
+                                    @php
+                                        $sale = App\Models\Sale::where('id',$v->sale_invoice_id)->first();
+                                    @endphp
+                                    <td>{{ date('d-m-Y', strtotime($sale->entry_date)) }}</td>
+                                    <td class="py-1">
+                                        {{ $v->account_code }}
+                                        {{-- <strong></strong> --}}
+                                    </td>
+                                    <td class="py-1">
+                                        {{ $v->account_name }}
+                                    </td>
+                                    <td class="py-1">
+                                        {{ $v->received_fc }}
+                                    </td>
 
-                            </tr>
+                                    <td class="py-1">
+                                        {{ $v->paid_fc }}
+                                    </td>
+                                    <td class="py-1">
+                                        {{ $v->exchange_rate }}
+                                    </td>
+                                    <td class="py-1">
+                                        {{ $v->debit }}
+                                    </td>
+                                    <td class="py-1">
+                                        {{ $v->credit }}
+                                        {{-- <strong>0.00</strong> --}}
+                                    </td>
+                                    <td class="py-1">
+                                        -
+                                    </td>
 
+                                </tr>
+
+                                @php
+                                    $sr += 1;
+                                    $form_id = $v->form_id;
+                                @endphp
+                            @endforeach
                             @php
-                                $sr += 1;
-                                $form_id = $v->form_id;
+                                $balance = $debit_sum - $credit_sum;
                             @endphp
-                        @endforeach
-                        @php
-                            $balance = $debit_sum - $credit_sum;
-                        @endphp
-                        <tr class="bg-own">
-                            <td colspan="6"><strong>Total</strong></td>
-                            <td ><strong>{{ $debit_sum }}</strong></td>
-                            <td ><strong>{{ $credit_sum }}</strong></td>
-                            <td ><strong>{{ $balance }}</strong></td>
-                        </tr>
-                        @php
-                            $debit_sum_sum += $debit_sum;
-                            $credit_sum_sum += $credit_sum;
-                            $balance_sum_sum += $balance;
-                        @endphp
+                            <tr class="bg-own">
+                                <td colspan="6"><strong>Total</strong></td>
+                                <td ><strong>{{ $debit_sum }}</strong></td>
+                                <td ><strong>{{ $credit_sum }}</strong></td>
+                                <td ><strong>{{ $balance }}</strong></td>
+                            </tr>
+                            @php
+                                $debit_sum_sum += $debit_sum;
+                                $credit_sum_sum += $credit_sum;
+                                $balance_sum_sum += $balance;
+                            @endphp
+                        {{-- @else
+                            <td class="text-danger">No Data Found!</td>
+                        @endif --}}
                     @endforeach
                     <tr class="bg-own">
                         <td colspan="6" class="text-danger"><strong>Grand Total</strong></td>

@@ -47,9 +47,13 @@ class ReportController extends Controller
         $data['from_date'] = $from_date;
         $data['to_date'] = $to_date;
 
-        $cst = Customer::where('id',$request->customer_id)->first();
-        $data['cst'] = $cst;
-        $sales = Sale::where('customer_id',$cst->id)->get();
+        if($request->customer_id){
+            $cst = Customer::where('id',$request->customer_id)->first();
+            $data['cst'] = $cst;
+            $sales = Sale::where('customer_id',$cst->id)->get();
+        }else{
+            return redirect()->back()->with('no data found');
+        }
         // $sales_dtls = SaleInvoiceDtl::where('customer_id',$cst->coa_id)->where('form_id','=',null)->get();
         // $other_vouchers = Voucher::where('chart_account_id',$cst->coa_id)->where('form_id','=',null)->get();
         // dd($other_vouchers);
