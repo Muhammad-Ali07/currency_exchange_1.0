@@ -50,7 +50,7 @@
                     <div class="card-header border-bottom">
                         <div class="card-left-side">
                             <h4 class="card-title">{{$data['title']}}</h4>
-                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-float waves-light transaction_save_btn" id="transaction_save_btn">Save</button>
+                            <button type="submit" disabled class="btn btn-success btn-sm waves-effect waves-float waves-light transaction_save_btn" id="transaction_save_btn">Save</button>
                         </div>
                         <div class="card-link">
                             <a href="{{$data['list_url']}}" class="btn btn-secondary btn-sm waves-effect waves-float waves-light">Back</a>
@@ -59,11 +59,42 @@
                     <div class="card-body mt-2">
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="mb-1 row">
+                                <div class="col-sm-3">
+                                    <h4><b>{{$data['code']}}</b></h4>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="row">
                                     <div class="col-sm-3">
-                                        <h4><b>{{$data['code']}}</b></h4>
+                                        <label class="col-form-label">Form Type</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input form_type" type="radio" name="form_type" id="sell" value="sell">
+                                            <label class="form-check-label" for="inlineRadio1">SELL</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input form_type" type="radio" name="form_type" id="buy" value="buy">
+                                            <label class="form-check-label" for="inlineRadio2">BUY</label>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2">
+
+                            </div>
+                            <div class="col-lg-8">
+                                <hr>
+                            </div>
+                            <div class="col-lg-2">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <div class="mb-1 row">
                                     <div class="col-lg-12">
                                         <div class="row">
@@ -79,18 +110,6 @@
                                 <div class="mb-1 row" id="buy">
                                     <h6>Buy</h6>
                                     <div class="col-lg-12">
-                                        {{-- <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Product<span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <div class="input-group eg_help_block">
-                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="product_name" type="text" placeholder="Click here..." class="product_name form-control form-control-sm text-left">
-                                                    <input id="product_id" type="hidden" name="product_id">
-                                                </div>
-                                            </div>
-                                        </div> --}}
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="col-form-label">CIH code <span class="required">*</span></label>
@@ -98,7 +117,7 @@
                                             <div class="col-sm-9">
                                                 <div class="input-group eg_help_block w-100">
                                                     <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="buy_cash_chart_name" type="text" placeholder="Click here..." class="buy_cash_chart_name form-control form-control-sm text-left">
+                                                    <input disabled id="buy_cash_chart_name" type="text" placeholder="Click here..." class="buy_cash_chart_name form-control form-control-sm text-left">
                                                     <input id="buy_cash_chart_id" type="hidden" name="buy_cash_chart_id">
                                                 </div>
                                             </div>
@@ -114,40 +133,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Rate/Unit<span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input id="buy_rate" type="text" name="buy_rate" class="buy_rate form-control form-control-sm text-left">
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="col-form-label">Quantity</label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
+                                                <input type="text" disabled class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
                                             </div>
                                         </div>
                                     </div>
-
-                                    {{-- <div class="col-lg-6">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Type <span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <div class="input-group eg_help_block">
-                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="transaction_type" name="transaction_type" type="text" placeholder="Click here..." class="transaction_type form-control form-control-sm text-left">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                 </div>
                                 {{-- <div class="mb-1 row" id="sell" style="display: none">
                                     <h6>Sell</h6>
@@ -176,7 +171,7 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                <div class="mb-1 row">
+                                <div class="mb-1 row" id="customerRow" style="display:none;">
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -204,17 +199,29 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="mb-1 row" id="supplierRow" style="display:none;">
+                                    <div class="col-lg-3">
+                                        <label class="col-form-label p-0">Supplier<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <div class="input-group eg_help_block">
+                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                            <input id="supplier_name" type="text" placeholder="Click here..." name="supplier_name" class="supplier_name form-control form-control-sm text-left">
+                                            <input id="supplier_id" type="hidden" class="supplier_id" name="supplier_id">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="mb-1 row">
                                     <div class="col-lg-4">
                                         <label class="col-form-label">Payment<span class="required">*</span></label>
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input payment" type="radio" name="payment" id="completed" value="completed" checked="">
+                                            <input class="form-check-input payment" disabled type="radio" name="payment" id="completed" value="completed" checked="">
                                             <label class="form-check-label" for="inlineRadio1">Complete</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input payment" type="radio" name="payment" id="partial" value="partial">
+                                            <input class="form-check-input payment" disabled type="radio" name="payment" id="partial" value="partial">
                                             <label class="form-check-label" for="inlineRadio2">Partial</label>
                                         </div>
                                     </div>
@@ -234,14 +241,14 @@
                                 </div> --}}
                             </div>
                             <div class="col-lg-6 col-md-6 col-12">
-                                <div class="card card-payment">
-                                    <div class="card-body">
+                                <div class="">
+                                    <div class="">
                                         <div class="row mb-2">
                                             <div class="col-lg-6">
                                                 <label class="form-label" for="payment-expiry">Payment Type</label>
                                             </div>
                                             <div class="col-lg-6">
-                                                <select class="select2 form-select" id="payment_type" name="payment_type">
+                                                <select class="select2 form-select" disabled id="payment_type" name="payment_type">
                                                     <option value="">--Select--</option>
                                                     <option value="cash">Cash</option>
                                                     <option value="bank">Bank</option>
@@ -351,7 +358,7 @@
                                                         <label class="col-form-label">Market Rate <span class="required">*</span></label>
                                                     </div>
                                                     <div class="col-sm-9">
-                                                        <input id="market_rate" name="market_rate" type="text" placeholder="Click here..." value="" class="market_rate form-control form-control-sm text-left">
+                                                        <input id="market_rate" disabled name="market_rate" type="text" placeholder="Click here..." value="" class="market_rate form-control form-control-sm text-left">
                                                     </div>
                                                 </div>
                                             </div>
@@ -361,7 +368,7 @@
                                                         <label class="col-form-label">Sell Rate <span class="required">*</span></label>
                                                     </div>
                                                     <div class="col-sm-9">
-                                                        <input id="cih_sell_rate" name="cih_sell_rate" type="text" placeholder="Click here..." value="" class="cih_sell_rate form-control form-control-sm text-left">
+                                                        <input id="cih_sell_rate" disabled name="cih_sell_rate" type="text" placeholder="Click here..." value="" class="cih_sell_rate form-control form-control-sm text-left">
                                                     </div>
                                                 </div>
                                             </div>
@@ -409,7 +416,7 @@
                                     <div class="data_entry_header">
                                         <div class="hiddenFiledsCount" style="display: inline-block;"><span>0</span> fields hide</div>
                                         <div style="display: inline-block;">
-                                            <a class="btn btn-sm btn-primary" id="gridAddBtn">Add</a>
+                                            <button type="button" disabled class="btn btn-sm btn-primary" id="gridAddBtn">Add</button>
                                         </div>
                                         <div class="dropdown chart-dropdown" style="display: inline-block;">
                                             <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
@@ -556,6 +563,8 @@
     <script src="{{asset('/pages/help/product_help.js')}}"></script>
     <script src="{{asset('/pages/help/product_help_new.js')}}"></script>
     <script src="{{asset('/pages/help/transaction_type_help.js')}}"></script>
+    <script src="{{ asset('/pages/help/supplier_help.js')}}"></script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
@@ -584,26 +593,6 @@
         });
       </script>
       <script>
-        // $(document).on('keyup','#quantity',function(){
-        //     var qty = $('#quantity').val();
-        //     var price = $('#sale_price').val();
-        //     var amount = 0;
-        //     console.log(qty);
-        //     amount = qty * price;
-        //     console.log(amount);
-        //     $('#amount').val(amount);
-        // });
-
-        // $(document).on('keyup','#sell_rate',function(){
-        //     var buy_qty = $('#quantity').val();
-        //     var sell_rate = $('#sell_rate').val();
-
-        //     var total_amount_to_paid = parseFloat(buy_qty) * parseFloat(sell_rate);
-        //     var total_amount = '$' + total_amount_to_paid;
-        //     $('#amount').text(total_amount);
-        //     $('.amount').val(total_amount_to_paid);
-
-        // });
         $(document).on('change','#payment_type',function(){
             var payment_type = $('#payment_type').val();
             if(payment_type == 'cash'){
@@ -775,14 +764,14 @@
             $('#quantity').val('');
             $('#cih_sell_rate').val('');
 
-            var debit_sum = '';
-            var credit_sum = '';
+            var debit_sum = 0;
+            var credit_sum = 0;
 
             $('.egt_form_table > tbody  > tr').each(function(index, tr) {
 
                 console.log(debit_sum);
-                debit_sum += $(this).find(".rowDebit").val();
-                credit_sum += $(this).find(".rowCredit").val();
+                debit_sum += parseFloat($(this).find(".rowDebit").val());
+                credit_sum += parseFloat($(this).find(".rowCredit").val());
             });
             // console.log(credit_sum);
             $('#tot_debit').text(debit_sum);
@@ -812,6 +801,73 @@
             tr.remove();
 
         });
+        $(document).on('click','.form_type',function(){
+            var form_type = $(this).val();
+            if(form_type == 'sell'){
+
+                $('.transaction_save_btn').removeAttr('disabled');
+                $('#buy_cash_chart_name').removeAttr('disabled');
+                $('#quantity').removeAttr('disabled');
+                $('.payment').removeAttr('disabled');
+                $('#payment_type').removeAttr('disabled');
+                $('#market_rate').removeAttr('disabled');
+                $('#cih_sell_rate').removeAttr('disabled');
+                $('#gridAddBtn').removeAttr('disabled');
+
+
+
+                $('#customerRow').show();
+                $('#supplierRow').hide();
+            }else{
+
+                var validate = true;
+                if(validate){
+                    var formData = {
+                        form_type : form_type
+                    };
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "GET",
+                        url: '{{ route('ajax.getCode') }}' + '/' + form_type,
+                        dataType	: 'json',
+                        data        : form_type,
+                        success: function(response,data) {
+                            if(response.status == 'success'){
+                                var customer = response.data['customer'];
+                                var length = customer.length;
+
+                                $('form').find('.nm_membership_no').html(customer.membership_no);
+                                $('form').find('#nm_membership_no_input').val(customer.membership_no);
+
+                            }else{
+                                ntoastr.error(response.message);
+                            }
+                        },
+                        error: function(response,status) {
+                            ntoastr.error('server error..404');
+                        }
+                    });
+
+                }
+
+
+                $('.transaction_save_btn').removeAttr('disabled');
+                $('#buy_cash_chart_name').removeAttr('disabled');
+                $('#quantity').removeAttr('disabled');
+                $('.payment').removeAttr('disabled');
+                $('#payment_type').removeAttr('disabled');
+                $('#market_rate').removeAttr('disabled');
+                $('#cih_sell_rate').removeAttr('disabled');
+
+                $('#gridAddBtn').removeAttr('disabled');
+
+                $('#customerRow').hide();
+                $('#supplierRow').show();
+
+            }
+        })
         </script>
 
         <script src="{{asset('/pages/help/bank_currency_help.js')}}"></script>

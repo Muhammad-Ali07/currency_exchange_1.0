@@ -234,7 +234,104 @@ class SaleInvoiceController extends Controller
                 // dump($total_amount);
                 // dd($gain_amount);
 
+                // dd($request->all ());
                 if($payment_type == 'cash'){
+                    $rowsCount = count($request->amount);
+                    for($i = 0; $i< $rowsCount; $i++){
+                        $coa = ChartOfAccount::where('id',$request->account_id[$i])->first();
+                        $gain_account = ChartOfAccount::where('id',579)->first();
+
+                        // for currency
+                        $sale_inv_dtl = SaleInvoiceDtl::create([
+                            'uuid' => self::uuid(),
+                            'account_id' => $coa->id,
+                            'account_name' => $coa->name,
+                            'account_code' => $coa->code,
+                            'received_fc' => $request->qty[$i],
+                            'paid_fc' => $request->amount[$i],
+                            'exchange_rate' => $request->sell_rate[$i],
+                            'debit' => $request->debit[$i],
+                            'credit' => $request->credit[$i],
+                            'sale_invoice_id' =>  $sale->id,
+
+                            'company_id' => auth()->user()->company_id,
+                            'branch_id' => auth()->user()->branch_id,
+                            'project_id' => auth()->user()->project_id,
+                            'user_id' => auth()->user()->id,
+                        ]);
+
+                        // for customer
+                        SaleInvoiceDtl::create([
+                            'uuid' => self::uuid(),
+                            'account_id' => $cst_account->id,
+                            'account_name' => $cst_account->name,
+                            'account_code' => $cst_account->code,
+                            'received_fc' => $request->qty[$i],
+                            'paid_fc' => $request->amount[$i],
+                            'exchange_rate' => $request->sell_rate[$i],
+                            'customer_id' => $request->customer_id,
+                            'debit' => $request->debit[$i],
+                            'credit' => $request->credit[$i],
+
+                            'company_id' => auth()->user()->company_id,
+                            'branch_id' => auth()->user()->branch_id,
+                            'project_id' => auth()->user()->project_id,
+                            'user_id' => auth()->user()->id,
+                        ]);
+
+                        // buy product section and create new product quantity , Incresing currency
+                        $product = Product::where('id',$coa->product_id)->first();
+                        $balance_qty = $product->stock_in + $request->qty[$i];
+                        $product->stock_in = $balance_qty;
+                        $product->save();
+                        $doc_data = [
+                            'model'             => 'ProductQuantity',
+                            'code_field'        => 'code',
+                            'code_prefix'       => strtoupper('pq'),
+                            'form_type_field'        => 'form_type',
+                            'form_type_value'       => 'product_quantity',
+                        ];
+                        $code = Utilities::documentCode($doc_data);
+                        if($request->qty[$i] != 0){
+                            $qty = $request->qty[$i];
+
+                            $product_quantity = ProductQuantity::create([
+                                'uuid' => self::uuid(),
+                                'entry_date' => date('Y-m-d', strtotime($request->entry_date[$i])),
+                                'name' => self::strUCWord($coa->name),
+                                'code' => $code,
+                                'form_type' => 'product_quantity',
+                                'product_id' => $coa->product_id,
+                                'quantity' => $qty,
+                                'balance_quantity' => $qty,
+                                'buying_rate' => $request->sell_rate[$i],
+                                'coa_id' => $coa->id,
+                                'coa_name' => $coa->name,
+                                'coa_code' => $coa->code,
+                                'coa_uuid' => $coa->uuid,
+                                'transaction_type' => isset($request->payment_type[$i]) ? $request->payment_type[$i] : '',
+                                'company_id' => auth()->user()->company_id,
+                                'branch_id' => auth()->user()->branch_id,
+                                'project_id' => auth()->user()->project_id,
+                                'user_id' => auth()->user()->id,
+                            ]);
+                            // dd($request->all());
+                        }
+                        if($request->amount[$i] != 0){
+                            $pq = ProductQuantity::where('coa_id',$coa->id)->where('balance_quantity','!=',0)->first();
+                            $balance_qty = $pq->balance_quantity - $request->amount[$i];
+                            $pq->balance_quantity = $balance_qty;
+                            $pq->save();
+
+                            // gave product section and update product quantity , Decreasing currency
+                            $product = Product::where('id',$coa->product_id)->first();
+                            $balance_qty = $product->stock_in - $request->amount[$i];
+                            $product->stock_in = $balance_qty;
+                            $product->save();
+                        }
+                    }
+
+                }else if($payment_type == 'bank'){
                     $rowsCount = count($request->amount);
                     for($i = 0; $i< $rowsCount; $i++){
                         $coa = ChartOfAccount::where('id',$request->account_id[$i])->first();
@@ -276,218 +373,43 @@ class SaleInvoiceController extends Controller
                             'user_id' => auth()->user()->id,
                         ]);
                     }
-                }else if($payment_type == 'bank'){
-                    $buy_rate_per_unit = $request->cih_sell_rate;
-                    $balance_amount = $qty * $buy_rate_per_unit;
-                    $total_amount = $balance_amount - $request->gain_amount;
-                    $gain_amount = $request->gain_amount;
+                    // $product_quantity = ProductQuantity::create([
+                    //     'uuid' => self::uuid(),
+                    //     'entry_date' => date('Y-m-d', strtotime($request->date)),
+                    //     'name' => self::strUCWord($receive_account->name),
+                    //     'code' => $code,
+                    //     'form_type' => 'product_quantity',
+                    //     'product_id' => $receive_account->product_id,
+                    //     'quantity' => $qty,
+                    //     'balance_quantity' => $qty,
+                    //     'buying_rate' => $buy_rate_per_unit,
+                    //     'coa_id' => $receive_account->id,
+                    //     'coa_name' => $receive_account->name,
+                    //     'coa_code' => $receive_account->code,
+                    //     'coa_uuid' => $receive_account->uuid,
+                    //     'transaction_type' => $request->payment_type,
+                    //     'company_id' => auth()->user()->company_id,
+                    //     'branch_id' => auth()->user()->branch_id,
+                    //     'project_id' => auth()->user()->project_id,
+                    //     'user_id' => auth()->user()->id,
+                    // ]);
 
-                    $receive_account = ChartOfAccount::where('id',$request->buy_cash_chart_id)->first();
-                    $gave_account = ChartOfAccount::where('id',$request->bank_chart_id)->first();
-                    $gain_account = ChartOfAccount::where('id',579)->first();
+                    // // gave product section and update product quantity , Decreasing currency
+                    // $product = Product::where('id',$gave_account->product_id)->first();
+                    // $balance_qty = $product->stock_in - $request->quantity;
+                    // $product->stock_in = $balance_qty;
+                    // $product->save();
 
-                    // dd($request->all());
-
-                    //for sale invoice  CRV voucher
-                    $max = Voucher::withTrashed()->where('type','CRV')->max('voucher_no');
-                    $voucher_no = self::documentCode('CRV',$max);
-                    $voucher_id = self::uuid();
-                    $posted = $request->current_action_id == 'post'?1:0;
-                    // dump($buy_rate_per_unit);
-                    // dump($total_amount);
-                    // dump($gain_amount);
-                    // dd($balance_amount);
-
-                    // CRV debit credit entry
-                    //credit voucher
-                    Voucher::create([
-                        'voucher_id' => $voucher_id,
-                        'uuid' => self::uuid(),
-                        'date' => date('Y-m-d', strtotime($request->entry_date)),
-                        'type' => 'CRV',
-                        'voucher_no' => $voucher_no,
-                        'sr_no' => 1,
-                        'form_id' => $sale->uuid,
-                        'chart_account_id' => $cst_account->id,
-                        'chart_account_name' => $cst_account->name,
-                        'chart_account_code' => $cst_account->code,
-                        'rate_per_unit' => $buy_rate_per_unit,
-                        'amount' => $qty,
-                        'debit' => Utilities::NumFormat(0),
-                        'credit' => Utilities::NumFormat($balance_amount),
-                        'balance_amount' => Utilities::NumFormat($balance_amount),
-                        'description' => 'dummy',
-                        'remarks' => 'dummy remarks',
-                        'company_id' => auth()->user()->company_id,
-                        'project_id' => auth()->user()->project_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'user_id' => auth()->user()->id,
-                        'posted' => 0,
-                    ]);
-                    //debit voucher
-                    Voucher::create([
-                        'voucher_id' => $voucher_id,
-                        'uuid' => self::uuid(),
-                        'date' => date('Y-m-d', strtotime($request->entry_date)),
-                        'type' => 'CRV',
-                        'voucher_no' => $voucher_no,
-                        'sr_no' => 2,
-                        'form_id' => $sale->uuid,
-                        'chart_account_id' => $receive_account->id,
-                        'chart_account_name' => $receive_account->name,
-                        'chart_account_code' => $receive_account->code,
-                        'rate_per_unit' => $buy_rate_per_unit,
-                        'amount' => $qty,
-                        'debit' => Utilities::NumFormat($total_amount),
-                        'credit' => Utilities::NumFormat(0),
-                        'balance_amount' => Utilities::NumFormat($total_amount),
-                        'description' => 'dummy',
-                        'remarks' => 'dummy remarks',
-                        'company_id' => auth()->user()->company_id,
-                        'project_id' => auth()->user()->project_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'user_id' => auth()->user()->id,
-                        'posted' => 0,
-                    ]);
-                    //debit voucher for gain amount
-                    Voucher::create([
-                        'voucher_id' => $voucher_id,
-                        'uuid' => self::uuid(),
-                        'date' => date('Y-m-d', strtotime($request->entry_date)),
-                        'type' => 'G/L',
-                        'voucher_no' => $voucher_no,
-                        'sr_no' => 3,
-                        'form_id' => $sale->uuid,
-                        'chart_account_id' => $gain_account->id,
-                        'chart_account_name' => $gain_account->name,
-                        'chart_account_code' => $gain_account->code,
-                        'rate_per_unit' => $buy_rate_per_unit,
-                        'amount' => $qty,
-                        'debit' => Utilities::NumFormat($gain_amount),
-                        'credit' => Utilities::NumFormat(0),
-                        'balance_amount' => Utilities::NumFormat($gain_amount),
-                        'description' => 'dummy',
-                        'remarks' => 'dummy remarks',
-                        'company_id' => auth()->user()->company_id,
-                        'project_id' => auth()->user()->project_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'user_id' => auth()->user()->id,
-                        'posted' => 0,
-                    ]);
-
-                    //for sale invoice  BPV voucher
-                    $max = Voucher::withTrashed()->where('type','BPV')->max('voucher_no');
-                    $voucher_no = self::documentCode('BPV',$max);
-                    $voucher_id = self::uuid();
-                    $posted = $request->current_action_id == 'post'?1:0;
-                    // BPV debit credit entry
-                    if($request->amt_paid_to_customer != null){
-                        $balance_amount = $request->amt_paid_to_customer;
-                    }
-
-                    //debit voucher
-                    Voucher::create([
-                        'voucher_id' => $voucher_id,
-                        'uuid' => self::uuid(),
-                        'date' => date('Y-m-d', strtotime($request->entry_date)),
-                        'type' => 'BPV',
-                        'voucher_no' => $voucher_no,
-                        'sr_no' => 1,
-                        'form_id' => $sale->uuid,
-                        'chart_account_id' => $cst_account->id,
-                        'chart_account_name' => $cst_account->name,
-                        'chart_account_code' => $cst_account->code,
-                        'rate_per_unit' => $buy_rate_per_unit,
-                        'amount' => $qty,
-                        'debit' => Utilities::NumFormat($balance_amount),
-                        'credit' => Utilities::NumFormat(0),
-                        'balance_amount' => Utilities::NumFormat($balance_amount),
-                        'description' => 'dummy',
-                        'remarks' => 'dummy remarks',
-                        'company_id' => auth()->user()->company_id,
-                        'project_id' => auth()->user()->project_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'user_id' => auth()->user()->id,
-                        'posted' => 0,
-                    ]);
-                    //credit voucher
-                    Voucher::create([
-                        'voucher_id' => $voucher_id,
-                        'uuid' => self::uuid(),
-                        'date' => date('Y-m-d', strtotime($request->entry_date)),
-                        'type' => 'BPV',
-                        'voucher_no' => $voucher_no,
-                        'sr_no' => 2,
-                        'form_id' => $sale->uuid,
-                        'chart_account_id' => $gave_account->id,
-                        'chart_account_name' => $gave_account->name,
-                        'chart_account_code' => $gave_account->code,
-                        'rate_per_unit' => $buy_rate_per_unit,
-                        'amount' => $qty,
-                        'debit' => Utilities::NumFormat(0),
-                        'credit' => Utilities::NumFormat($balance_amount),
-                        'balance_amount' => Utilities::NumFormat($balance_amount),
-                        'description' => 'dummy',
-                        'remarks' => 'dummy remarks',
-                        'company_id' => auth()->user()->company_id,
-                        'project_id' => auth()->user()->project_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'user_id' => auth()->user()->id,
-                        'posted' => 0,
-                    ]);
-
-                    // buy product section and create new product quantity , Incresing currency
-                    $product = Product::where('id',$receive_account->product_id)->first();
-                    $balance_qty = $product->stock_in + $request->quantity;
-                    $product->stock_in = $balance_qty;
-                    $product->save();
-
-                    $doc_data = [
-                        'model'             => 'ProductQuantity',
-                        'code_field'        => 'code',
-                        'code_prefix'       => strtoupper('pq'),
-                        'form_type_field'        => 'form_type',
-                        'form_type_value'       => 'product_quantity',
-                    ];
-                    $code = Utilities::documentCode($doc_data);
-
-                    $product_quantity = ProductQuantity::create([
-                        'uuid' => self::uuid(),
-                        'entry_date' => date('Y-m-d', strtotime($request->date)),
-                        'name' => self::strUCWord($receive_account->name),
-                        'code' => $code,
-                        'form_type' => 'product_quantity',
-                        'product_id' => $receive_account->product_id,
-                        'quantity' => $qty,
-                        'balance_quantity' => $qty,
-                        'buying_rate' => $buy_rate_per_unit,
-                        'coa_id' => $receive_account->id,
-                        'coa_name' => $receive_account->name,
-                        'coa_code' => $receive_account->code,
-                        'coa_uuid' => $receive_account->uuid,
-                        'transaction_type' => $request->payment_type,
-                        'company_id' => auth()->user()->company_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'project_id' => auth()->user()->project_id,
-                        'user_id' => auth()->user()->id,
-                    ]);
-
-                    // gave product section and update product quantity , Decreasing currency
-                    $product = Product::where('id',$gave_account->product_id)->first();
-                    $balance_qty = $product->stock_in - $request->quantity;
-                    $product->stock_in = $balance_qty;
-                    $product->save();
-
-                    $pdtqty = ProductQuantity::where('coa_id',$gave_account->id)->where('balance_quantity','!=',0)->get();
-                    foreach($pdtqty as $pq){
-                        // dd($pq->balance_quantity);
-                        if($request->amount < $pq->balance_quantity){
-                            // dd($pq);
-                            $balance_qty = $pq->balance_quantity - $request->amount;
-                            $pq->balance_quantity = $balance_qty;
-                            $pq->save();
-                        }
-                    }
+                    // $pdtqty = ProductQuantity::where('coa_id',$gave_account->id)->where('balance_quantity','!=',0)->get();
+                    // foreach($pdtqty as $pq){
+                    //     // dd($pq->balance_quantity);
+                    //     if($request->amount < $pq->balance_quantity){
+                    //         // dd($pq);
+                    //         $balance_qty = $pq->balance_quantity - $request->amount;
+                    //         $pq->balance_quantity = $balance_qty;
+                    //         $pq->save();
+                    //     }
+                    // }
                 }else{
                     dd('in both account section');
 

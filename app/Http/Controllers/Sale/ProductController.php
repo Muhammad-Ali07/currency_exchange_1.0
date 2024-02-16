@@ -171,12 +171,9 @@ class ProductController extends Controller
             ];
             $data['code'] = Utilities::documentCode($doc_data);
             $filename = '';
-            // dd($request->all());
-            // dd($request->product_image);
             if ($request->has('product_image')) {
                 $file = $request->file('product_image');
                 $filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
-                // dd($filename);
                 $file->move(public_path('uploads'), $filename);
             }
             $p_data = [
@@ -187,55 +184,16 @@ class ProductController extends Controller
                 'status' => isset($request->status) ? "1" : "0",
                 'coa_id' => $r['uuid'],
                 'coa_code' => $r['code'],
-                // 'external_item_id' => $request->external_item_id,
-                // 'default_sale_price' => $request->default_sale_price,
+                'image' => $filename,
+
                 'company_id' => auth()->user()->company_id,
                 'branch_id' => auth()->user()->branch_id,
                 'project_id' => auth()->user()->project_id,
                 'user_id' => auth()->user()->id,
             ];
 
-            // if(isset($request->buyable_type_id) && !empty($request->buyable_type_id)){
-            //     $p_data['buyable_type_id'] = $request->buyable_type_id;
-            // }else{
-            //     $p_data['buyable_type_id'] = NULL;
-            // }
             $product = Product::create($p_data);
 
-
-            // if(isset($request->pv) && !empty($request->pv)){
-            //     foreach ($request->pv as $pvId=>$pvVal){
-            //         if(is_array($pvVal)){
-            //             $k = 1;
-            //             foreach ($pvVal as $checkboxList){
-            //                 if(!empty($checkboxList)){
-            //                     PropertyVariation::create([
-            //                         'sr_no' => $k,
-            //                         'product_id' => $product->id,
-            //                         'product_variation_id' => $pvId,
-            //                         'value' => $checkboxList,
-            //                         'company_id' => auth()->user()->company_id,
-            //                         'project_id' => auth()->user()->project_id,
-            //                         'user_id' => auth()->user()->id,
-            //                     ]);
-            //                     $k = $k + 1;
-            //                 }
-            //             }
-            //         }else{
-            //             if(!empty($pvVal)){
-            //                 PropertyVariation::create([
-            //                     'sr_no' => 1,
-            //                     'product_id' => $product->id,
-            //                     'product_variation_id' => $pvId,
-            //                     'value' => $pvVal,
-            //                     'company_id' => auth()->user()->company_id,
-            //                     'project_id' => auth()->user()->project_id,
-            //                     'user_id' => auth()->user()->id,
-            //                 ]);
-            //             }
-            //         }
-            //     }
-            // }
         }catch (Exception $e) {
             DB::rollback();
             return $this->jsonErrorResponse($data, $e->getMessage());
@@ -294,6 +252,59 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data = [];
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'product_name' => 'required',
+            // 'product_quantity' => 'required',
+            // 'buying_rate' => 'required',
+        ],[
+           'product_name.required' => 'Name is required',
+        //    'product_quantity.required' => 'Project is required',
+        //    'buying_rate.required' => 'Buying rate is required',
+        ]);
+
+        if ($validator->fails()) {
+            $data['validator_errors'] = $validator->errors();
+            $validator_errors = $data['validator_errors']->getMessageBag()->toArray();
+            $err = 'Fields are required';
+
+            foreach ($validator_errors as $key=>$valid_error){
+                $err = $valid_error[0];
+            }
+            return $this->jsonErrorResponse($data, $err);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $om_filename = '';
+            if ($request->has('om_image')) {
+                $file = $request->file('om_image');
+                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                $file->move(public_path('uploads'), $om_filename);
+            }
+            else{
+                if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){
+                    $om_filename = '';
+                }else{
+                    $om_filename = $request->om_hidden_image;
+                }
+            }
+            Product::where('uuid',$id)
+                ->update([
+                'name' => self::strUCWord($request->name),
+                'image' => $om_filename,
+            ]);
+
+        }catch (Exception $e) {
+            DB::rollback();
+            return $this->jsonErrorResponse($data, $e->getMessage());
+        }
+        DB::commit();
+
+        $data['redirect'] = self::Constants()['list_url'];
+        return $this->jsonSuccessResponse($data, 'Successfully updated');
     }
 
     /**

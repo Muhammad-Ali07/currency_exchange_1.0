@@ -14,6 +14,7 @@ use App\Http\Controllers\Accounts\CashPaymentController;
 use App\Http\Controllers\Accounts\CashReceiveController;
 use App\Http\Controllers\Accounts\JournalController;
 use App\Http\Controllers\Accounts\OpeningBalanceController;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Setting\CountryController;
 use App\Http\Controllers\Setting\RegionController;
 use App\Http\Controllers\Setting\CityController;
@@ -262,12 +263,14 @@ Route::group(['middleware' => 'auth'], function () {
             //     Route::get('print/{id}', 'printView')->name('print');
             // });
         });
-        // Route::prefix('sale')->name('sale.')->group(function () {
-        //     Route::prefix('sale-invoice')->name('sale-invoice.')->controller(SaleInvoiceController::class)->group(function(){
-        //         Route::post('get-seller-list', 'getSellerList')->name('getSellerList');
-        //         Route::post('get-product-detail', 'getProductDetail')->name('getProductDetail');
-        //         Route::get('print/{id}', 'printView')->name('print');
-        //     });
-        // });
+        Route::prefix('ajax')->name('ajax.')->group(function () {
+            Route::get('getCode/{form_type?}', [AjaxController::class, 'getCode'])->name('getCode');
+
+            // Route::prefix('sale-invoice')->name('sale-invoice.')->controller(SaleInvoiceController::class)->group(function(){
+            //     Route::post('get-seller-list', 'getSellerList')->name('getSellerList');
+            //     Route::post('get-product-detail', 'getProductDetail')->name('getProductDetail');
+            //     Route::get('print/{id}', 'printView')->name('print');
+            // });
+        });
     // });
 });

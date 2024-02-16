@@ -96,7 +96,7 @@
                                             </a>
                                             <img id="product_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};">
                                         </div>
-                                        <input class="form-control form-control-sm" type="file" value="{{ $img }}" id="product_image_url" name="product_image"/>
+                                        <input class="form-control form-control-sm" type="file" value="{{ $img }}" id="product_image_url" name="om_image"/>
                                     </div>
                                 </div>
                                 <div class="mb-1 row">
