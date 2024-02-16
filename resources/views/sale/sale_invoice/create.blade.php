@@ -729,7 +729,7 @@
                             '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
                         '</td>'+
                         '<td>'+
-                            '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                            '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
                         '</td>'+
                     '</tr>';
                     tr += '<tr>'+
@@ -758,7 +758,7 @@
                             '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
                         '</td>'+
                         '<td>'+
-                            '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                            '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
                         '</td>'+
                     '</tr>';
                     $('.egt_form_body').append(tr);

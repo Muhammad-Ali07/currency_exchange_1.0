@@ -233,7 +233,7 @@
                                                                     </td>
                                                                     <td class="text-center">
                                                                         <div class="egt_btn-group">
-                                                                            <button type="button" class="btn btn-danger btn-sm egt_del">
+                                                                            <button type="button" disabled class="btn btn-danger btn-sm egt_del">
                                                                                 <i data-feather="trash-2"></i>
                                                                             </button>
                                                                         </div>
