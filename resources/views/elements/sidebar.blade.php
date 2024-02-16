@@ -173,13 +173,13 @@
                         </a>
                     </li>
                     @endpermission
-                    @permission('bank-payment'.$sidebar_menu)
+                    {{-- @permission('bank-payment'.$sidebar_menu)
                     <li class="{{ ($path == 'accounts/opening-balance')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('accounts.opening-balance.index') }}">
                             <span class="menu-item text-truncate">Opening Balance</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                     @permission('bank-payment'.$sidebar_menu)
                     <li class="{{ ($path == 'accounts/bank-payment')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('accounts.bank-payment.index') }}">
