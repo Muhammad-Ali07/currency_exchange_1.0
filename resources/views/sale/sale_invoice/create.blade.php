@@ -212,7 +212,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 row">
+                                {{-- <div class="mb-1 row">
 
                                     <div class="col-lg-4">
                                         <label class="col-form-label">Payment<span class="required">*</span></label>
@@ -227,7 +227,7 @@
                                             <label class="form-check-label" for="inlineRadio2">Partial</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- <div class="mb-1 row">
                                     <div class="col-lg-12">
