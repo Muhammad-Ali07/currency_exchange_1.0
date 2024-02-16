@@ -693,6 +693,7 @@ class ComposerStaticInit0a0183b02e6437a568cce7db3779de86
         'App\\Models\\Project' => __DIR__ . '/../..' . '/app/Models/Project.php',
         'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',
         'App\\Models\\Sale' => __DIR__ . '/../..' . '/app/Models/Sale.php',
+        'App\\Models\\SaleInvoiceDtl' => __DIR__ . '/../..' . '/app/Models/SaleInvoiceDtl.php',
         'App\\Models\\Supplier' => __DIR__ . '/../..' . '/app/Models/Supplier.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\UserProject' => __DIR__ . '/../..' . '/app/Models/UserProject.php',

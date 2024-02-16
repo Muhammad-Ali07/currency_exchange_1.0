@@ -45,6 +45,10 @@ class Sale extends Model
 
     protected $morphClass = null;
 
+    public function dtl(){
+        return $this->hasMany(SaleInvoiceDtl::class,'sale_invoice_id');
+    }
+
     public function project(){
         return $this->belongsTo(Project::class,'project_id','id');
     }

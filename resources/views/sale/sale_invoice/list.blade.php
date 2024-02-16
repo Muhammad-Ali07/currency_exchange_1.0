@@ -28,11 +28,11 @@
                                     <tr>
                                         <th class="cell-fit" width="15%">Date</th>
                                         <th class="cell-fit" width="10%">Code</th>
-                                        <th class="cell-fit" width="10%">Type</th>
+                                        {{-- <th class="cell-fit" width="10%">Type</th>
                                         <th class="cell-fit" width="15%">Product</th>
                                         <th class="cell-fit" width="10%">Customer</th>
                                         <th class="cell-fit" width="10%">Price</th>
-                                        <th class="cell-fit" width="10%">Quantity</th>
+                                        <th class="cell-fit" width="10%">Quantity</th> --}}
                                         <th class="cell-fit" width="10%">Actions</th>
                                     </tr>
                                     </thead>

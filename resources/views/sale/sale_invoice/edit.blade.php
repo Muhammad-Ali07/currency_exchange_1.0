@@ -33,7 +33,7 @@
 @section('content')
     @php
         $current = $data['current'];
-        dd($current);
+        // dd($current);
         $url = route('transaction.sale.update',$data['id']);
 
     @endphp
@@ -64,7 +64,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
-                                        <h4><b>{{$data['code']}}</b></h4>
+                                        <h4><b>{{$current->code}}</b></h4>
                                     </div>
                                 </div>
                                 <div class="mb-1 row">
@@ -74,109 +74,10 @@
                                                 <label class="col-form-label">Entry Date</label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <input type="text" id="entry_date" name="entry_date" class="form-control form-control-sm" value="{{date('d-m-Y', strtotime($entry_date))}}" />
+                                                <input type="text" id="entry_date" name="entry_date" class="form-control form-control-sm" value="{{date('d-m-Y', strtotime($current->entry_date))}}" />
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mb-1 row">
-                                    <h6>Buy</h6>
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Product<span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <div class="input-group eg_help_block">
-                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="product_name" type="text" placeholder="Click here..." class="product_name form-control form-control-sm text-left">
-                                                    <input id="product_id" type="hidden" name="product_id">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Balance<span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input id="stock_in" type="text" disabled class="stock_in form-control form-control-sm text-left">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Rate<span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input id="buy_rate" type="text" class="buy_rate form-control form-control-sm text-left">
-                                            </div>
-                                        </div>
-                                    </div> --}}
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Quantity</label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- <div class="col-lg-6">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Type <span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <div class="input-group eg_help_block">
-                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="transaction_type" name="transaction_type" type="text" placeholder="Click here..." class="transaction_type form-control form-control-sm text-left">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-                                </div>
-                                <div class="mb-1 row">
-                                    <h6>Sell</h6>
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Product <span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <div class="input-group eg_help_block">
-                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="to_product_name" type="text" placeholder="Click here..." class="to_product_name form-control form-control-sm text-left">
-                                                    <input id="to_product_id" type="hidden" name="to_product_id">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Balance<span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input id="to_stock_in" type="text" disabled class="to_stock_in form-control form-control-sm text-left">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Rate/Unit</label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm" id="sell_rate" name="sale_price" aria-invalid="false">
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="mb-1 row">
                                     <div class="col-lg-12">
@@ -187,8 +88,8 @@
                                             <div class="col-sm-9">
                                                 <div class="input-group eg_help_block">
                                                     <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="customer_name" type="text" placeholder="Click here..." class="customer_name form-control form-control-sm text-left">
-                                                    <input id="customer_id" type="hidden" name="customer_id">
+                                                    <input id="customer_name" type="text" value="{{ $current->customer->name }}" placeholder="Click here..." class="customer_name form-control form-control-sm text-left">
+                                                    <input id="customer_id" type="hidden" name="customer_id" value="{{ $current->customer->id }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -211,10 +112,10 @@
                                 <div class="row"> <div class="col-lg-12 mb-2"></div></div>
 
                                 <div class="card card-payment">
-                                    <div class="card-header">
+                                    {{-- <div class="card-header">
                                         <h4 class="card-title">Amount to be Paid</h4>
                                         <h4 class="card-title text-primary" id="amount">$0.00</h4>
-                                    </div>
+                                    </div> --}}
                                     <div class="card-body">
                                         <form action="javascript:void(0);" class="form">
                                             <div class="row">
@@ -224,16 +125,15 @@
                                                         <input type="number" id="payment-card-number" class="form-control" placeholder="2133 3244 4567 8921">
                                                     </div>
                                                 </div> --}}
-                                                <div class="col-sm-6 col-12">
+                                                {{-- <div class="col-sm-6 col-12">
                                                     <div class="mb-2">
                                                         <label class="form-label" for="payment-expiry">Payment Type</label>
                                                         <select class="select2 form-select" id="payment_type" name="payment_type">
-                                                            <option value="cash" selected>Cash</option>
+                                                            <option value="cash" {{ ($sale->id == $current->booking_id )? "Selected":""  }} selected>Cash</option>
                                                             <option value="bank" selected>Bank</option>
                                                         </select>
-                                                        {{-- <input type="number" id="payment-expiry" class="form-control" placeholder="MM / YY"> --}}
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 {{-- <div class="col-sm-6 col-12">
                                                     <div class="mb-2">
                                                         <label class="form-label" for="payment-cvv">CVV / CVC</label>
@@ -254,7 +154,116 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-end">
+                                    <div class="data_entry_header">
+                                        <div class="hiddenFiledsCount" style="display: inline-block;"><span>0</span> fields hide</div>
+                                        {{-- <div style="display: inline-block;">
+                                            <a class="btn btn-sm btn-primary" id="gridAddBtn">Add</a>
+                                        </div> --}}
+                                        <div class="dropdown chart-dropdown" style="display: inline-block;">
+                                            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
+                                            @php
+                                                $headings = ['Account Code','Received','Paid','Exchange Rate','Debit(LC)','Credit(LC)',];
+                                            @endphp
+                                            <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
+                                                @foreach($headings as $key=>$heading)
+                                                    <li class="dropdown-item">
+                                                        <label>
+                                                            <input value="{{$key}}" type="checkbox" checked> {{$heading}}
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-2">
+                                <div class="col-lg-12">
+                                    <div id="erp_grid_table" class="egt">
+                                        <div class="">
+                                            <div class="table-scroll ">
+                                                <table class="egt_form_table table table-bordered">
+                                                    <thead class="egt_form_header">
+                                                    <tr class="egt_form_header_title">
+                                                        <th width="20%">Account Code</th>
+                                                        <th width="22%">Received</th>
+                                                        <th width="22%">Paid</th>
+                                                        <th width="22%">Exchange Rate</th>
+                                                        {{-- <th width="20%">Paid Currency Code</th> --}}
+                                                        <th width="22%">Debit(LC)</th>
+                                                        <th width="22%">Credit(LC)</th>
+                                                        <th width="13%" class="text-center">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="egt_form_body">
+                                                        @if(isset( $data['current']->dtl) && count( $data['current']->dtl) > 0)
+                                                        @foreach($data['current']->dtl as $dtl)
+                                                            @if($dtl->customer_id == null)
+                                                                <tr>
+                                                                    {{-- <td class="handle"><i data-feather="move" class="handle egt_handle"></i>
+                                                                        <input type="text" data-id="egt_sr_no" name="pd[{{$loop->iteration}}][egt_sr_no]"  value="{{$loop->iteration}}" class="form-control form-control-sm" readonly>
+                                                                    </td> --}}
+                                                                    <td>
+                                                                        <input type="hidden" data-id="chart_id" name="pd[{{$loop->iteration}}][chart_id]" value="{{$dtl->account_id}}" class="chart_id form-control form-control-sm">
+                                                                        <input type="hidden" data-id="egt_chart_code" name="pd[{{$loop->iteration}}][egt_chart_code]" value="{{$dtl->account_code}}" class=" chart_code form-control form-control-sm text-left" readonly>
+                                                                        <input type="text" data-id="egt_chart_name" name="pd[{{$loop->iteration}}][egt_chart_name]" value="{{$dtl->account_name}}" class="chart_name form-control form-control-sm" readonly>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="egt_received_fc" readonly type="text" name="pd[{{$loop->iteration}}][egt_received_fc]" value="{{$dtl->received_fc}}" class="received_fc form-control form-control-sm">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="egt_paid_fc" readonly type="text" name="pd[{{$loop->iteration}}][egt_paid_fc]" value="{{$dtl->paid_fc}}" class="paid_fc form-control form-control-sm">
+                                                                    </td>
 
+                                                                    <td>
+                                                                        <input type="text" readonly data-id="egt_exchange_rate" name="pd[{{$loop->iteration}}][egt_exchange_rate]" value="{{$dtl->exchange_rate}}"  class="form-control form-control-sm">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input data-id="egt_debit" readonly type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <input data-id="egt_credit" readonly type="text" name="pd[{{$loop->iteration}}][egt_credit]" value="{{number_format($dtl->credit,3)}}" class="FloatValidate credit form-control form-control-sm">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="egt_btn-group">
+                                                                            <button type="button" class="btn btn-danger btn-sm egt_del">
+                                                                                <i data-feather="trash-2"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
+                                                    </tbody>
+                                                    <tfoot class="egt_form_footer">
+                                                    <tr class="egt_form_footer_total">
+                                                        <td class="voucher-total-title">Total</td>
+                                                        <td></td>
+                                                        {{-- <td></td> --}}
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="voucher-total-debit text-end">
+                                                            <span id="tot_debit"></span>
+                                                            <input id="tot_voucher_debit" name="tot_voucher_debit" type="hidden" >
+                                                        </td>
+                                                        <td class="voucher-total-credit text-end">
+                                                            <span id="tot_credit"></span>
+                                                            <input id="tot_voucher_credit" name="tot_voucher_credit" type="hidden" >
+                                                        </td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mb-1 row">
                                 <label class="col-form-label">Remarks</label>
                                 <div class="col-lg-12">
@@ -304,7 +313,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-1 row">
+                            {{-- <div class="mb-1 row">
                                 <div class="col-lg-6">
                                     <div class="row">
                                         <div class="col-sm-3">
@@ -355,7 +364,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="mb-1 row">
                                 <label class="col-form-label">Remarks</label>
                                 <div class="col-lg-12">

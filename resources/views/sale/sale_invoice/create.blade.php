@@ -414,7 +414,7 @@
                                         <div class="dropdown chart-dropdown" style="display: inline-block;">
                                             <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
                                             @php
-                                                $headings = ['Received Currency Code','Received','Exchange Rate','Paid Currency Code','Paid','Debit(LC)','Credit(LC)',];
+                                                $headings = ['Account Code','Received','Paid','Exchange Rate','Debit(LC)','Credit(LC)',];
                                             @endphp
                                             <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
                                                 @foreach($headings as $key=>$heading)
@@ -437,11 +437,11 @@
                                                 <table class="egt_form_table table table-bordered">
                                                     <thead class="egt_form_header">
                                                     <tr class="egt_form_header_title">
-                                                        <th width="20%">Received Currency Code</th>
+                                                        <th width="20%">Account Code</th>
                                                         <th width="22%">Received</th>
-                                                        <th width="22%">Exchange Rate</th>
-                                                        <th width="20%">Paid Currency Code</th>
                                                         <th width="22%">Paid</th>
+                                                        <th width="22%">Exchange Rate</th>
+                                                        {{-- <th width="20%">Paid Currency Code</th> --}}
                                                         <th width="22%">Debit(LC)</th>
                                                         <th width="22%">Credit(LC)</th>
                                                         <th width="13%" class="text-center">Action</th>
@@ -491,7 +491,7 @@
                                                     <tr class="egt_form_footer_total">
                                                         <td class="voucher-total-title">Total</td>
                                                         <td></td>
-                                                        <td></td>
+                                                        {{-- <td></td> --}}
                                                         <td></td>
                                                         <td></td>
                                                         <td class="voucher-total-debit text-end">
@@ -704,36 +704,67 @@
 
 
             var tr = '';
+
             tr = '<tr>'+
                     '<td>'+
-                        '<input type="hidden" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
-                        '<input type="text" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
+                        '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
+                        '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="text" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
+                        '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
+                    '</td>'+
+                    // '<td>'+
+                        //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
+                        //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                        // '</td>'+
+                    '<td>'+
+                        '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="0">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="text" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
+                        '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
-                        '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                        '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="'+amount+'">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="text" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" class="form-control form-control-sm" value="">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="text" class="form-control form-control-sm" value="">'+
+                        '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
                     '</td>'+
                     '<td>'+
                         '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
                     '</td>'+
                 '</tr>';
-                console.log(tr);
-            $('.egt_form_body').append(tr);
+                tr += '<tr>'+
+                    '<td>'+
+                        '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+pCurrencyChartId+'">'+
+                        '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+
+                    '</td>'+
+                    // '<td>'+
+                    //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
+                    //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                    // '</td>'+
+                    '<td>'+
+                        '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" readonly value="1">'+
+                    '</td>'+
+
+                    '<td>'+
+                        '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="0">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
+                    '</td>'+
+                    '<td>'+
+                        '<button type="button" class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                    '</td>'+
+                '</tr>';
+                // console.log(tr);
+
+                $('.egt_form_body').append(tr);
 
             $('#buy_cash_chart_name').val('');
             $('#buy_cash_chart_id').val('');
@@ -744,7 +775,21 @@
             $('#quantity').val('');
             $('#cih_sell_rate').val('');
 
+            var debit_sum = '';
+            var credit_sum = '';
+
+            $('.egt_form_table > tbody  > tr').each(function(index, tr) {
+
+                console.log(debit_sum);
+                debit_sum += $(this).find(".rowDebit").val();
+                credit_sum += $(this).find(".rowCredit").val();
+            });
+            // console.log(credit_sum);
+            $('#tot_debit').text(debit_sum);
+            $('#tot_credit').text(credit_sum);
+
         });
+
         $(document).on('click','.currencyRow',function(){
             var tr = $(this).closest('tr');
 

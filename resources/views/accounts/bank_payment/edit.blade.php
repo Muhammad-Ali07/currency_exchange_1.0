@@ -186,51 +186,51 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody class="egt_form_body">
-                                                @if(isset( $data['dtl']) && count( $data['dtl']) > 0)
-                                                    @foreach($data['dtl'] as $dtl)
-                                                        <tr>
-                                                            <td class="handle"><i data-feather="move" class="handle egt_handle"></i>
-                                                                <input type="text" data-id="egt_sr_no" name="pd[{{$loop->iteration}}][egt_sr_no]"  value="{{$loop->iteration}}" class="form-control form-control-sm" readonly>
-                                                                <input type="hidden" data-id="chart_id" name="pd[{{$loop->iteration}}][chart_id]" value="{{$dtl->chart_account_id}}" class="chart_id form-control form-control-sm">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" data-id="egt_chart_code" name="pd[{{$loop->iteration}}][egt_chart_code]" value="{{$dtl->chart_account_code}}" class=" chart_code form-control form-control-sm text-left" readonly>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" data-id="egt_chart_name" name="pd[{{$loop->iteration}}][egt_chart_name]" value="{{$dtl->chart_account_name}}" class="chart_name form-control form-control-sm" readonly>
-                                                            </td>
-                                                            <td>
-                                                                <input id="egt_cheque_no" type="text" name="pd[{{$loop->iteration}}][egt_cheque_no]" value="{{$dtl->cheque_no}}" class="cheque_no form-control form-control-sm">
-                                                            </td>
-                                                            <td>
-                                                                <input id="egt_cheque_date" type="text" name="pd[{{$loop->iteration}}][egt_cheque_date]" value="{{$dtl->cheque_date}}" class="cheque_date form-control form-control-sm flatpickr-basic flatpickr-input"  placeholder="Click & Select Date" readonly>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" data-id="egt_description" name="pd[{{$loop->iteration}}][egt_description]" value="{{$dtl->description}}"  class="form-control form-control-sm">
-                                                            </td>
-                                                            <td>
-                                                                <input data-id="egt_amount" type="text" name="pd[{{$loop->iteration}}][egt_amount]" value="{{number_format($dtl->amount,3)}}" class="FloatValidate debit form-control form-control-sm">
-                                                            </td>
-                                                            <td>
-                                                                <input data-id="egt_rate" type="text" name="pd[{{$loop->iteration}}][egt_rate]" value="{{number_format($dtl->rate_per_unit,3)}}" class="FloatValidate debit form-control form-control-sm">
-                                                            </td>
-                                                            <td>
-                                                                <input data-id="egt_debit" type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
-                                                            </td>
+                                                    @if(isset( $data['dtl']) && count( $data['dtl']) > 0)
+                                                        @foreach($data['dtl'] as $dtl)
+                                                            <tr>
+                                                                <td class="handle"><i data-feather="move" class="handle egt_handle"></i>
+                                                                    <input type="text" data-id="egt_sr_no" name="pd[{{$loop->iteration}}][egt_sr_no]"  value="{{$loop->iteration}}" class="form-control form-control-sm" readonly>
+                                                                    <input type="hidden" data-id="chart_id" name="pd[{{$loop->iteration}}][chart_id]" value="{{$dtl->chart_account_id}}" class="chart_id form-control form-control-sm">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" data-id="egt_chart_code" name="pd[{{$loop->iteration}}][egt_chart_code]" value="{{$dtl->chart_account_code}}" class=" chart_code form-control form-control-sm text-left" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" data-id="egt_chart_name" name="pd[{{$loop->iteration}}][egt_chart_name]" value="{{$dtl->chart_account_name}}" class="chart_name form-control form-control-sm" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <input id="egt_cheque_no" type="text" name="pd[{{$loop->iteration}}][egt_cheque_no]" value="{{$dtl->cheque_no}}" class="cheque_no form-control form-control-sm">
+                                                                </td>
+                                                                <td>
+                                                                    <input id="egt_cheque_date" type="text" name="pd[{{$loop->iteration}}][egt_cheque_date]" value="{{$dtl->cheque_date}}" class="cheque_date form-control form-control-sm flatpickr-basic flatpickr-input"  placeholder="Click & Select Date" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" data-id="egt_description" name="pd[{{$loop->iteration}}][egt_description]" value="{{$dtl->description}}"  class="form-control form-control-sm">
+                                                                </td>
+                                                                <td>
+                                                                    <input data-id="egt_amount" type="text" name="pd[{{$loop->iteration}}][egt_amount]" value="{{number_format($dtl->amount,3)}}" class="FloatValidate debit form-control form-control-sm">
+                                                                </td>
+                                                                <td>
+                                                                    <input data-id="egt_rate" type="text" name="pd[{{$loop->iteration}}][egt_rate]" value="{{number_format($dtl->rate_per_unit,3)}}" class="FloatValidate debit form-control form-control-sm">
+                                                                </td>
+                                                                <td>
+                                                                    <input data-id="egt_debit" type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
+                                                                </td>
 
-                                                            <td>
-                                                                <input data-id="egt_credit" type="text" name="pd[{{$loop->iteration}}][egt_credit]" value="{{number_format($dtl->credit,3)}}" class="FloatValidate credit form-control form-control-sm">
-                                                            </td>
-                                                            <td class="text-center">
-                                                                <div class="egt_btn-group">
-                                                                    <button type="button" class="btn btn-danger btn-sm egt_del">
-                                                                        <i data-feather="trash-2"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
+                                                                <td>
+                                                                    <input data-id="egt_credit" type="text" name="pd[{{$loop->iteration}}][egt_credit]" value="{{number_format($dtl->credit,3)}}" class="FloatValidate credit form-control form-control-sm">
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <div class="egt_btn-group">
+                                                                        <button type="button" class="btn btn-danger btn-sm egt_del">
+                                                                            <i data-feather="trash-2"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
                                                 </tbody>
                                                 <tfoot class="egt_form_footer">
                                                 <tr class="egt_form_footer_total">
