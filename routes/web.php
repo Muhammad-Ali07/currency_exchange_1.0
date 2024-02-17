@@ -104,6 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('bankCurrencyHelp/{str?}', [HelpController::class, 'bankCurrencyHelp'])->name('bankCurrencyHelp');
             Route::get('cashCurrencyHelp/{str?}', [HelpController::class, 'cashCurrencyHelp'])->name('cashCurrencyHelp');
             Route::get('buyCashCurrencyHelp/{str?}', [HelpController::class, 'buyCashCurrencyHelp'])->name('buyCashCurrencyHelp');
+            Route::get('chartVoucherHelp/{str?}', [HelpController::class, 'chartVoucherHelp'])->name('chartVoucherHelp');
 
 
         });

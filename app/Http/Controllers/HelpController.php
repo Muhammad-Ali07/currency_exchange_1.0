@@ -276,5 +276,23 @@ class HelpController extends Controller
         return view('helps.buy_cash_currency_help',compact('data'));
     }
 
+    public function chartVoucherHelp($val = null)
+    {
+        // dd('in help');
+        $data = [];
+        $chart = ChartOfAccount::where('level',4);
+        if(!empty($val)){
+            $val = (string)$val;
+            $chart = $chart->where('code','like',"%$val%");
+            $chart = $chart->orWhere('name','like',"%$val%");
+        }
+
+        $chart = $chart->select('id','code','name')->get();
+        //dd($chart);
+        $data['chart'] =  $chart;
+
+        return view('helps.chart_voucher_help',compact('data'));
+    }
+
 
 }

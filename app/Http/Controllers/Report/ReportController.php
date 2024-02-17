@@ -277,32 +277,6 @@ class ReportController extends Controller
         $data = [];
         $data['title'] = $title;
         $data['company'] = Company::first();
-        $type = $request->voucher_type;
-        // dd($type);
-        $voucher_name = '';
-        if($type == 'CPV'){
-            $voucher_name = 'Cash Payment Vouchers';
-        }else if($type == 'BPV'){
-            $voucher_name = 'Bank Payment Vouchers';
-        }else if($type == 'CRV'){
-            $voucher_name = 'Cash Receive Vouchers';
-        }else if($type == 'BRV'){
-            $voucher_name = 'Bank Receive Vouchers';
-        }else if($type == 'SIV'){
-            $voucher_name = 'Sale Invoice Vouchers';
-        }else if($type == 'OBV'){
-            $voucher_name = 'Opening Balance Vouchers';
-        }else if($type == 'CST'){
-            $voucher_name = 'Customer Voucher';
-        }else if($type == 'JV'){
-            $voucher_name = 'Journal Voucher';
-        }else if($type == 'G/L'){
-            $voucher_name = 'Gain/Loss Voucher';
-        }
-        else{
-            $voucher_name = 'Other Voucher';
-        }
-        $data['report_name'] = $voucher_name;
 
         $from_date = date('Y-m-d', strtotime($request->from_date));
         $to_date = date('Y-m-d', strtotime($request->to_date));
@@ -310,29 +284,68 @@ class ReportController extends Controller
         $data['to_date'] = $to_date;
 
         $data['permission_view'] = $view;
-        // dump($from_date);
-        // dd($voucher_name);
-        // dd($type);
-        $vouchers = Voucher::where('type',$type)->whereBetween('created_at', [$from_date, $to_date])->get();
-        // dd($vouchers);
-        $arr_vouchers = [];
-        if($voucher_name == 'Gain/Loss Voucher'){
-            foreach($vouchers as $v){
-                $arr_vouchers[$v->date][] = $v;
-            }
 
-        }else{
-            foreach($vouchers as $v){
-                $arr_vouchers[$v->voucher_no][] = $v;
+        if($request->voucher_type != ''){
+            $type = $request->voucher_type;
+            // dd($type);
+            $voucher_name = '';
+
+            if($type == 'CPV'){
+                $voucher_name = 'Cash Payment Vouchers';
+            }else if($type == 'BPV'){
+                $voucher_name = 'Bank Payment Vouchers';
+            }else if($type == 'CRV'){
+                $voucher_name = 'Cash Receive Vouchers';
+            }else if($type == 'BRV'){
+                $voucher_name = 'Bank Receive Vouchers';
+            }else if($type == 'SIV'){
+                $voucher_name = 'Sale Invoice Vouchers';
+            }else if($type == 'OBV'){
+                $voucher_name = 'Opening Balance Vouchers';
+            }else if($type == 'CST'){
+                $voucher_name = 'Customer Voucher';
+            }else if($type == 'JV'){
+                $voucher_name = 'Journal Voucher';
+            }else if($type == 'G/L'){
+                $voucher_name = 'Gain/Loss Voucher';
             }
-        }
-        // dd($voucher_name);
-        $data['vouchers'] = $arr_vouchers;
-        if($voucher_name == 'Gain/Loss Voucher'){
-            return view('reports.vouchers.gainLossReport',compact('data'));
+            else{
+                $voucher_name = 'Other Voucher';
+            }
+            $data['report_name'] = $voucher_name;
+            $vouchers = Voucher::where('type',$type)->whereBetween('created_at', [$from_date, $to_date])->get();
+            $arr_vouchers = [];
+            if($voucher_name == 'Gain/Loss Voucher'){
+                foreach($vouchers as $v){
+                    $arr_vouchers[$v->date][] = $v;
+                }
+
+            }else{
+                foreach($vouchers as $v){
+                    $arr_vouchers[$v->voucher_no][] = $v;
+                }
+            }
+            // dd($voucher_name);
+            $data['vouchers'] = $arr_vouchers;
+            if($voucher_name == 'Gain/Loss Voucher'){
+                return view('reports.vouchers.gainLossReport',compact('data'));
+            }else{
+                return view('reports.vouchers.voucherReport',compact('data'));
+            }
         }else{
-            return view('reports.vouchers.voucherReport',compact('data'));
+            $data['report_name'] = 'General Ledger';
+
+            // dump($request->all());
+            $id = $request->ledger_id;
+            // dump($id);
+            $vouchers = Voucher::where('chart_account_id',$id)->whereBetween('created_at', [$from_date, $to_date])->get();
+            // dd($vouchers);
+            $data['vouchers'] = $vouchers;
+
+            return view('reports.ledgers.ledgerReport',compact('data'));
+
         }
+
     }
 
 }

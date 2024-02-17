@@ -99,6 +99,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-lg-12 mt-2">
+                                        <h4><p>OR</p></h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-1">
+                                        <label class="col-form-label p-0">All Ledgers <span class="required">*</span></label>
+                                        <div class="input-group eg_help_block">
+                                            <span class="input-group-text" id="om_addon_remove"><i data-feather='minus-circle'></i></span>
+                                            <input id="ledger_name" name="ledger_name" type="text" class="ledger_name form-control form-control-sm text-left">
+                                            <input id="ledger_id" type="hidden" class="ledger_id" name="ledger_id">
+                                        </div>
+                                    </div>
+
+                                </div>
                             {{-- </form> --}}
                         </div>
                     </div>
@@ -130,4 +146,6 @@
 
 </script>
     <script src="{{asset('/pages/help/currency_help.js')}}"></script>
+    <script src="{{ asset('/pages/help/chart_voucher_help.js') }}"></script>
+
 @endsection
