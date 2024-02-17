@@ -312,8 +312,9 @@ class ReportController extends Controller
         $data['permission_view'] = $view;
         // dump($from_date);
         // dd($voucher_name);
-
+        // dd($type);
         $vouchers = Voucher::where('type',$type)->whereBetween('created_at', [$from_date, $to_date])->get();
+        // dd($vouchers);
         $arr_vouchers = [];
         if($voucher_name == 'Gain/Loss Voucher'){
             foreach($vouchers as $v){

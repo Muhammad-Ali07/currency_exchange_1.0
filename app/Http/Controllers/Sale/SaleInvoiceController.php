@@ -236,17 +236,23 @@ class SaleInvoiceController extends Controller
 
                 // dd($request->all ());
                 $rowsCount = count($request->amount);
+                //for sale invoice  CRV voucher
+                $max = Voucher::withTrashed()->where('type','SI')->max('voucher_no');
+                $voucher_no = self::documentCode('SI',$max);
+                $voucher_id = self::uuid();
+                $posted = $request->current_action_id == 'post'?1:0;
                 for($i = 0; $i< $rowsCount; $i++){
                     $coa = ChartOfAccount::where('id',$request->account_id[$i])->first();
                     $gain_account = ChartOfAccount::where('id',579)->first();
 
-                    //for sale invoice  CRV voucher
-                    $max = Voucher::withTrashed()->where('type','SI')->max('voucher_no');
-                    $voucher_no = self::documentCode('SI',$max);
-                    $voucher_id = self::uuid();
-                    $posted = $request->current_action_id == 'post'?1:0;
                     // dd('done');
                     //voucher
+                    $amount = '';
+                    if($request->amount[$i] != 0){
+                        $amount = $request->amount[$i];
+                    }else if($request->qty[$i] != 0){
+                        $amount = $request->qty[$i];
+                    }
                     Voucher::create([
                         'voucher_id' => $voucher_id,
                         'uuid' => self::uuid(),
@@ -259,7 +265,7 @@ class SaleInvoiceController extends Controller
                         'chart_account_name' => $coa->name,
                         'chart_account_code' => $coa->code,
                         'rate_per_unit' => $request->sell_rate[$i],
-                        'amount' => $request->amount[$i],
+                        'amount' => $amount,
                         'debit' => Utilities::NumFormat($request->debit[$i]),
                         'credit' => Utilities::NumFormat($request->credit[$i]),
                         // 'balance_amount' => Utilities::NumFormat($balance_amount),
