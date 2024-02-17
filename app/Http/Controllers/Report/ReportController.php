@@ -333,13 +333,9 @@ class ReportController extends Controller
                 return view('reports.vouchers.voucherReport',compact('data'));
             }
         }else{
-            $data['report_name'] = 'General Ledger';
-
-            // dump($request->all());
+            $data['report_name'] = $request->ledger_name;
             $id = $request->ledger_id;
-            // dump($id);
             $vouchers = Voucher::where('chart_account_id',$id)->whereBetween('created_at', [$from_date, $to_date])->get();
-            // dd($vouchers);
             $data['vouchers'] = $vouchers;
 
             return view('reports.ledgers.ledgerReport',compact('data'));
