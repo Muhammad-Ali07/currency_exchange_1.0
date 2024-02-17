@@ -240,6 +240,38 @@ class SaleInvoiceController extends Controller
                     $coa = ChartOfAccount::where('id',$request->account_id[$i])->first();
                     $gain_account = ChartOfAccount::where('id',579)->first();
 
+                    //for sale invoice  CRV voucher
+                    $max = Voucher::withTrashed()->where('type','SI')->max('voucher_no');
+                    $voucher_no = self::documentCode('SI',$max);
+                    $voucher_id = self::uuid();
+                    $posted = $request->current_action_id == 'post'?1:0;
+                    // dd('done');
+                    //voucher
+                    Voucher::create([
+                        'voucher_id' => $voucher_id,
+                        'uuid' => self::uuid(),
+                        'date' => date('Y-m-d', strtotime($request->entry_date)),
+                        'type' => 'SI',
+                        'voucher_no' => $voucher_no,
+                        'sr_no' => 1,
+                        'form_id' => $sale->uuid,
+                        'chart_account_id' => $coa->id,
+                        'chart_account_name' => $coa->name,
+                        'chart_account_code' => $coa->code,
+                        'rate_per_unit' => $request->sell_rate[$i],
+                        'amount' => $request->amount[$i],
+                        'debit' => Utilities::NumFormat($request->debit[$i]),
+                        'credit' => Utilities::NumFormat($request->credit[$i]),
+                        // 'balance_amount' => Utilities::NumFormat($balance_amount),
+                        'description' => 'dummy',
+                        'remarks' => 'dummy remarks',
+                        'company_id' => auth()->user()->company_id,
+                        'project_id' => auth()->user()->project_id,
+                        'branch_id' => auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'posted' => 0,
+                    ]);
+
                     // for currency
                     $sale_inv_dtl = SaleInvoiceDtl::create([
                         'uuid' => self::uuid(),
@@ -293,8 +325,6 @@ class SaleInvoiceController extends Controller
                         'project_id' => auth()->user()->project_id,
                         'user_id' => auth()->user()->id,
                     ]);
-
-
 
                     // buy product section and create new product quantity , Incresing currency
                     $product = Product::where('id',$coa->product_id)->first();
