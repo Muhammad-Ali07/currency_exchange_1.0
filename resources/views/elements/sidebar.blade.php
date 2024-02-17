@@ -252,21 +252,21 @@
                             <span class="menu-item text-truncate">Cash Currency Ledger</span>
                         </a>
                     </li>
-                    @endpermission
-                    @permission('bank-currency-ledger-view')
+                    @endpermission --}}
+                    {{-- @permission('bank-currency-ledger-view')
                     <li class="{{ ($path == 'reports/bank_currency/ledger')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('reports.bank_currency.ledger') }}">
                             <span class="menu-item text-truncate">Bank Currency Ledger</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                     @permission('vouchers-list-view')
                     <li class="{{ ($path == 'reports/vouchers/list')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('reports.vouchers.list') }}">
                             <span class="menu-item text-truncate">Vouchers List</span>
                         </a>
                     </li>
-                    @endpermission --}}
+                    @endpermission
 
                     @permission('customer_legder-view')
                     <li class="{{ ($path == 'reports/customer/ledger')?'active':'' }}">
