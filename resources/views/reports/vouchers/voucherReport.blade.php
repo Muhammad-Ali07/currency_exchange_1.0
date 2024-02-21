@@ -123,7 +123,7 @@
                     <th class="py-1 ps-4">Date</th>
                     <th class="py-1">Account Code</th>
                     <th class="py-1">Account Head</th>
-                    {{-- <th class="py-1 ps-4">Voucher No.</th> --}}
+                    <th class="py-1 ps-4">Description</th>
                     <th class="py-1">Amount</th>
                     <th class="py-1">Rate/Unit</th>
 
@@ -201,24 +201,25 @@
                                     @endphp
                                     <a href="{{ $url }}" class="fw-semibold mb-25">{{ $v->voucher_no }}</a>
                                 </td> --}}
+                                <td>{{ $v->description }}</td>
                                 <td class="py-1">
-                                    {{ $v->amount }}
+                                    {{ number_format($v->amount,2) }}
                                 </td>
                                 <td class="py-1">
-                                    {{ $v->rate_per_unit }}
+                                    {{ number_format($v->rate_per_unit,2) }}
                                 </td>
 
                                 <td class="py-1">
-                                    {{ $v->debit }}
+                                    {{ number_format($v->debit,2) }}
                                 </td>
                                 <td class="py-1">
-                                    {{ $v->credit }}
+                                    {{ number_format($v->credit,2) }}
                                     {{-- <strong>0.00</strong> --}}
                                 </td>
                             </tr>
                         @endforeach
                             <tr class="bg-own">
-                                <td colspan="5"><strong>Total</strong></td>
+                                <td colspan="6"><strong>Total</strong></td>
                                 <td>{{ number_format($debit_sum,2) }}</td>
                                 <td>{{ number_format($credit_sum,2) }}</td>
                             </tr>
@@ -228,7 +229,7 @@
                             @endphp
                     @endforeach
                     <tr class="bg-own">
-                        <td colspan="5"><strong>Grand Total</strong></td>
+                        <td colspan="6"><strong>Grand Total</strong></td>
                         <td style="color:red">{{ number_format($debit_sum_sum,2) }}</td>
                         <td style="color:red">{{ number_format($credit_sum_sum,2) }}</td>
                     </tr>

@@ -728,7 +728,7 @@
                             '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" name="desc" class="form-control form-control-sm" value="">'+
+                            '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
                         '</td>'+
                         '<td>'+
                             '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
@@ -755,7 +755,7 @@
                             '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" name="desc" class="form-control form-control-sm" value="">'+
+                            '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
                         '</td>'+
                         '<td>'+
                             '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+

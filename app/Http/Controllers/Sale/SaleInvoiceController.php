@@ -199,7 +199,7 @@ class SaleInvoiceController extends Controller
                 //     'code_prefix'       => strtoupper('si'),
                 // ];
                 // $code = Utilities::documentCode($doc_data);
-
+                // dd($request->all());
                 $form_type = $request->form_type;
 
                 if($form_type == 'sell'){
@@ -213,7 +213,7 @@ class SaleInvoiceController extends Controller
                     $code = Utilities::documentCode($doc_data);
                     $customer = Customer::where('id',$request->customer_id)->first();
                     $cst_account = ChartOfAccount::where('id',$customer->coa_id)->first();
-
+                    // dd($request->all());
                     $sale = Sale::create([
                         'uuid' => self::uuid(),
                         'code' => $code,
@@ -221,6 +221,7 @@ class SaleInvoiceController extends Controller
                         'customer_id' => $request->customer_id,
                         'supplier_id' => 0,
                         'transaction_type' => $form_type,
+                        'description' => $request->remarks,
 
                         'company_id' => auth()->user()->company_id,
                         'branch_id' => auth()->user()->branch_id,

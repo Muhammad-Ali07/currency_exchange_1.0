@@ -142,6 +142,8 @@
                     <th class="py-1 ps-4">Date</th>
                     <th class="py-1">Account Code</th>
                     <th class="py-1">Account Head</th>
+                    <th class="py-1">Description</th>
+
                     <th class="py-1 ps-4">Received</th>
                     <th class="py-1">Paid</th>
                     <th class="py-1">Exchange Rate</th>
@@ -164,7 +166,7 @@
                     @foreach ($data['vouchers'] as $key => $vch )
                         {{-- @if ($vch->count() > 0) --}}
                             <tr class="bg-own">
-                                <td colspan="9"><strong>{{ $key }}</strong></td>
+                                <td colspan="10"><strong>{{ $key }}</strong></td>
                             </tr>
                             @php
                                 $debit_sum = 0;
@@ -207,21 +209,23 @@
                                     <td class="py-1">
                                         {{ $v->account_name }}
                                     </td>
+                                    <td>{{ $v->description }}</td>
+
                                     <td class="py-1">
-                                        {{ $v->received_fc }}
+                                        {{ number_format($v->received_fc,2) }}
                                     </td>
 
                                     <td class="py-1">
-                                        {{ $v->paid_fc }}
+                                        {{ number_format($v->paid_fc,2) }}
                                     </td>
                                     <td class="py-1">
-                                        {{ $v->exchange_rate }}
+                                        {{ number_format($v->exchange_rate,2) }}
                                     </td>
                                     <td class="py-1">
-                                        {{ $v->debit }}
+                                        {{ number_format($v->debit,2) }}
                                     </td>
                                     <td class="py-1">
-                                        {{ $v->credit }}
+                                        {{ number_format($v->credit,2) }}
                                         {{-- <strong>0.00</strong> --}}
                                     </td>
                                     <td class="py-1">
@@ -239,10 +243,10 @@
                                 $balance = $debit_sum - $credit_sum;
                             @endphp
                             <tr class="bg-own">
-                                <td colspan="6"><strong>Total</strong></td>
-                                <td ><strong>{{ $debit_sum }}</strong></td>
-                                <td ><strong>{{ $credit_sum }}</strong></td>
-                                <td ><strong>{{ $balance }}</strong></td>
+                                <td colspan="7"><strong>Total</strong></td>
+                                <td ><strong>{{ number_format($debit_sum,2) }}</strong></td>
+                                <td ><strong>{{ number_format($credit_sum,2) }}</strong></td>
+                                <td ><strong>{{ number_format($balance,2) }}</strong></td>
                             </tr>
                             @php
                                 $debit_sum_sum += $debit_sum;
@@ -254,11 +258,10 @@
                         @endif --}}
                     @endforeach
                     <tr class="bg-own">
-                        <td colspan="6" class="text-danger"><strong>Grand Total</strong></td>
-                        <td class="text-danger"><strong>{{ $debit_sum_sum }}</strong></td>
-                        <td class="text-danger"><strong>{{ $credit_sum_sum }}</strong></td>
-                        <td class="text-danger"><strong>{{ $balance_sum_sum }}</strong></td>
-
+                        <td colspan="7" class="text-danger"><strong>Grand Total</strong></td>
+                        <td class="text-danger"><strong>{{ number_format($debit_sum_sum,2) }}</strong></td>
+                        <td class="text-danger"><strong>{{ number_format($credit_sum_sum,2) }}</strong></td>
+                        <td class="text-danger"><strong>{{ number_format($balance_sum_sum,2) }}</strong></td>
                     </tr>
 
                 {{-- @else

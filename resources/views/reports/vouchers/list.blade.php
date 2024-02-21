@@ -72,8 +72,12 @@
                                                             $voucher_name = 'Bank Receive Voucher';
                                                         }else if($v->type == 'BPV'){
                                                             $voucher_name = 'Bank Payment Voucher';
-                                                        }else if($v->type == 'SIV'){
+                                                        }else if($v->type == 'SI'){
                                                             $voucher_name = 'Sale Invoice Voucher';
+                                                        }else if($v->type == 'PI'){
+                                                            $voucher_name = 'Purchase Invoice Voucher';
+                                                        }else if($v->type == 'JV'){
+                                                            $voucher_name = 'Journal Voucher';
                                                         }else if($v->type == 'OBV'){
                                                             $voucher_name = 'Opening Balance Voucher';
                                                         }else if($v->type == 'CST'){

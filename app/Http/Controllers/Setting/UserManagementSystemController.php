@@ -50,7 +50,7 @@ class UserManagementSystemController extends Controller
                 'icon' => '',
                 'child' => [
                     ['dname'=>'Home', 'name' => 'home', 'action' => [ $smenu,$view ] ],
-                    ['dname'=>'Company', 'name' => 'company', 'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ] ],
+                    // ['dname'=>'Company', 'name' => 'company', 'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ] ],
                     // ['dname'=>'Project', 'name' => 'project','action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ] ],
                 ],
             ],
@@ -69,31 +69,31 @@ class UserManagementSystemController extends Controller
                         'name' => 'chart-of-account-tree',
                         'action' => [ $smenu,$list,$view ]
                     ],
-                    [
-                        'dname' => 'Bank Payment',
-                        'name' => 'bank-payment',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
-                    [
-                        'dname' => 'Opening Balance',
-                        'name' => 'opening-balance',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
-                    [
-                        'dname' => 'Bank Receive',
-                        'name' => 'bank-receive',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
-                    [
-                        'dname' => 'Cash Payment',
-                        'name' => 'cash-payment',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
-                    [
-                        'dname' => 'Cash Receive',
-                        'name' => 'cash-receive',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
+                    // [
+                    //     'dname' => 'Bank Payment',
+                    //     'name' => 'bank-payment',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
+                    // [
+                    //     'dname' => 'Opening Balance',
+                    //     'name' => 'opening-balance',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
+                    // [
+                    //     'dname' => 'Bank Receive',
+                    //     'name' => 'bank-receive',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
+                    // [
+                    //     'dname' => 'Cash Payment',
+                    //     'name' => 'cash-payment',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
+                    // [
+                    //     'dname' => 'Cash Receive',
+                    //     'name' => 'cash-receive',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
                     [
                         'dname' => 'Journal',
                         'name' => 'journal',
@@ -121,11 +121,11 @@ class UserManagementSystemController extends Controller
                         'name' => 'product',
                         'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
                     ],
-                    [
-                        'dname' => 'Product Quantity',
-                        'name' => 'product-quantity',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
+                    // [
+                    //     'dname' => 'Product Quantity',
+                    //     'name' => 'product-quantity',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
                 ]
             ],
             // Transactional Forms
@@ -133,26 +133,26 @@ class UserManagementSystemController extends Controller
                 'name' => 'Transaction',
                 'icon' => 'icon-xl la la-shopping-cart',
                 'child' => [
-                    [
-                        'dname' => 'Product Property',
-                        'name' => 'product-property',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
+                    // [
+                    //     'dname' => 'Product Property',
+                    //     'name' => 'product-property',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
                     [
                         'dname' => 'Sale',
                         'name' => 'sale',
                         'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
                     ],
-                    [
-                        'dname' => 'Purchase',
-                        'name' => 'purchase',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
-                    [
-                        'dname' => 'Return',
-                        'name' => 'return',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
+                    // [
+                    //     'dname' => 'Purchase',
+                    //     'name' => 'purchase',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
+                    // [
+                    //     'dname' => 'Return',
+                    //     'name' => 'return',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
 
                 ]
             ],
@@ -179,16 +179,16 @@ class UserManagementSystemController extends Controller
                 'name' => 'Report',
                 'icon' => 'icon-xl la la-clipboard',
                 'child' => [
-                    [
-                        'dname' => 'Account Ledger',
-                        'name' => 'accounting_ledger',
-                        'action' => [ $view ]
-                    ],
-                    [
-                        'dname' => 'Profit&Loss Statement',
-                        'name' => 'profit_loss_statement',
-                        'action' => [ $view ]
-                    ],
+                    // [
+                    //     'dname' => 'Account Ledger',
+                    //     'name' => 'accounting_ledger',
+                    //     'action' => [ $view ]
+                    // ],
+                    // [
+                    //     'dname' => 'Profit&Loss Statement',
+                    //     'name' => 'profit_loss_statement',
+                    //     'action' => [ $view ]
+                    // ],
                     [
                         'dname' => 'Customer Ledger',
                         'name' => 'customer_legder',
@@ -199,16 +199,16 @@ class UserManagementSystemController extends Controller
                         'name' => 'supplier_legder',
                         'action' => [ $view ]
                     ],
-                    [
-                        'dname' => 'Currency Ledger',
-                        'name' => 'currency-ledger',
-                        'action' => [ $view ]
-                    ],
-                    [
-                        'dname' => 'Bank Currency Ledger',
-                        'name' => 'bank-currency-ledger',
-                        'action' => [ $view ]
-                    ],
+                    // [
+                    //     'dname' => 'Currency Ledger',
+                    //     'name' => 'currency-ledger',
+                    //     'action' => [ $view ]
+                    // ],
+                    // [
+                    //     'dname' => 'Bank Currency Ledger',
+                    //     'name' => 'bank-currency-ledger',
+                    //     'action' => [ $view ]
+                    // ],
                     [
                         'dname' => 'Vouchers List',
                         'name' => 'vouchers-list',
@@ -222,21 +222,21 @@ class UserManagementSystemController extends Controller
                 'name' => 'Setting',
                 'icon' => 'icon-xl la la-cog',
                 'child' => [
-                    [
-                        'dname' => 'User',
-                        'name' => 'user',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
+                    // [
+                    //     'dname' => 'User',
+                    //     'name' => 'user',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
                     [
                         'dname' => 'User Management',
                         'name' => 'user-management',
                         'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
                     ],
-                    [
-                        'dname' => 'Branch',
-                        'name' => 'branch',
-                        'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
-                    ],
+                    // [
+                    //     'dname' => 'Branch',
+                    //     'name' => 'branch',
+                    //     'action' => [ $smenu,$list,$create,$edit,$view,$delete,$print ]
+                    // ],
                 ]
             ],
         ];

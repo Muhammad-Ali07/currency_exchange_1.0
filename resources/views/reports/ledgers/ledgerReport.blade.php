@@ -124,6 +124,7 @@
                     <th class="py-1">Account Code</th>
                     <th class="py-1">Account Head</th>
                     <th class="py-1">Voucher No.</th>
+                    <th class="py-1">Description</th>
 
                     <th class="py-1">Debit</th>
                     <th class="py-1">Credit</th>
@@ -177,6 +178,7 @@
                                             <a href="{{ $url }}" class="fw-semibold mb-25">{{ $v->voucher_no }}</a>
                                             {{-- <a href="{{ route('') }}">{{ $v->voucher_no }}</a> --}}
                                         </td>
+                                        <td>{{ $v->description }}</td>
 
                                         <td class="py-1">
                                             {{ $v->debit }}
@@ -197,7 +199,7 @@
                                 $balance = $debit_sum_sum - $credit_sum_sum;
                             @endphp
                             <tr class="bg-own">
-                                <td colspan="4"><strong>Total</strong></td>
+                                <td colspan="5"><strong>Total</strong></td>
                                 <td style="color:red">{{ number_format($debit_sum_sum,2) }}</td>
                                 <td style="color:red">{{ number_format($credit_sum_sum,2) }}</td>
                                 <td style="color:red">{{ number_format($balance,2) }}</td>

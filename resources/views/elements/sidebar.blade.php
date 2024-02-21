@@ -112,13 +112,13 @@
                         </a>
                     </li>
                     @endpermission
-                    @permission('product'.$sidebar_menu)
+                    {{-- @permission('product'.$sidebar_menu)
                     <li class="{{ ($path == 'master/product-quantity')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('master.product-quantity.index') }}">
                             <span class="menu-item text-truncate">Product Quantity</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                     @permission('customer'.$sidebar_menu)
                     <li class="{{ ($path == 'master/customer')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('master.customer.index') }}">
@@ -243,7 +243,7 @@
             <li id="report_nav" class="nav-item has-sub {{ ($prefix == '/reports')?'open':'' }}">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather='clipboard'></i>
-                    <span class="menu-title text-truncate">Reports</span>
+                    <span class="menu-title text-truncate">Ledgers</span>
                 </a>
                 <ul class="menu-content" id="report_nav_ul">
                     {{-- @permission('currency-ledger-view')
@@ -326,13 +326,13 @@
                     <span class="menu-title text-truncate">Setting</span>
                 </a>
                 <ul class="menu-content" id="setting_nav_ul">
-                    @permission('user'.$sidebar_menu)
+                    {{-- @permission('user'.$sidebar_menu)
                     <li class="{{ ($path == 'setting/user')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.user.index') }}">
                             <span class="menu-item text-truncate">User</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                     @permission('user-management'.$sidebar_menu)
                     <li class="{{ ($path == 'setting/user-management')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.user-management.create') }}">
@@ -340,13 +340,13 @@
                         </a>
                     </li>
                     @endpermission
-                    @permission('branch'.$sidebar_menu)
+                    {{-- @permission('branch'.$sidebar_menu)
                     <li class="{{ ($path == 'setting/branch')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('setting.branch.index') }}">
                             <span class="menu-item text-truncate">Branch</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                 </ul>
             </li>
         </ul>

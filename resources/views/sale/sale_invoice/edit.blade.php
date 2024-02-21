@@ -192,6 +192,8 @@
                                                     <thead class="egt_form_header">
                                                     <tr class="egt_form_header_title">
                                                         <th width="20%">Account Code</th>
+                                                        <th width="20%">Description</th>
+
                                                         <th width="22%">Received</th>
                                                         <th width="22%">Paid</th>
                                                         <th width="22%">Exchange Rate</th>
@@ -214,6 +216,10 @@
                                                                         <input type="hidden" data-id="egt_chart_code" name="pd[{{$loop->iteration}}][egt_chart_code]" value="{{$dtl->account_code}}" class=" chart_code form-control form-control-sm text-left" readonly>
                                                                         <input type="text" data-id="egt_chart_name" name="pd[{{$loop->iteration}}][egt_chart_name]" value="{{$dtl->account_name}}" class="chart_name form-control form-control-sm" readonly>
                                                                     </td>
+                                                                    <td>
+                                                                        <input id="egt_description" readonly type="text" name="pd[{{$loop->iteration}}][egt_description]" value="{{$dtl->description}}" class="description form-control form-control-sm">
+                                                                    </td>
+
                                                                     <td>
                                                                         <input id="egt_received_fc" readonly type="text" name="pd[{{$loop->iteration}}][egt_received_fc]" value="{{$dtl->received_fc}}" class="received_fc form-control form-control-sm">
                                                                     </td>
@@ -253,7 +259,7 @@
                                                     <tr class="egt_form_footer_total">
                                                         <td class="voucher-total-title">Total</td>
                                                         <td></td>
-                                                        {{-- <td></td> --}}
+                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td class="voucher-total-debit text-end">
@@ -269,6 +275,19 @@
                                                     </tfoot>
                                                 </table>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-1 row">
+                                <label class="col-form-label">Remarks</label>
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        {{-- <div class="col-sm-3">
+                                        </div> --}}
+                                        <div class="col-sm-12">
+                                            <textarea disabled name="remarks" class="form-control form-control-sm" id="summernote" >{!! $current->description !!}</textarea>
+                                            {{-- <div id="summernote"><p></p></div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -331,6 +350,7 @@
           // ['view', ['fullscreen', 'codeview', 'help']]
         ]
       });
+      $('#summernote').summernote('disable');
     </script>
 
     @yield('scriptCustom')

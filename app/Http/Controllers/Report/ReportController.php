@@ -12,6 +12,7 @@ use App\Models\Supplier;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -61,7 +62,8 @@ class ReportController extends Controller
         }
         $salesResultDtlArr = [];
         foreach($salesResult as $r){
-            $salesResultDtlArr[$r->code] = SaleInvoiceDtl::where('sale_invoice_id',$r->id)->where('customer_id',null)->get();
+            $salesResultDtlArr[$r->code] = SaleInvoiceDtl::where('sale_invoice_id',$r->id)->where('customer_id',null)
+                                            ->whereBetween(DB::raw('DATE(created_at)'), [$from_date, $to_date])->get();
         }
         $data['vouchers'] = $salesResultDtlArr;
         return view('reports.customer.customerLedgerReport',compact('data'));
@@ -169,7 +171,8 @@ class ReportController extends Controller
         }
         $salesResultDtlArr = [];
         foreach($salesResult as $r){
-            $salesResultDtlArr[$r->code] = SaleInvoiceDtl::where('sale_invoice_id',$r->id)->where('supplier_id',null)->get();
+            $salesResultDtlArr[$r->code] = SaleInvoiceDtl::where('sale_invoice_id',$r->id)
+                                            ->where('supplier_id',null)->whereBetween(DB::raw('DATE(created_at)'), [$from_date, $to_date])->get();
         }
         $data['vouchers'] = $salesResultDtlArr;
         return view('reports.supplier.supplierLedgerReport',compact('data'));
@@ -362,7 +365,7 @@ class ReportController extends Controller
         }else{
             $data['report_name'] = $request->ledger_name;
             $id = $request->ledger_id;
-            $vouchers = Voucher::where('chart_account_id',$id)->whereBetween('created_at', [$from_date, $to_date])->get();
+            $vouchers = Voucher::where('chart_account_id',$id)->whereBetween('date', [$from_date, $to_date])->get();
             $data['vouchers'] = $vouchers;
             return view('reports.ledgers.ledgerReport',compact('data'));
 
