@@ -89,6 +89,10 @@ function funcGetProductChartDetail(chart_id) {
                 if(response.status == 'success'){
                     var vouchers_sum = response.data['vouchers_sum'];
                     console.log(vouchers_sum);
+                    $('form').find('#bank_code').find('#bank_balance').val('');
+                    $('form').find('#bank_code').find('#bank_chart_name').val('');
+                    $('form').find('#bank_code').find('#bank_chart_id').val('');
+
                     $('form').find('#cash_code').find('#cih_balance').val(vouchers_sum);
                     var buy_rate = $('form').find('#buy_rate').val();
                     var quantity = $('form').find('#quantity').val();
@@ -99,6 +103,9 @@ function funcGetProductChartDetail(chart_id) {
                     if(total_amount > vouchers_sum){
                         $('form').find('#transaction_save_btn').prop('disabled',true);
                         ntoastr.error('Cash in hand is less then the amount to be paid...');
+                    }else if(vouchers_sum == 0){
+                        $('form').find('#transaction_save_btn').prop('disabled',true);
+                        ntoastr.error('Cash in hand is not enough...');
                     }else{
                         $('form').find('#transaction_save_btn').prop('disabled',false);
                         // funcGetProductQtyDetail(chart_id,total_amount);

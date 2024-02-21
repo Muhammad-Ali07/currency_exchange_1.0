@@ -189,10 +189,10 @@ class JournalController extends Controller
                 // dd($vu);
                 $vu_id = $vu->id;
             }else{
-                $vu_id = '';
+                $vu_id = 0;
             }
 
-
+            // dd($request->all());
 
             $max = Voucher::withTrashed()->where('type',self::Constants()['type'])->max('voucher_no');
             $voucher_no = self::documentCode(self::Constants()['type'],$max);
@@ -203,7 +203,6 @@ class JournalController extends Controller
             foreach ($request->pd as $pd){
                 $account = ChartOfAccount::where('id',$pd['chart_id'])->first();
                 if(!empty($account)){
-
                     $balance_amount = $pd['egt_amount'] * $pd['egt_rate'] ;
                     Voucher::create([
                         'voucher_id' => $voucher_id,
@@ -232,41 +231,83 @@ class JournalController extends Controller
                     $sr = $sr + 1;
                 }
                 if(!empty($account->product_id)){
-                    $product = Product::where('id',$account->product_id)->first();
-                    $balance_stock = $product->stock_in;
-                    $total_stock = $balance_stock + $pd['egt_amount'];
-                    $product->stock_in = $total_stock;
-                    $product->save();
+                    // dd($account->product_id);
 
-                    $doc_data = [
-                        'model'             => 'ProductQuantity',
-                        'code_field'        => 'code',
-                        'code_prefix'       => strtoupper('pq'),
-                        'form_type_field'        => 'form_type',
-                        'form_type_value'       => 'product_quantity',
-                    ];
-                    $code = Utilities::documentCode($doc_data);
-                    $product_quantity = ProductQuantity::create([
-                        'uuid' => self::uuid(),
-                        'entry_date' => date('Y-m-d', strtotime($request->date)),
-                        'name' => self::strUCWord($account->name),
-                        'code' => $code,
-                        'form_type' => 'product_quantity',
-                        'product_id' => $product->id,
-                        'quantity' => $pd['egt_amount'],
-                        'balance_quantity' => $pd['egt_amount'],
-                        'buying_rate' => $pd['egt_rate'],
-                        'coa_id' => $account->id,
-                        'coa_name' => $account->name,
-                        'coa_code' => $account->code,
-                        'coa_uuid' => $account->uuid,
+                    if($pd['egt_credit'] != 0){
+                        $product = Product::where('id',$account->product_id)->first();
+                        $balance_stock = $product->stock_in;
+                        $total_stock = $balance_stock - $pd['egt_amount'];
+                        $product->stock_in = $total_stock;
+                        $product->save();
 
-                        'company_id' => auth()->user()->company_id,
-                        'branch_id' => auth()->user()->branch_id,
-                        'project_id' => auth()->user()->project_id,
-                        'user_id' => auth()->user()->id,
+                        $product_quantity = ProductQuantity::where('coa_id',$account->id)->where('balance_quantity','!=',0)->get();
+                        $amount = $pd['egt_amount'];
+                        // $array = array(2, 3, 3, 5);
+                        $remaining_balances = array();
+                        // dd($product_quantity);
+                        foreach ($product_quantity as $pq) {
+                            // Subtract the array element from the amount
+                            $remaining_balance_amount = max(0, $amount - $pq->balance_quantity);
+                            // Subtract the remaining balance from the array element
+                            $remaining_balance_row = max(0, $pq->balance_quantity - $amount);
+                            // Store the remaining balances for both amount and array row
+                            // $remaining_balances[] = array(
+                            //     'amount' => $remaining_balance_amount,
+                            //     'row_amount' => $remaining_balance_row
+                            // );
 
-                    ]);
+                            // Update the amount with the remaining balance after subtraction
+                            $amount = $remaining_balance_amount;
+
+                            $pq->balance_quantity = $remaining_balance_row;
+                            $pq->save();
+
+                            if($remaining_balance_amount == 0){
+                                break;
+                            }else{
+                                continue;
+                            }
+                        }
+                        // dd('done');
+
+                    }else{
+                        //debit entry
+                        $product = Product::where('id',$account->product_id)->first();
+                        $balance_stock = $product->stock_in;
+                        $total_stock = $balance_stock + $pd['egt_amount'];
+                        $product->stock_in = $total_stock;
+                        $product->save();
+
+                        $doc_data = [
+                            'model'             => 'ProductQuantity',
+                            'code_field'        => 'code',
+                            'code_prefix'       => strtoupper('pq'),
+                            'form_type_field'        => 'form_type',
+                            'form_type_value'       => 'product_quantity',
+                        ];
+                        $code = Utilities::documentCode($doc_data);
+                        $product_quantity = ProductQuantity::create([
+                            'uuid' => self::uuid(),
+                            'entry_date' => date('Y-m-d', strtotime($request->date)),
+                            'name' => self::strUCWord($account->name),
+                            'code' => $code,
+                            'form_type' => 'product_quantity',
+                            'product_id' => $product->id,
+                            'quantity' => $pd['egt_amount'],
+                            'balance_quantity' => $pd['egt_amount'],
+                            'buying_rate' => $pd['egt_rate'],
+                            'coa_id' => $account->id,
+                            'coa_name' => $account->name,
+                            'coa_code' => $account->code,
+                            'coa_uuid' => $account->uuid,
+
+                            'company_id' => auth()->user()->company_id,
+                            'branch_id' => auth()->user()->branch_id,
+                            'project_id' => auth()->user()->project_id,
+                            'user_id' => auth()->user()->id,
+
+                        ]);
+                    }
                 }
             }
 

@@ -14,21 +14,25 @@ class AjaxController extends Controller
         if($form_type == 'sell'){
             $doc_data = [
                 'model'             => 'Sale',
-                'transaction_type'  => 'sale',
+                'form_type_field'  => 'transaction_type',
+                'form_type_value'  => 'sell',
                 'code_field'        => 'code',
-
                 'code_prefix'       => strtoupper('si'),
             ];
             $data['code'] = Utilities::documentCode($doc_data);
         }else{
             $doc_data = [
                 'model'             => 'Sale',
-                'transaction_type'  => 'purchase',
+                'form_type_field'  => 'transaction_type',
+                'form_type_value'  => 'buy',
                 'code_field'        => 'code',
                 'code_prefix'       => strtoupper('pi'),
             ];
             $data['code'] = Utilities::documentCode($doc_data);
-            dd($data['code']);
         }
+        // dd($data['code']);
+        return $this->jsonSuccessResponse($data, 'Success');
+
+        // return $data;
     }
 }

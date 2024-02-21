@@ -180,7 +180,7 @@
                         </a>
                     </li>
                     @endpermission --}}
-                    @permission('bank-payment'.$sidebar_menu)
+                    {{-- @permission('bank-payment'.$sidebar_menu)
                     <li class="{{ ($path == 'accounts/bank-payment')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('accounts.bank-payment.index') }}">
                             <span class="menu-item text-truncate">Bank Payment</span>
@@ -207,7 +207,7 @@
                             <span class="menu-item text-truncate">Cash Receive</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endpermission --}}
                     @permission('journal'.$sidebar_menu)
                     <li class="{{ ($path == 'accounts/journal')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('accounts.journal.index') }}">
@@ -272,6 +272,13 @@
                     <li class="{{ ($path == 'reports/customer/ledger')?'active':'' }}">
                         <a class="d-flex align-items-center" href="{{ route('reports.customer.ledger') }}">
                             <span class="menu-item text-truncate">Customer Ledger</span>
+                        </a>
+                    </li>
+                    @endpermission
+                    @permission('supplier_legder-view')
+                    <li class="{{ ($path == 'reports/supplier/ledger')?'active':'' }}">
+                        <a class="d-flex align-items-center" href="{{ route('reports.supplier.ledger') }}">
+                            <span class="menu-item text-truncate">Supplier Ledger</span>
                         </a>
                     </li>
                     @endpermission

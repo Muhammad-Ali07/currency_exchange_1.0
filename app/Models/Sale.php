@@ -25,6 +25,7 @@ class Sale extends Model
         'branch_id',
         'project_id',
         'user_id',
+        'supplier_id',
 
         'payment_currency',
         'payment_type',

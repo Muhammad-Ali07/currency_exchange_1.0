@@ -195,6 +195,11 @@ class UserManagementSystemController extends Controller
                         'action' => [ $view ]
                     ],
                     [
+                        'dname' => 'Supplier Ledger',
+                        'name' => 'supplier_legder',
+                        'action' => [ $view ]
+                    ],
+                    [
                         'dname' => 'Currency Ledger',
                         'name' => 'currency-ledger',
                         'action' => [ $view ]

@@ -191,6 +191,12 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('ledger', 'customerLedger')->name('ledger');
                 Route::post('cstLedgerReport', 'customerLedgerReport')->name('store');
             });
+            // Supplier Ledger
+            Route::prefix('supplier')->name('supplier.')->controller(ReportController::class)->group(function(){
+                Route::get('ledger', 'supplierLedger')->name('ledger');
+                Route::post('spLedgerReport', 'supplierLedgerReport')->name('store');
+            });
+
             // cash currency report
             Route::prefix('currency')->name('currency.')->controller(ReportController::class)->group(function(){
                 Route::get('ledger', 'currencyLedger')->name('ledger');

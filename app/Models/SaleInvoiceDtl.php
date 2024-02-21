@@ -24,7 +24,8 @@ class SaleInvoiceDtl extends Model
         'credit',
         'sale_invoice_id',
         'customer_id',
-
+        'supplier_id',
+        'description',
         'company_id',
         'branch_id',
         'project_id',
