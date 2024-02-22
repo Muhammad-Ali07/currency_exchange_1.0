@@ -579,29 +579,29 @@ class SaleInvoiceController extends Controller
                             ]);
 
                             // income/loss voucher
-                            Voucher::create([
-                                'voucher_id' => $voucher_id,
-                                'uuid' => self::uuid(),
-                                'date' => date('Y-m-d', strtotime($request->entry_date)),
-                                'type' => 'PI',
-                                'voucher_no' => $voucher_no,
-                                'sr_no' => 2,
-                                'form_id' => $sale->uuid,
-                                'chart_account_id' => $cash_account->id,
-                                'chart_account_name' => $cash_account->name,
-                                'chart_account_code' => $cash_account->code,
-                                // 'rate_per_unit' => $gain_amount_per_unit,
-                                // 'amount' => $gain_amount,
-                                'debit' => Utilities::NumFormat($gain_amount),
-                                'credit' => Utilities::NumFormat(0),
-                                'description' => $request->desc[$i],
-                                'remarks' => $request->desc[$i],
-                                'company_id' => auth()->user()->company_id,
-                                'project_id' => auth()->user()->project_id,
-                                'branch_id' => auth()->user()->branch_id,
-                                'user_id' => auth()->user()->id,
-                                'posted' => 0,
-                            ]);
+                            // Voucher::create([
+                            //     'voucher_id' => $voucher_id,
+                            //     'uuid' => self::uuid(),
+                            //     'date' => date('Y-m-d', strtotime($request->entry_date)),
+                            //     'type' => 'PI',
+                            //     'voucher_no' => $voucher_no,
+                            //     'sr_no' => 2,
+                            //     'form_id' => $sale->uuid,
+                            //     'chart_account_id' => $cash_account->id,
+                            //     'chart_account_name' => $cash_account->name,
+                            //     'chart_account_code' => $cash_account->code,
+                            //     // 'rate_per_unit' => $gain_amount_per_unit,
+                            //     // 'amount' => $gain_amount,
+                            //     'debit' => Utilities::NumFormat($gain_amount),
+                            //     'credit' => Utilities::NumFormat(0),
+                            //     'description' => $request->desc[$i],
+                            //     'remarks' => $request->desc[$i],
+                            //     'company_id' => auth()->user()->company_id,
+                            //     'project_id' => auth()->user()->project_id,
+                            //     'branch_id' => auth()->user()->branch_id,
+                            //     'user_id' => auth()->user()->id,
+                            //     'posted' => 0,
+                            // ]);
 
                         }else if($request->credit[$i] != 0){
                             // dd('in else');
@@ -633,27 +633,27 @@ class SaleInvoiceController extends Controller
                             ]);
 
                             // income/loss voucher
-                            Voucher::create([
-                                'voucher_id' => $voucher_id,
-                                'uuid' => self::uuid(),
-                                'date' => date('Y-m-d', strtotime($request->entry_date)),
-                                'type' => 'PI',
-                                'voucher_no' => $voucher_no,
-                                'sr_no' => 2,
-                                'form_id' => $sale->uuid,
-                                'chart_account_id' => $gain_account->id,
-                                'chart_account_name' => $gain_account->name,
-                                'chart_account_code' => $gain_account->code,
-                                'debit' => Utilities::NumFormat(0),
-                                'credit' => Utilities::NumFormat($gain_amount),
-                                'description' => $request->desc[$i],
-                                'remarks' => $request->desc[$i],
-                                'company_id' => auth()->user()->company_id,
-                                'project_id' => auth()->user()->project_id,
-                                'branch_id' => auth()->user()->branch_id,
-                                'user_id' => auth()->user()->id,
-                                'posted' => 0,
-                            ]);
+                            // Voucher::create([
+                            //     'voucher_id' => $voucher_id,
+                            //     'uuid' => self::uuid(),
+                            //     'date' => date('Y-m-d', strtotime($request->entry_date)),
+                            //     'type' => 'PI',
+                            //     'voucher_no' => $voucher_no,
+                            //     'sr_no' => 2,
+                            //     'form_id' => $sale->uuid,
+                            //     'chart_account_id' => $gain_account->id,
+                            //     'chart_account_name' => $gain_account->name,
+                            //     'chart_account_code' => $gain_account->code,
+                            //     'debit' => Utilities::NumFormat(0),
+                            //     'credit' => Utilities::NumFormat($gain_amount),
+                            //     'description' => $request->desc[$i],
+                            //     'remarks' => $request->desc[$i],
+                            //     'company_id' => auth()->user()->company_id,
+                            //     'project_id' => auth()->user()->project_id,
+                            //     'branch_id' => auth()->user()->branch_id,
+                            //     'user_id' => auth()->user()->id,
+                            //     'posted' => 0,
+                            // ]);
 
                         }
 

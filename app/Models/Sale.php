@@ -56,6 +56,9 @@ class Sale extends Model
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id','id');
     }
+    public function supplier(){
+        return $this->belongsTo(Supplier::class,'supplier_id','id');
+    }
     // public function property_payment_mode(){
     //     return $this->belongsTo(PropertyPaymentMode::class,'property_payment_mode_id','id');
     // }
