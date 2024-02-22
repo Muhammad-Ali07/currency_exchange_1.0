@@ -97,19 +97,15 @@
                                         </div>
                                     </div>
                                 @else
-                                <div class="mb-1 row">
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label class="col-form-label">Supplier <span class="required">*</span></label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <div class="input-group eg_help_block">
-                                                    <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
-                                                    <input id="supplier_name" type="text" value="{{ $current->supplier->name }}" placeholder="Click here..." class="supplier_name form-control form-control-sm text-left">
-                                                    <input id="supplier_id" type="hidden" name="supplier_id" value="{{ $current->supplier->id }}">
-                                                </div>
-                                            </div>
+                                <div class="mb-1 row" id="supplierRow">
+                                    <div class="col-lg-3">
+                                        <label class="col-form-label p-0">Supplier<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <div class="input-group eg_help_block">
+                                            <span class="input-group-text" id="addon_remove"><i data-feather='minus-circle'></i></span>
+                                            <input id="supplier_name" type="text" placeholder="Click here..." name="supplier_name" class="supplier_name form-control form-control-sm text-left">
+                                            <input id="supplier_id" type="hidden" class="supplier_id" name="supplier_id">
                                         </div>
                                     </div>
                                 </div>
