@@ -144,8 +144,8 @@
                     <th class="py-1">Account Head</th>
                     <th class="py-1">Description</th>
 
-                    <th class="py-1 ps-4">Received</th>
-                    <th class="py-1">Paid</th>
+                    <th class="py-1 ps-4">Paid</th>
+                    <th class="py-1">Received</th>
                     <th class="py-1">Exchange Rate</th>
                     <th class="py-1">Debit</th>
                     <th class="py-1">Credit</th>
