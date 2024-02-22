@@ -342,6 +342,8 @@
 
 @section('script')
     <script src="{{asset('/pages/help/customer_help.js')}}"></script>
+    <script src="{{ asset('/pages/help/supplier_help.js')}}"></script>
+
     <script src="{{asset('/pages/help/product_help.js')}}"></script>
     <script src="{{asset('/pages/help/transaction_type_help.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
