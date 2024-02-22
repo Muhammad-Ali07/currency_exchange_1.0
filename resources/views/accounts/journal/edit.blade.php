@@ -137,6 +137,9 @@
                                                     <th width="20%">Account Code</th>
                                                     <th width="22%">Account Name</th>
                                                     <th width="22%">Description</th>
+                                                    <th width="22%">Amount</th>
+                                                    <th width="22%">Rate/Unit</th>
+
                                                     <th width="16%">Debit</th>
                                                     <th width="16%">Credit</th>
                                                     <th width="13%" class="text-center">Action</th>
@@ -154,6 +157,12 @@
                                                     </td>
                                                     <td>
                                                         <input id="egt_description" type="text" class="form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_amount" type="text" class="form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_rate_per_unit" type="text" class="form-control form-control-sm">
                                                     </td>
                                                     <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
@@ -186,6 +195,13 @@
                                                                 <input type="text" data-id="egt_description" name="pd[{{$loop->iteration}}][egt_description]" value="{{$dtl->description}}"  class="form-control form-control-sm">
                                                             </td>
                                                             <td>
+                                                                <input type="text" data-id="egt_amount" name="pd[{{$loop->iteration}}][egt_amount]" value="{{$dtl->amount}}"  class="form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" data-id="egt_rate_per_unit" name="pd[{{$loop->iteration}}][egt_rate_per_unit]" value="{{$dtl->rate_per_unit}}"  class="form-control form-control-sm">
+                                                            </td>
+
+                                                            <td>
                                                                 <input data-id="egt_debit" type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
                                                             </td>
                                                             <td>
@@ -207,6 +223,8 @@
                                                     <td class="voucher-total-title">Total</td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
+
                                                     <td></td>
                                                     <td class="voucher-total-debit text-end">
                                                         <span id="tot_debit"></span>

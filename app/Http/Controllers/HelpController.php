@@ -259,9 +259,10 @@ class HelpController extends Controller
     {
         //cash currency ledger
         $data = [];
-        $chart = ChartOfAccount::where('level',4)
-                // ->where('parent_account_code','01-02-0001-0000');
-                ->where('parent_account_code','01-02-0002-0000');
+        $chart = ChartOfAccount::where('level',4);
+                // ->where('parent_account_code','01-02-0001-0000')
+                // cash currency
+                // ->where('parent_account_code','01-02-0002-0000');
 
         if(!empty($val)){
             $val = (string)$val;
