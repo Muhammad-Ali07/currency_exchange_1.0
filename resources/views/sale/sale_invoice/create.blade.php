@@ -112,7 +112,7 @@
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
-                                                <label class="col-form-label">CIH code <span class="required">*</span></label>
+                                                <label class="col-form-label">Currency code <span class="required">*</span></label>
                                             </div>
                                             <div class="col-sm-9">
                                                 <div class="input-group eg_help_block w-100">
@@ -378,7 +378,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-1 row gain_row">
+                                        <div class="mb-1 row gain_row" style="display:none;">
                                             <div class="col-lg-6">
                                                 <h5 class="card-title">Gain Amount/Unit</h5>
                                             </div>
@@ -387,7 +387,7 @@
                                                 <input type="hidden" name="gain_amount_per_unit" class="gain_amount_per_unit form-control form-control-sm text-left">
                                             </div>
                                         </div>
-                                        <div class="mb-1 row gain_row">
+                                        <div class="mb-1 row gain_row" style="display:none;">
                                             <div class="col-lg-6">
                                                 <h5 class="card-title">Total Gain Amount</h5>
                                             </div>
@@ -846,10 +846,14 @@
                 $('#gridAddBtn').removeAttr('disabled');
 
                 $('#customerRow').show();
+                $('.gain_row').show();
+                $('#customerRow').show();
+
                 $('#supplierRow').hide();
             }else{
 
                 getCode(form_type);
+                $('.gain_row').hide();
 
                 $('.transaction_save_btn').removeAttr('disabled');
                 $('#buy_cash_chart_name').removeAttr('disabled');
