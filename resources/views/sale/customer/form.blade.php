@@ -83,7 +83,7 @@
                         <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
-                                    <label class="col-form-label">Passport No# <span class="required">*</span></label>
+                                    <label class="col-form-label">Legal Document# <span class="required">*</span></label>
                                 </div>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control form-control-sm" value="" id="cnic_no" name="cnic_no" />
@@ -121,7 +121,7 @@
                         <div class="col-lg-6">
                             <div class="mb-1 row">
                                 <div class="col-sm-3">
-                                    <label class="col-form-label">Attachment</label>
+                                    <label class="col-form-label">Attachment(PDF)</label>
                                 </div>
                                 <div class="col-sm-9">
                                     @php $img = asset('assets/images/avatars/blank-img.png') @endphp
@@ -144,11 +144,11 @@
                                         }
                                     </style>
                                     <div style="position: relative;">
-                                        <a onclick="document.getElementById('om_showImage').src='{{ $img }}'" class="close AClass" id="om_resetInput">
+                                        {{-- <a onclick="document.getElementById('om_showImage').src='{{ $img }}'" class="close AClass" id="om_resetInput">
                                             <span class="img_remove">&times;</span>
-                                        </a>
+                                        </a> --}}
                                         {{-- @dd($img); --}}
-                                        <img id="om_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};">
+                                        {{-- <img id="om_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};"> --}}
                                     </div>
                                     <input class="form-control form-control-sm" type="file" id="om_image_url"  name="om_image"/>
                                 </div>

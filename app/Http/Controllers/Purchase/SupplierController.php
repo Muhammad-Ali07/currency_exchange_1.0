@@ -133,7 +133,7 @@ class SupplierController extends Controller
             'name' => 'required',
             // 'cnic_no' => 'required',
             'email' => 'nullable|email',
-            'om_image' => 'mimes:jpeg,png,jpg'
+            // 'om_image' => 'mimes:jpeg,png,jpg'
 
         ]);
         // dd($request->all());
@@ -171,9 +171,15 @@ class SupplierController extends Controller
 
             $om_filename = '';
             if ($request->has('om_image')) {
-                $file = $request->file('om_image');
-                $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
-                $file->move(public_path('uploads'), $om_filename);
+                $profileImage = $request->file('om_image');
+                $profileImageSaveAsName = time() . Auth::id() . "-attachment." . $profileImage->getClientOriginalExtension();
+                $upload_path = 'uploads/';
+                $om_filename= $upload_path . $profileImageSaveAsName;
+                $success = $profileImage->move($upload_path, $profileImageSaveAsName);
+
+                // $file = $request->file('om_image');
+                // $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                // $file->move(public_path('uploads'), $om_filename);
             }
 
             Supplier::create([
@@ -285,9 +291,15 @@ class SupplierController extends Controller
 
             $om_filename = '';
                 if ($request->has('om_image')) {
-                    $file = $request->file('om_image');
-                    $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
-                    $file->move(public_path('uploads'), $om_filename);
+                    $profileImage = $request->file('om_image');
+                    $profileImageSaveAsName = time() . Auth::id() . "-attachment." . $profileImage->getClientOriginalExtension();
+                    $upload_path = 'uploads/';
+                    $om_filename= $upload_path . $profileImageSaveAsName;
+                    $success = $profileImage->move($upload_path, $profileImageSaveAsName);
+
+                    // $file = $request->file('om_image');
+                    // $om_filename = date('yzHis') . '-' . Auth::user()->id . '-' . sprintf("%'05d", rand(0, 99999)) . '.png';
+                    // $file->move(public_path('uploads'), $om_filename);
                 }
                 else{
                     if( ($request->om_image == 'null' || $request->om_image == "") && ($request->om_hidden_image == '' || $request->om_hidden_image == 'null')){

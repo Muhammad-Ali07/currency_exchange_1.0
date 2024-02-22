@@ -153,13 +153,12 @@
                                                 color:white;
                                             }
                                         </style>
-                                        <div style="position: relative;">
+                                        {{-- <div style="position: relative;">
                                             <a onclick="document.getElementById('om_showImage').src='{{ $img }}'" class="close AClass" id="om_resetInput">
                                                 <span class="img_remove">&times;</span>
                                             </a>
-                                            {{-- @dd($img); --}}
                                             <img id="om_showImage" class="mb-1" src="{{ $img }}" style="width: 100px; height: 90px; float: {{session()->get('locale') == 'ar' ?"left":"right"}};">
-                                        </div>
+                                        </div> --}}
                                         <input class="form-control form-control-sm" type="file" id="om_image_url"  name="om_image"/>
                                     </div>
                                 </div>

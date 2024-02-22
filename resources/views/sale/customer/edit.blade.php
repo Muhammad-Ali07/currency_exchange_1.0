@@ -166,16 +166,17 @@
                             <div class="col-lg-6">
                                 <div class="mb-1 row">
                                     <div class="col-sm-3">
-                                        <label class="col-form-label">Attachment</label>
+                                        <label class="col-form-label">Attachment(PDF)</label>
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 text-end">
                                         @php $root = \Illuminate\Support\Facades\Request::root(); $image_url = isset($current->image) ? $current->image : '';@endphp
                                         @if(isset($image_url) && !is_null( $image_url ) && $image_url != "")
                                             @php $img = $root.'/uploads/'.$image_url; @endphp
                                         @else
                                             @php $img = asset('assets/images/avatars/blank-img.png') @endphp
                                         @endif
-                                        <img id="om_showImage" class="mb-1 float-end" src="{{ $img }}" style="width: 30%; height: 50%;">
+                                        <a href="{{ asset($image_url) }}">Download</a>
+                                        {{-- <img id="om_showImage" class="mb-1 float-end" src="{{ $img }}" style="width: 30%; height: 50%;"> --}}
                                         <input class="form-control form-control-sm" type="file"  id="om_image_url" name="om_image"/>
                                         <input type="hidden" value="{{ $image_url }}" name="om_hidden_image" id="om_hidden_avatar">
                                         <input type="hidden" value="{{ $current->image }}" name="om_hidden_image_upload_id" id="om_hidden_image_upload_id">
