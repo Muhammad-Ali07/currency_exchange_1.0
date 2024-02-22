@@ -181,10 +181,10 @@
                                         <td>{{ $v->description }}</td>
 
                                         <td class="py-1">
-                                            {{ $v->debit }}
+                                            {{ number_format($v->debit,2) }}
                                         </td>
                                         <td class="py-1">
-                                            {{ $v->credit }}
+                                            {{ number_format($v->credit,2) }}
                                         </td>
                                         <td class="py-1">
                                             0.00
