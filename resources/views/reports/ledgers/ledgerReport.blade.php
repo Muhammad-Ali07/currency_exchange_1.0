@@ -142,72 +142,100 @@
                             $form_id = '';
                             $sr = 1;
                         @endphp
-                        @if ($data['vouchers']->count() > 0)
-                            @foreach ($data['vouchers'] as $v )
-                                    <tr>
-                                        <td>{{ date('d-m-Y', strtotime($v->date)) }}</td>
-                                        <td class="py-1">
-                                            {{ $v->chart_account_code }}
-                                            {{-- <strong></strong> --}}
-                                        </td>
-                                        <td class="py-1">
-                                            {{ $v->chart_account_name }}
-                                        </td>
-                                        <td class="py-1">
-                                            @php
-                                                $form_id = isset($v->form_id) ? $v->form_id : '';
-                                                $type = $v->type;
-                                                // dd($type);
-                                                // $voucher =  \App\Models\Voucher::where('voucher_id',$v->voucher_id)->first();
-                                                if($type == 'CRV'){
-                                                    $url = route('accounts.cash-receive.edit',$v->voucher_id);
-                                                }else if($type == 'BRV'){
-                                                    $url = route('accounts.bank-receive.edit',$v->voucher_id);
-                                                }else if($type == 'CPV'){
-                                                    $url = route('accounts.cash-payment.edit',$v->voucher_id);
-                                                }else if($type == 'BPV'){
-                                                    $url = route('accounts.bank-payment.edit',$v->voucher_id);
-                                                }else if($type == 'SI'){
-                                                    $url = route('transaction.sale.edit',$v->form_id);
-                                                }else if($type == 'JV'){
-                                                    $url = route('accounts.journal.edit',$v->voucher_id);
-                                                }else{
-                                                    $url = '';
-                                                }
-                                            @endphp
-                                            <a href="{{ $url }}" class="fw-semibold mb-25">{{ $v->voucher_no }}</a>
-                                            {{-- <a href="{{ route('') }}">{{ $v->voucher_no }}</a> --}}
-                                        </td>
-                                        <td>{{ $v->description }}</td>
+                        {{-- @if ($data['vouchers']->count() > 0) --}}
+                            @foreach ($data['vouchers'] as $key => $vch )
+                                <tr class="bg-own">
+                                    <td colspan="10"><strong>{{ $key }}</strong></td>
+                                </tr>
+                                @foreach($vch as $vc)
+                                @php
+                                    $debit_sum = 0;
+                                    $credit_sum = 0;
+                                @endphp
+                                    @foreach($vc as $v)
+                                        <tr>
+                                            <td>{{ date('d-m-Y', strtotime($v->date)) }}</td>
+                                            <td class="py-1">
+                                                {{ $v->chart_account_code }}
+                                                {{-- <strong></strong> --}}
+                                            </td>
+                                            <td class="py-1">
+                                                {{ $v->chart_account_name }}
+                                            </td>
+                                            <td class="py-1">
+                                                @php
+                                                    $form_id = isset($v->form_id) ? $v->form_id : '';
+                                                    $type = $v->type;
+                                                    // dd($type);
+                                                    // $voucher =  \App\Models\Voucher::where('voucher_id',$v->voucher_id)->first();
+                                                    if($type == 'CRV'){
+                                                        $url = route('accounts.cash-receive.edit',$v->voucher_id);
+                                                    }else if($type == 'BRV'){
+                                                        $url = route('accounts.bank-receive.edit',$v->voucher_id);
+                                                    }else if($type == 'CPV'){
+                                                        $url = route('accounts.cash-payment.edit',$v->voucher_id);
+                                                    }else if($type == 'BPV'){
+                                                        $url = route('accounts.bank-payment.edit',$v->voucher_id);
+                                                    }else if($type == 'SI'){
+                                                        $url = route('transaction.sale.edit',$v->form_id);
+                                                    }else if($type == 'JV'){
+                                                        $url = route('accounts.journal.edit',$v->voucher_id);
+                                                    }else{
+                                                        $url = '';
+                                                    }
+                                                @endphp
+                                                <a href="{{ $url }}" class="fw-semibold mb-25">{{ $v->voucher_no }}</a>
+                                                {{-- <a href="{{ route('') }}">{{ $v->voucher_no }}</a> --}}
+                                            </td>
+                                            <td>{{ $v->description }}</td>
 
-                                        <td class="py-1">
-                                            {{ number_format($v->debit,2) }}
-                                        </td>
-                                        <td class="py-1">
-                                            {{ number_format($v->credit,2) }}
-                                        </td>
-                                        <td class="py-1">
-                                            0.00
-                                        </td>
-                                    </tr>
+                                            <td class="py-1">
+                                                {{ number_format($v->debit,2) }}
+                                            </td>
+                                            <td class="py-1">
+                                                {{ number_format($v->credit,2) }}
+                                            </td>
+                                            <td class="py-1">
+                                                0.00
+                                            </td>
+                                        </tr>
+
+                                        @php
+                                            $debit_sum += $v->debit;
+                                            $credit_sum += $v->credit;
+                                        @endphp
+
+                                    @endforeach
                                     @php
-                                        $debit_sum_sum += $v->debit;
-                                        $credit_sum_sum += $v->credit;
+                                        $balance = $debit_sum - $credit_sum;
                                     @endphp
+                                    <tr class="bg-own">
+                                        <td colspan="5"><strong>Total</strong></td>
+                                        <td style="color:red">{{ number_format($debit_sum,2) }}</td>
+                                        <td style="color:red">{{ number_format($credit_sum,2) }}</td>
+                                        <td style="color:red">{{ number_format($balance,2) }}</td>
+                                    </tr>
+
+                                @endforeach
+                                @php
+                                    $debit_sum_sum += $debit_sum;
+                                    $credit_sum_sum += $credit_sum;
+                                @endphp
+
                             @endforeach
                             @php
                                 $balance = $debit_sum_sum - $credit_sum_sum;
                             @endphp
                             <tr class="bg-own">
-                                <td colspan="5"><strong>Total</strong></td>
+                                <td colspan="5"><strong>Grand Total</strong></td>
                                 <td style="color:red">{{ number_format($debit_sum_sum,2) }}</td>
                                 <td style="color:red">{{ number_format($credit_sum_sum,2) }}</td>
                                 <td style="color:red">{{ number_format($balance,2) }}</td>
 
                             </tr>
-                        @else
+                        {{-- @else
                             <tr><td>No data found...</td></tr>
-                        @endif
+                        @endif --}}
             </tbody>
         </table>
     </div>

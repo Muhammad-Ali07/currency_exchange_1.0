@@ -365,8 +365,15 @@ class ReportController extends Controller
         }else{
             $data['report_name'] = $request->ledger_name;
             $id = $request->ledger_id;
+            // dd($request->all());
             $vouchers = Voucher::where('chart_account_id',$id)->whereBetween('date', [$from_date, $to_date])->get();
-            $data['vouchers'] = $vouchers;
+            $arr_vouchers = [];
+            foreach($vouchers as $v){
+                $arr_vouchers[$v->voucher_no][] = Voucher::where('voucher_id',$v->voucher_id)->get();
+            }
+            // dump($arr_vouchers);
+            $data['vouchers'] = $arr_vouchers;
+            // dd($data['vouchers']);
             return view('reports.ledgers.ledgerReport',compact('data'));
 
         }
