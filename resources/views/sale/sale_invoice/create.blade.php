@@ -667,9 +667,8 @@
             if(isNaN(amount)){
                 ntoastr.error('Error in amount...');
             }else if(balance < amount){
-                $('#transaction_save_btn').prop('disabled',true);
+                // $('#transaction_save_btn').prop('disabled',true);
                 ntoastr.error('Insufficient balance...');
-
             }else{
                 total_amount = '$' + amount;
             }
