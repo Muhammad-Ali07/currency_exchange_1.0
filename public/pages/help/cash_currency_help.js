@@ -101,13 +101,13 @@ function funcGetProductChartDetail(chart_id) {
                     $('form').find('#amount').text(amount_to_be_paid);
                     $('form').find('.amount').val(total_amount);
                     if(total_amount > vouchers_sum){
-                        $('form').find('#transaction_save_btn').prop('disabled',true);
-                        ntoastr.error('Cash in hand is less then the amount to be paid...');
+                        // $('form').find('#transaction_save_btn').prop('disabled',true);
+                        // ntoastr.error('Cash in hand is less then the amount to be paid...');
                     }else if(vouchers_sum == 0){
-                        $('form').find('#transaction_save_btn').prop('disabled',true);
-                        ntoastr.error('Cash in hand is not enough...');
+                        // $('form').find('#transaction_save_btn').prop('disabled',true);
+                        // ntoastr.error('Cash in hand is not enough...');
                     }else{
-                        $('form').find('#transaction_save_btn').prop('disabled',false);
+                        // $('form').find('#transaction_save_btn').prop('disabled',false);
                         // funcGetProductQtyDetail(chart_id,total_amount);
                     }
                 }else{

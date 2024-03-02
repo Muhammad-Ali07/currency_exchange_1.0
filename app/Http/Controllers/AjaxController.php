@@ -20,13 +20,22 @@ class AjaxController extends Controller
                 'code_prefix'       => strtoupper('si'),
             ];
             $data['code'] = Utilities::documentCode($doc_data);
-        }else{
+        }else if($form_type == 'buy'){
             $doc_data = [
                 'model'             => 'Sale',
                 'form_type_field'  => 'transaction_type',
                 'form_type_value'  => 'buy',
                 'code_field'        => 'code',
                 'code_prefix'       => strtoupper('pi'),
+            ];
+            $data['code'] = Utilities::documentCode($doc_data);
+        }else{
+            $doc_data = [
+                'model'             => 'Sale',
+                'form_type_field'  => 'transaction_type',
+                'form_type_value'  => 'convert',
+                'code_field'        => 'code',
+                'code_prefix'       => strtoupper('cn'),
             ];
             $data['code'] = Utilities::documentCode($doc_data);
         }

@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @else
+                                @elseif(!empty($current->supplier_id))
                                 <div class="mb-1 row" id="supplierRow">
                                     <div class="col-lg-3">
                                         <label class="col-form-label p-0">Supplier<span class="required">*</span></label>
@@ -109,6 +109,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                @else
+
                                 @endif
                                 {{-- <div class="mb-1 row">
                                     <div class="col-lg-12">

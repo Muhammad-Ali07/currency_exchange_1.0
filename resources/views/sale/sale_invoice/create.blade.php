@@ -78,6 +78,11 @@
                                             <input class="form-check-input form_type" type="radio" name="form_type" id="buy" value="buy">
                                             <label class="form-check-label" for="inlineRadio2">BUY</label>
                                         </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input form_type" type="radio" name="form_type" id="convert" value="convert">
+                                            <label class="form-check-label" for="inlineRadio2">Convert</label>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-1 row" id="buy">
-                                    <h6>Receive</h6>
+                                    <h6 id="buy_h6">Receive</h6>
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -140,6 +145,29 @@
                                             </div>
                                             <div class="col-sm-9">
                                                 <input type="text" disabled class="form-control form-control-sm" id="quantity" name="quantity" aria-invalid="false">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row convert" style="display: none;">
+                                    <div class="col-lg-12 old_exchange_rate">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label class="col-form-label">Old Exchange Rate <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <input id="market_rate" disabled name="market_rate" type="text" placeholder="Click here..." value="" class="market_rate form-control form-control-sm text-left">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 old_exchange_amount">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label class="col-form-label">Old Exchange Amount <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <input id="old_buying_amount" readonly name="old_buying_amount" type="text" placeholder="Click here..." value="" class="old_buying_amount form-control form-control-sm text-left">
                                             </div>
                                         </div>
                                     </div>
@@ -259,7 +287,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <h6>Paid</h6>
+                                        <h6 id="paid_h6">Paid</h6>
 
 
                                         <div class="mb-1 row" id="cash_code" style="display: none;">
@@ -357,13 +385,41 @@
 
                                         </div>
                                         <div class="mb-1 row" >
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-12 old_exchange_rate" style="display: none;">
                                                 <div class="row">
                                                     <div class="col-sm-4">
-                                                        <label class="col-form-label">Market Rate <span class="required">*</span></label>
+                                                        <label class="col-form-label">Old Exchange Rate <span class="required">*</span></label>
                                                     </div>
                                                     <div class="col-sm-8">
                                                         <input id="market_rate" disabled name="market_rate" type="text" placeholder="Click here..." value="" class="market_rate form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 old_exchange_amount" style="display: none;">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <label class="col-form-label">Old Exchange Amount <span class="required">*</span></label>
+                                                    </div>
+                                                    <div class="col-sm-8">
+                                                        <input id="old_buying_amount" disabled name="old_buying_amount" type="text" placeholder="Click here..." value="" class="old_buying_amount form-control form-control-sm text-left">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <label class="col-form-label">Formula</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input formula" type="radio" name="formula" id="multiply" value="multiply">
+                                                            <label class="form-check-label" for="inlineRadio1">Multiply</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input formula" type="radio" name="formula" id="divide" value="divide">
+                                                            <label class="form-check-label" for="inlineRadio2">Devide</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -378,7 +434,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-1 row gain_row" style="display:none;">
+                                        <div class="mb-1 row" style="display:none;">
                                             <div class="col-lg-6">
                                                 <h5 class="card-title">Gain Amount/Unit</h5>
                                             </div>
@@ -389,7 +445,7 @@
                                         </div>
                                         <div class="mb-1 row gain_row" style="display:none;">
                                             <div class="col-lg-6">
-                                                <h5 class="card-title">Total Gain Amount</h5>
+                                                <h5 class="card-title">Expense Amount</h5>
                                             </div>
                                             <div class="col-lg-6">
                                                 <h5 class="card-title text-primary float-end" id="total_gain_amount"></h5>
@@ -398,7 +454,7 @@
                                         </div>
                                         <div class="mb-1 row">
                                             <div class="col-lg-6">
-                                                <h5 class="card-title">Total Amount</h5>
+                                                <h5 class="card-title">Current Amount</h5>
                                             </div>
                                             <div class="col-lg-6">
                                                 <h5 class="card-title text-primary float-end" id="amount">$0.00</h5>
@@ -636,7 +692,30 @@
         //     // var other_currency = $('#other_currency').val();
         //     $('#sell').hide();
         // });
+        $(document).on('keyup','#market_rate',function(){
+            var old_rate = $(this).val();
+            var market_rate = $('#market_rate').val();
+            var total_buy_qty = $('#quantity').val();
 
+            var form_type = $("input[name='form_type']:checked").val();
+            // console.log(form_type);
+            if(form_type == 'convert'){
+                // in internal conversion
+                var qty_to_exchange = $('#quantity').val();
+                if(isNaN(qty_to_exchange) || qty_to_exchange == '' ){
+                    qty_to_exchange = 0;
+                }
+                var old_exchange_rate = $('#market_rate').val();
+                var old_exchange_amount = parseFloat(qty_to_exchange) / parseFloat(old_exchange_rate);
+                console.log(old_exchange_amount);
+                $('#old_buying_amount').val(old_exchange_amount.toFixed(3));
+            }
+            else{
+                var old_amount = parseFloat(total_buy_qty) * parseFloat(old_rate);
+                $('#old_buying_amount').val(parseFloat(old_amount.toFixed(3)));
+            }
+
+        });
         $(document).on('blur','#cih_sell_rate',function(){
             var sell_rate = $(this).val();
             var market_rate = $('#market_rate').val();
@@ -644,36 +723,79 @@
             if(balance == ''){
                 balance = $('.bank_balance').val();
             }
+            var form_type = $("input[name='form_type']:checked").val();
+            var formula = $("input[name='formula']:checked").val();
 
-            var gain_amount_per_unit = parseFloat(market_rate) - parseFloat(sell_rate);
+            // console.log(form_type);
+            //for buy and sell
+            if(form_type != 'convert'){
+                var gain_amount_per_unit =  parseFloat(sell_rate) - parseFloat(market_rate);
 
-            $('#gain_amount_per_unit').text(parseFloat(gain_amount_per_unit.toFixed(3)));
-            $('.gain_amount_per_unit').val(parseFloat(gain_amount_per_unit.toFixed(3)));
+                $('#gain_amount_per_unit').text(parseFloat(gain_amount_per_unit.toFixed(3)));
+                $('.gain_amount_per_unit').val(parseFloat(gain_amount_per_unit.toFixed(3)));
 
-            var total_buy_qty = $('#quantity').val();
-            if(isNaN(total_buy_qty) || total_buy_qty == '' ){
-                total_buy_qty = 0;
-            }
-            // functionality for calculation of gain amount
-            var gain_amount = parseFloat(total_buy_qty) * parseFloat(gain_amount_per_unit);
-            var total_gain_amount = '$' + parseFloat(gain_amount.toFixed(3));
-            $('#gain_amount').val(parseFloat(gain_amount.toFixed(3)));
-            $('#total_gain_amount').text(total_gain_amount);
+                var total_buy_qty = $('#quantity').val();
+                if(isNaN(total_buy_qty) || total_buy_qty == '' ){
+                    total_buy_qty = 0;
+                }
 
-            //functionality for calculating total amount to be paid
-            var amount = parseFloat(total_buy_qty) * parseFloat(sell_rate);
-            var total_amount = '$0';
-            // console.log(amount);
-            if(isNaN(amount)){
-                ntoastr.error('Error in amount...');
-            }else if(balance < amount){
-                // $('#transaction_save_btn').prop('disabled',true);
-                ntoastr.error('Insufficient balance...');
+                //functionality for calculating total amount to be paid
+                if(formula == 'multiply'){
+                    var amount = parseFloat(total_buy_qty) * parseFloat(sell_rate);
+                }else{
+                    var amount = parseFloat(total_buy_qty) / parseFloat(sell_rate);
+                }
+                var total_amount = '$0';
+                // console.log(amount);
+                    if(isNaN(amount)){
+                        ntoastr.error('Error in amount...');
+                    }else if(balance < amount){
+                        // $('#transaction_save_btn').prop('disabled',true);
+                        ntoastr.error('Insufficient balance...');
+                    }else{
+                        total_amount = '$' + parseFloat(amount.toFixed(3));
+                    }
+                    $('#amount').text(total_amount);
+                    $('.amount').val(amount);
+
+                    // var old_amount = $('#old_buying_amount').val();
+                    // console.log(old_amount);
+                    // var expense_amount = parseFloat(amount) - parseFloat(old_amount);
+                    // console.log(expense_amount);
+                    // var total_exp_amount = '$' + parseFloat(expense_amount.toFixed(3));
+
+                    // $('#gain_amount').val(parseFloat(expense_amount.toFixed(3)));
+                    // $('#total_gain_amount').text(total_exp_amount);
             }else{
-                total_amount = '$' + amount;
+                var qty_to_convert = $('#quantity').val();
+                var formula = $("input[name='formula']:checked").val();
+                if(formula == 'multiply'){
+                    var amount = parseFloat(qty_to_convert) * parseFloat(sell_rate);
+                }else{
+                    var amount = parseFloat(qty_to_convert) / parseFloat(sell_rate);
+                }
+
+
+                var total_amount = '$0';
+                // console.log(amount);
+                if(isNaN(amount)){
+                    ntoastr.error('Error in amount...');
+                }else{
+                    total_amount = '$' + parseFloat(amount.toFixed(3));
+                }
+                $('#amount').text(total_amount);
+                $('.amount').val(amount);
+
+                var old_amount = $('#old_buying_amount').val();
+                console.log(old_amount);
+                var expense_amount = parseFloat(old_amount) - parseFloat(amount);
+                console.log(expense_amount);
+                var total_exp_amount = '$' + parseFloat(expense_amount.toFixed(3));
+
+                $('#gain_amount').val(parseFloat(expense_amount.toFixed(3)));
+                $('#total_gain_amount').text(total_exp_amount);
+
             }
-            $('#amount').text(total_amount);
-            $('.amount').val(amount);
         });
 
         $(document).on('keyup','#bank_sell_rate',function(){
@@ -718,93 +840,186 @@
             var cihSellRate = $('#cih_sell_rate').val();
             var amount = $('.amount').val();
 
-            if(rCurrencyChartName != null && pCurrencyChartName != null && qty != '' && cihSellRate != '' && amount != 'NaN' ){
-                var tr = '';
+            var form_type = $("input[name='form_type']:checked").val();
+            if(form_type != 'convert'){
 
-                tr = '<tr>'+
-                        '<td>'+
-                            '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
-                            '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="0">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="'+amount+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
-                        '</td>'+
-                        '<td>'+
-                            '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
-                        '</td>'+
-                    '</tr>';
-                    tr += '<tr>'+
-                        '<td>'+
-                            '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+pCurrencyChartId+'">'+
-                            '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+
-                        '</td>'+
-                        // '<td>'+
-                        //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
-                        //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
-                        // '</td>'+
-                        '<td>'+
-                            '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" readonly value="1">'+
-                        '</td>'+
+                if(rCurrencyChartName != null && pCurrencyChartName != null && qty != '' && cihSellRate != '' && amount != 'NaN' ){
+                    var tr = '';
 
-                        '<td>'+
-                            '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="0">'+
-                        '</td>'+
-                        '<td>'+
-                            '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
-                        '</td>'+
-                        '<td>'+
-                            '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
-                        '</td>'+
-                    '</tr>';
-                    $('.egt_form_body').append(tr);
-                    $('#buy_cash_chart_name').val('');
-                    $('#buy_cash_chart_id').val('');
+                    tr = '<tr>'+
+                            '<td>'+
+                                '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
+                                '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+qty+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="'+amount+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                            '</td>'+
+                        '</tr>';
+                        tr += '<tr>'+
+                            '<td>'+
+                                '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+pCurrencyChartId+'">'+
+                                '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+
+                            '</td>'+
+                            // '<td>'+
+                            //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
+                            //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                            // '</td>'+
+                            '<td>'+
+                                '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="'+amount+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" readonly value="1">'+
+                            '</td>'+
 
-                    $('#cash_chart_name').val('');
-                    $('#cash_chart_id').val('');
+                            '<td>'+
+                                '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                            '</td>'+
+                        '</tr>';
+                        $('.egt_form_body').append(tr);
+                        $('#buy_cash_chart_name').val('');
+                        $('#buy_cash_chart_id').val('');
 
-                    $('#quantity').val('');
-                    $('#cih_sell_rate').val('');
+                        $('#cash_chart_name').val('');
+                        $('#cash_chart_id').val('');
 
-                    var debit_sum = 0;
-                    var credit_sum = 0;
+                        $('#quantity').val('');
+                        $('#cih_sell_rate').val('');
 
-                    $('.egt_form_table > tbody  > tr').each(function(index, tr) {
+                        var debit_sum = 0;
+                        var credit_sum = 0;
 
-                        console.log(debit_sum);
-                        debit_sum += parseFloat($(this).find(".rowDebit").val());
-                        credit_sum += parseFloat($(this).find(".rowCredit").val());
-                    });
-                    // console.log(credit_sum);
-                    $('#tot_debit').text(debit_sum);
-                    $('#tot_credit').text(credit_sum);
+                        $('.egt_form_table > tbody  > tr').each(function(index, tr) {
+
+                            console.log(debit_sum);
+                            debit_sum += parseFloat($(this).find(".rowDebit").val());
+                            credit_sum += parseFloat($(this).find(".rowCredit").val());
+                        });
+                        // console.log(credit_sum);
+                        $('#tot_debit').text(debit_sum);
+                        $('#tot_credit').text(credit_sum);
+                }else{
+                    ntoastr.error('Fields are empty...');
+                }
             }else{
-                ntoastr.error('Fields are empty...');
+                if(rCurrencyChartName != null && pCurrencyChartName != null && qty != '' && cihSellRate != '' && amount != 'NaN' ){
+                    var tr = '';
+
+                    tr = '<tr>'+
+                            '<td>'+
+                                '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+rCurrencyChartId+'">'+
+                                '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+rCurrencyChartName+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="'+qty+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" value="'+cihSellRate+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="'+amount+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                            '</td>'+
+                        '</tr>';
+                        tr += '<tr>'+
+                            '<td>'+
+                                '<input type="hidden" name="account_id[]" class="rowRecChartID" readonly value="'+pCurrencyChartId+'">'+
+                                '<input type="text" name="account_code[]" class="form-control form-control-sm rowRecChartName" readonly value="'+pCurrencyChartName+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="desc[]" class="form-control form-control-sm" value="">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="qty[]" class="form-control form-control-sm rowQty" readonly value="'+amount+'">'+
+                            '</td>'+
+                            // '<td>'+
+                            //     '<input type="hidden" readonly class="rowPaidChartId" value="'+pCurrencyChartId+'">'+
+                            //     '<input type="text" class="form-control form-control-sm rowPaidChartName" readonly value="'+pCurrencyChartName+'">'+
+                            // '</td>'+
+                            '<td>'+
+                                '<input type="text" name="amount[]" class="form-control form-control-sm rowAmount" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="sell_rate[]" class="form-control form-control-sm rowSellRate" readonly value="1">'+
+                            '</td>'+
+
+                            '<td>'+
+                                '<input type="text" name="debit[]" class="form-control form-control-sm rowDebit" readonly value="'+amount+'">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" name="credit[]" class="form-control form-control-sm rowCredit" readonly value="0">'+
+                            '</td>'+
+                            '<td>'+
+                                '<button type="button" disabled class="btn btn-warning btn-sm currencyRow">Edit</button>'+
+                            '</td>'+
+                        '</tr>';
+                        $('.egt_form_body').append(tr);
+                        $('#buy_cash_chart_name').val('');
+                        $('#buy_cash_chart_id').val('');
+
+                        $('#cash_chart_name').val('');
+                        $('#cash_chart_id').val('');
+
+                        $('#quantity').val('');
+                        $('#cih_sell_rate').val('');
+
+                        var debit_sum = 0;
+                        var credit_sum = 0;
+
+                        $('.egt_form_table > tbody  > tr').each(function(index, tr) {
+
+                            console.log(debit_sum);
+                            debit_sum += parseFloat($(this).find(".rowDebit").val());
+                            credit_sum += parseFloat($(this).find(".rowCredit").val());
+                        });
+                        // console.log(credit_sum);
+                        $('#tot_debit').text(debit_sum);
+                        $('#tot_credit').text(credit_sum);
+                }else{
+                    ntoastr.error('Fields are empty...');
+                }
             }
+
                 // console.log(tr);
         });
 
@@ -834,41 +1049,54 @@
             var form_type = $(this).val();
             if(form_type == 'sell'){
                 getCode(form_type);
+                $('#buy_h6').text('Receive');
+                $('#paid_h6').text('Paid');
 
-                $('.transaction_save_btn').removeAttr('disabled');
-                $('#buy_cash_chart_name').removeAttr('disabled');
-                $('#quantity').removeAttr('disabled');
-                $('.payment').removeAttr('disabled');
-                $('#payment_type').removeAttr('disabled');
-                $('#market_rate').removeAttr('disabled');
-                $('#cih_sell_rate').removeAttr('disabled');
-                $('#gridAddBtn').removeAttr('disabled');
+                hideShow();
 
                 $('#customerRow').show();
                 $('.gain_row').show();
                 $('#customerRow').show();
+                $('.convert').hide();
 
                 $('#supplierRow').hide();
-            }else{
-
+            }else if(form_type == 'buy'){
                 getCode(form_type);
-                $('.gain_row').hide();
+                hideShow();
+                $('#buy_h6').text('Receive');
+                $('#paid_h6').text('Paid');
 
+                $('.gain_row').hide();
+                $('#customerRow').hide();
+                $('#supplierRow').show();
+                $('.convert').hide();
+
+            }else{
+                getCode(form_type);
+                hideShow();
+                $('#buy_h6').text('From Currency');
+                $('#paid_h6').text('To Currency');
+
+                $('#supplierRow').hide();
+                $('#customerRow').hide();
+                $('.convert').show();
+
+                $('.gain_row').show();
+            }
+        });
+
+        function hideShow(form_type){
                 $('.transaction_save_btn').removeAttr('disabled');
                 $('#buy_cash_chart_name').removeAttr('disabled');
                 $('#quantity').removeAttr('disabled');
                 $('.payment').removeAttr('disabled');
                 $('#payment_type').removeAttr('disabled');
                 $('#market_rate').removeAttr('disabled');
+                $('#old_buying_amount').removeAttr('disabled');
                 $('#cih_sell_rate').removeAttr('disabled');
-
                 $('#gridAddBtn').removeAttr('disabled');
 
-                $('#customerRow').hide();
-                $('#supplierRow').show();
-
-            }
-        });
+        }
 
         function getCode(form_type){
             var validate = true;
