@@ -22,6 +22,9 @@ class SaleInvoiceDtl extends Model
         'exchange_rate',
         'debit',
         'credit',
+        'fc_debit',
+        'fc_credit',
+
         'sale_invoice_id',
         'customer_id',
         'supplier_id',

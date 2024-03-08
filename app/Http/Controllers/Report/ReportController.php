@@ -371,8 +371,8 @@ class ReportController extends Controller
             foreach($vouchers as $v){
                 $arr_vouchers[$v->voucher_no][] = Voucher::where('voucher_id',$v->voucher_id)->get();
             }
-            // dump($arr_vouchers);
-            $data['vouchers'] = $arr_vouchers;
+            // dd($vouchers);
+            $data['vouchers'] = $vouchers;
             // dd($data['vouchers']);
             return view('reports.ledgers.ledgerReport',compact('data'));
 

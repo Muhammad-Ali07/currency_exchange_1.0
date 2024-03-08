@@ -23,6 +23,8 @@ class Voucher extends Model
         'payment_mode_id',
         'debit',
         'credit',
+        'fc_debit',
+        'fc_credit',
         'description',
         'remarks',
         'tax_perc',

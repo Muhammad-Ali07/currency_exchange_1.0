@@ -18,14 +18,11 @@
     .bg-own{
             background-color: #f3f2f7 !important;
         }
-        .table > :not(caption) > * > *{
-            padding:0 !important;
-        }
 </style>
 @endsection
 
 @section('reportContent')
-{{-- @dd('done'); --}}
+
 <div class="invoice-print p-3">
     <div class="pb-2">
         <div class="row" style="width:100%">
@@ -128,11 +125,9 @@
                     <th class="py-1">Account Head</th>
                     <th class="py-1">Voucher No.</th>
                     <th class="py-1">Description</th>
-                    <th class="py-1">Debit(FC)</th>
-                    <th class="py-1">Credit(FC)</th>
 
-                    <th class="py-1">Debit(LC)</th>
-                    <th class="py-1">Credit(LC)</th>
+                    <th class="py-1">Debit</th>
+                    <th class="py-1">Credit</th>
                     <th class="py-1">Balance</th>
                 </tr>
             </thead>
@@ -146,38 +141,18 @@
                             $hr = false;
                             $form_id = '';
                             $sr = 1;
-                            $row_balance = 0;
                         @endphp
                         {{-- @if ($data['vouchers']->count() > 0) --}}
-                            @foreach ($data['vouchers'] as $v )
+                            @foreach ($data['vouchers'] as $key => $vch )
+                                <tr class="bg-own">
+                                    <td colspan="10"><strong>{{ $key }}</strong></td>
+                                </tr>
+                                @foreach($vch as $vc)
                                 @php
                                     $debit_sum = 0;
                                     $credit_sum = 0;
-                                    if($row_balance == 0){
-                                        if($v->debit > 0){
-                                            $row_balance = $v->debit;
-                                        }else{
-                                            $row_balance = $v->credit;
-                                        }
-                                    }else{
-                                        if($v->credit > 0){
-                                            if($v->chart_account_code == '02-01-0002-0001'){
-                                                $row_balance = $row_balance + $v->credit;
-                                            }else{
-                                                $row_balance = $row_balance - $v->credit;
-                                            }
-                                        }
-                                        if($v->debit > 0){
-                                            if($v->chart_account_code == '02-01-0002-0001'){
-                                                $row_balance = $row_balance - $v->debit;
-                                            }else{
-                                                $row_balance = $row_balance + $v->debit;
-                                            }
-
-                                            // $row_balance = $row_balance + $v->debit;
-                                        }
-                                    }
                                 @endphp
+                                    @foreach($vc as $v)
                                         <tr>
                                             <td>{{ date('d-m-Y', strtotime($v->date)) }}</td>
                                             <td class="py-1">
@@ -213,12 +188,6 @@
                                                 {{-- <a href="{{ route('') }}">{{ $v->voucher_no }}</a> --}}
                                             </td>
                                             <td>{{ $v->description }}</td>
-                                            <td class="py-1">
-                                                {{ number_format($v->fc_debit,2) }}
-                                            </td>
-                                            <td class="py-1">
-                                                {{ number_format($v->fc_credit,2) }}
-                                            </td>
 
                                             <td class="py-1">
                                                 {{ number_format($v->debit,2) }}
@@ -227,7 +196,7 @@
                                                 {{ number_format($v->credit,2) }}
                                             </td>
                                             <td class="py-1">
-                                                {{ number_format($row_balance,2) }}
+                                                0.00
                                             </td>
                                         </tr>
 
@@ -235,15 +204,19 @@
                                             $debit_sum += $v->debit;
                                             $credit_sum += $v->credit;
                                         @endphp
+
+                                    @endforeach
                                     @php
                                         $balance = $debit_sum - $credit_sum;
                                     @endphp
-                                    {{-- <tr class="bg-own">
+                                    <tr class="bg-own">
                                         <td colspan="5"><strong>Total</strong></td>
                                         <td style="color:red">{{ number_format($debit_sum,2) }}</td>
                                         <td style="color:red">{{ number_format($credit_sum,2) }}</td>
                                         <td style="color:red">{{ number_format($balance,2) }}</td>
-                                    </tr> --}}
+                                    </tr>
+
+                                @endforeach
                                 @php
                                     $debit_sum_sum += $debit_sum;
                                     $credit_sum_sum += $credit_sum;

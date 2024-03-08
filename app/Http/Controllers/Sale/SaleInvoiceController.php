@@ -235,18 +235,22 @@ class SaleInvoiceController extends Controller
                     $voucher_no = self::documentCode('SI',$max);
                     $voucher_id = self::uuid();
                     $posted = $request->current_action_id == 'post'?1:0;
+
                     for($i = 0; $i< $rowsCount; $i++){
                         $coa = ChartOfAccount::where('id',$request->account_id[$i])->first();
                         $gain_account = ChartOfAccount::where('id',579)->first();
-                        $cash_account = ChartOfAccount::where('id',550)->first();
-                        $gain_amount = $request->gain_amount;
+                        //$cash_account = ChartOfAccount::where('id',550)->first();
+                        // $gain_amount = $request->gain_amount;
                         $gain_amount_per_unit = $request->gain_amount_per_unit;
-
                         // dd('done');
                         //voucher
                         $amount = '';
+                        $gain_amount = $request->current_amount - $request->old_buying_amount;
+                        // dump($request->all());
+                        // dd($gain_amount);
                         if($request->amount[$i] != 0){
                             $amount = $request->amount[$i];
+                            // dd($request->all());
                         }else if($request->qty[$i] != 0){
                             $amount = $request->qty[$i];
                         }
@@ -260,6 +264,9 @@ class SaleInvoiceController extends Controller
                             'received_fc' => $request->qty[$i],
                             'paid_fc' => $request->amount[$i],
                             'exchange_rate' => $request->sell_rate[$i],
+                            'fc_debit' => $request->fc_debit[$i],
+                            'fc_credit' => $request->fc_credit[$i],
+
                             'debit' => $request->debit[$i],
                             'credit' => $request->credit[$i],
                             'description' => $request->desc[$i],
@@ -283,6 +290,9 @@ class SaleInvoiceController extends Controller
                             'customer_id' => $request->customer_id,
                             'debit' => $request->debit[$i],
                             'credit' => $request->credit[$i],
+                            'fc_debit' => $request->fc_debit[$i],
+                            'fc_credit' => $request->fc_credit[$i],
+
                             'description' => $request->desc[$i],
 
                             'company_id' => auth()->user()->company_id,
@@ -296,7 +306,7 @@ class SaleInvoiceController extends Controller
                             // in debit entry
                             $gain_account = ChartOfAccount::where('id',579)->first();
                             $currencyamount = $request->debit[$i] - $gain_amount;
-
+                            // dd($gain_amount);
                             //currency voucher
                             Voucher::create([
                                 'voucher_id' => $voucher_id,
@@ -313,6 +323,9 @@ class SaleInvoiceController extends Controller
                                 'amount' => $amount,
                                 'debit' => Utilities::NumFormat($request->debit[$i]),
                                 'credit' => Utilities::NumFormat($request->credit[$i]),
+                                'fc_debit' => $request->fc_debit[$i],
+                                'fc_credit' => $request->fc_credit[$i],
+
                                 // 'balance_amount' => Utilities::NumFormat($balance_amount),
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
@@ -332,13 +345,16 @@ class SaleInvoiceController extends Controller
                                 'voucher_no' => $voucher_no,
                                 'sr_no' => 2,
                                 'form_id' => $sale->uuid,
-                                'chart_account_id' => $cash_account->id,
-                                'chart_account_name' => $cash_account->name,
-                                'chart_account_code' => $cash_account->code,
+                                'chart_account_id' => $gain_account->id,
+                                'chart_account_name' => $gain_account->name,
+                                'chart_account_code' => $gain_account->code,
                                 // 'rate_per_unit' => $gain_amount_per_unit,
                                 // 'amount' => $gain_amount,
                                 'debit' => Utilities::NumFormat($gain_amount),
                                 'credit' => Utilities::NumFormat(0),
+                                'fc_debit' => Utilities::NumFormat($gain_amount),
+                                'fc_credit' => Utilities::NumFormat(0),
+
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
                                 'company_id' => auth()->user()->company_id,
@@ -368,6 +384,9 @@ class SaleInvoiceController extends Controller
                                 'amount' => $amount,
                                 'debit' => Utilities::NumFormat($request->debit[$i]),
                                 'credit' => Utilities::NumFormat($request->credit[$i]),
+                                'fc_debit' => $request->fc_debit[$i],
+                                'fc_credit' => $request->fc_credit[$i],
+
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
                                 'company_id' => auth()->user()->company_id,
@@ -378,27 +397,27 @@ class SaleInvoiceController extends Controller
                             ]);
 
                             // income/loss voucher
-                            Voucher::create([
-                                'voucher_id' => $voucher_id,
-                                'uuid' => self::uuid(),
-                                'date' => date('Y-m-d', strtotime($request->entry_date)),
-                                'type' => 'SI',
-                                'voucher_no' => $voucher_no,
-                                'sr_no' => 2,
-                                'form_id' => $sale->uuid,
-                                'chart_account_id' => $gain_account->id,
-                                'chart_account_name' => $gain_account->name,
-                                'chart_account_code' => $gain_account->code,
-                                'debit' => Utilities::NumFormat(0),
-                                'credit' => Utilities::NumFormat($gain_amount),
-                                'description' => $request->desc[$i],
-                                'remarks' => $request->desc[$i],
-                                'company_id' => auth()->user()->company_id,
-                                'project_id' => auth()->user()->project_id,
-                                'branch_id' => auth()->user()->branch_id,
-                                'user_id' => auth()->user()->id,
-                                'posted' => 0,
-                            ]);
+                            // Voucher::create([
+                            //     'voucher_id' => $voucher_id,
+                            //     'uuid' => self::uuid(),
+                            //     'date' => date('Y-m-d', strtotime($request->entry_date)),
+                            //     'type' => 'SI',
+                            //     'voucher_no' => $voucher_no,
+                            //     'sr_no' => 2,
+                            //     'form_id' => $sale->uuid,
+                            //     'chart_account_id' => $gain_account->id,
+                            //     'chart_account_name' => $gain_account->name,
+                            //     'chart_account_code' => $gain_account->code,
+                            //     'debit' => Utilities::NumFormat(0),
+                            //     'credit' => Utilities::NumFormat($gain_amount),
+                            //     'description' => $request->desc[$i],
+                            //     'remarks' => $request->desc[$i],
+                            //     'company_id' => auth()->user()->company_id,
+                            //     'project_id' => auth()->user()->project_id,
+                            //     'branch_id' => auth()->user()->branch_id,
+                            //     'user_id' => auth()->user()->id,
+                            //     'posted' => 0,
+                            // ]);
 
                         }
 
@@ -517,6 +536,9 @@ class SaleInvoiceController extends Controller
                             'exchange_rate' => $request->sell_rate[$i],
                             'debit' => $request->debit[$i],
                             'credit' => $request->credit[$i],
+                            'fc_debit' => $request->fc_debit[$i],
+                            'fc_credit' => $request->fc_credit[$i],
+
                             'sale_invoice_id' =>  $sale->id,
                             'description' => $request->desc[$i],
 
@@ -537,6 +559,9 @@ class SaleInvoiceController extends Controller
                             'supplier_id' => $request->supplier_id,
                             'debit' => $request->debit[$i],
                             'credit' => $request->credit[$i],
+                            'fc_debit' => $request->fc_debit[$i],
+                            'fc_credit' => $request->fc_credit[$i],
+
                             'description' => $request->desc[$i],
 
                             'company_id' => auth()->user()->company_id,
@@ -569,6 +594,9 @@ class SaleInvoiceController extends Controller
                                 'amount' => $amount,
                                 'debit' => Utilities::NumFormat($request->debit[$i]),
                                 'credit' => Utilities::NumFormat($request->credit[$i]),
+                                'fc_debit' => $request->fc_debit[$i],
+                                'fc_credit' => $request->fc_credit[$i],
+
                                 // 'balance_amount' => Utilities::NumFormat($balance_amount),
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
@@ -624,6 +652,9 @@ class SaleInvoiceController extends Controller
                                 'amount' => $amount,
                                 'debit' => Utilities::NumFormat($request->debit[$i]),
                                 'credit' => Utilities::NumFormat($request->credit[$i]),
+                                'fc_debit' => $request->fc_debit[$i],
+                                'fc_credit' => $request->fc_credit[$i],
+
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
                                 'company_id' => auth()->user()->company_id,
@@ -912,6 +943,9 @@ class SaleInvoiceController extends Controller
                             'exchange_rate' => $request->sell_rate[$i],
                             'debit' => $request->debit[$i],
                             'credit' => $request->credit[$i],
+                            'fc_debit' => $request->fc_debit[$i],
+                            'fc_credit' => $request->fc_credit[$i],
+
                             'sale_invoice_id' =>  $sale->id,
                             'description' => $request->desc[$i],
 
@@ -920,7 +954,7 @@ class SaleInvoiceController extends Controller
                             'project_id' => auth()->user()->project_id,
                             'user_id' => auth()->user()->id,
                         ]);
-                        // dd('done');
+                        //  dd($request->all());
                         // for income/gain
                         if($request->debit[$i] != 0){
                             // in debit entry
@@ -934,9 +968,10 @@ class SaleInvoiceController extends Controller
                                 'exchange_rate' => $request->sell_rate[$i],
                                 'debit' => $request->gain_amount,
                                 'credit' => 0,
+                                'fc_debit' => $request->gain_amount,
+                                'fc_credit' => 0,
                                 'sale_invoice_id' =>  $sale->id,
                                 'description' => $request->desc[$i],
-
                                 'company_id' => auth()->user()->company_id,
                                 'branch_id' => auth()->user()->branch_id,
                                 'project_id' => auth()->user()->project_id,
@@ -959,6 +994,9 @@ class SaleInvoiceController extends Controller
                                 'amount' => $amount,
                                 'debit' => Utilities::NumFormat($request->debit[$i]),
                                 'credit' => Utilities::NumFormat($request->credit[$i]),
+                                'fc_debit' => $request->fc_debit[$i],
+                                'fc_credit' => $request->fc_credit[$i],
+
                                 // 'balance_amount' => Utilities::NumFormat($balance_amount),
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
@@ -968,6 +1006,35 @@ class SaleInvoiceController extends Controller
                                 'user_id' => auth()->user()->id,
                                 'posted' => 0,
                             ]);
+                            //Commission Expense voucher
+                            Voucher::create([
+                                'voucher_id' => $voucher_id,
+                                'uuid' => self::uuid(),
+                                'date' => date('Y-m-d', strtotime($request->entry_date)),
+                                'type' => 'CN',
+                                'voucher_no' => $voucher_no,
+                                'sr_no' => 1,
+                                'form_id' => $sale->uuid,
+                                'chart_account_id' => $coa->id,
+                                'chart_account_name' => $coa->name,
+                                'chart_account_code' => $coa->code,
+                                'rate_per_unit' => $request->sell_rate[$i],
+                                'amount' => $amount,
+                                'debit' => $request->gain_amount,
+                                'credit' => 0,
+                                'fc_debit' => $request->gain_amount,
+                                'fc_credit' => 0,
+
+                                // 'balance_amount' => Utilities::NumFormat($balance_amount),
+                                'description' => $request->desc[$i],
+                                'remarks' => $request->desc[$i],
+                                'company_id' => auth()->user()->company_id,
+                                'project_id' => auth()->user()->project_id,
+                                'branch_id' => auth()->user()->branch_id,
+                                'user_id' => auth()->user()->id,
+                                'posted' => 0,
+                            ]);
+
                         }else if($request->credit[$i] != 0){
                             // dd('in else');
                             // for currency
@@ -986,6 +1053,9 @@ class SaleInvoiceController extends Controller
                                 'amount' => $amount,
                                 'debit' => Utilities::NumFormat($request->debit[$i]),
                                 'credit' => Utilities::NumFormat($request->credit[$i]),
+                                'fc_debit' => $request->fc_debit[$i],
+                                'fc_credit' => $request->fc_credit[$i],
+
                                 'description' => $request->desc[$i],
                                 'remarks' => $request->desc[$i],
                                 'company_id' => auth()->user()->company_id,

@@ -181,7 +181,7 @@
                                         <div class="dropdown chart-dropdown" style="display: inline-block;">
                                             <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-bs-toggle="dropdown"></i>
                                             @php
-                                                $headings = ['Account Code','Received','Paid','Exchange Rate','Debit(LC)','Credit(LC)',];
+                                                $headings = ['Account Code','Received','Paid','Exchange Rate','Debit(FC)','Credit(FC)','Debit(LC)','Credit(LC)',];
                                             @endphp
                                             <ul class="listing_dropdown dropdown-menu dropdown-menu-end">
                                                 @foreach($headings as $key=>$heading)
@@ -215,6 +215,9 @@
                                                         <th width="22%">Paid</th>
                                                         <th width="22%">Exchange Rate</th>
                                                         {{-- <th width="20%">Paid Currency Code</th> --}}
+                                                        <th width="22%">Debit(FC)</th>
+                                                        <th width="22%">Credit(FC)</th>
+
                                                         <th width="22%">Debit(LC)</th>
                                                         <th width="22%">Credit(LC)</th>
                                                         <th width="13%" class="text-center">Action</th>
@@ -248,6 +251,13 @@
                                                                         <input type="text" readonly data-id="egt_exchange_rate" name="pd[{{$loop->iteration}}][egt_exchange_rate]" value="{{$dtl->exchange_rate}}"  class="form-control form-control-sm">
                                                                     </td>
                                                                     <td>
+                                                                        <input data-id="egt_fc_debit" readonly type="text" name="pd[{{$loop->iteration}}][egt_fc_debit]" value="{{number_format($dtl->fc_debit,3)}}" class="FloatValidate egt_fc_debit form-control form-control-sm">
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <input data-id="egt_fc_credit" readonly type="text" name="pd[{{$loop->iteration}}][egt_fc_credit]" value="{{number_format($dtl->fc_credit,3)}}" class="FloatValidate egt_fc_credit form-control form-control-sm">
+                                                                    </td>
+                                                                    <td>
                                                                         <input data-id="egt_debit" readonly type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
                                                                     </td>
 
@@ -279,6 +289,9 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
+                                                        <td></td>
+
                                                         <td class="voucher-total-debit text-end">
                                                             <span id="tot_debit">{{ number_format($debit_sum,3) }}</span>
                                                             <input id="tot_voucher_debit" name="tot_voucher_debit" type="hidden" >

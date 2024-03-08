@@ -114,8 +114,11 @@
                                                     <th width="22%">Description</th>
                                                     <th width="22%">Quantity</th>
                                                     <th width="22%">Rate/Unit</th>
-                                                    <th width="16%">Debit</th>
-                                                    <th width="16%">Credit</th>
+                                                    <th width="16%">Debit(FC)</th>
+                                                    <th width="16%">Credit(FC)</th>
+
+                                                    <th width="16%">Debit(LC)</th>
+                                                    <th width="16%">Credit(LC)</th>
                                                     <th width="13%" class="text-center">Action</th>
                                                 </tr>
                                                 <tr class="egt_form_header_input">
@@ -138,6 +141,12 @@
                                                     <td>
                                                         <input id="egt_rate" type="text" class="form-control form-control-sm">
                                                     </td>
+                                                    <td>
+                                                        <input id="egt_fc_debit" type="text" class="FloatValidate egt_fc_debit form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_fc_credit" type="text" class="FloatValidate egt_fc_credit form-control form-control-sm">
+                                                    </td>
 
                                                     <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
@@ -157,6 +166,8 @@
                                                 <tfoot class="egt_form_footer">
                                                 <tr class="egt_form_footer_total">
                                                     <td class="voucher-total-title">Total</td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

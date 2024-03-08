@@ -216,8 +216,12 @@ class JournalController extends Controller
                         'chart_account_code' => $account->code,
                         'amount' => $pd['egt_amount'],
                         'rate_per_unit' => $pd['egt_rate'],
-                        'debit' => Utilities::NumFormat($pd['egt_debit']),
-                        'credit' => Utilities::NumFormat($pd['egt_credit']),
+                        'debit' => Utilities::NumFormat($pd['egt_fc_debit']),
+                        'credit' => Utilities::NumFormat($pd['egt_fc_credit']),
+
+                        'fc_debit' => Utilities::NumFormat($pd['egt_debit']),
+                        'fc_credit' => Utilities::NumFormat($pd['egt_credit']),
+
                         'balance_amount' => Utilities::NumFormat($balance_amount),
                         'description' => $pd['egt_description'],
                         'voucher_upload_id' => $vu_id,

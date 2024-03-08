@@ -139,9 +139,11 @@
                                                     <th width="22%">Description</th>
                                                     <th width="22%">Amount</th>
                                                     <th width="22%">Rate/Unit</th>
+                                                    <th width="16%">Debit(FC)</th>
+                                                    <th width="16%">Credit(FC)</th>
 
-                                                    <th width="16%">Debit</th>
-                                                    <th width="16%">Credit</th>
+                                                    <th width="16%">Debit(LC)</th>
+                                                    <th width="16%">Credit(LC)</th>
                                                     <th width="13%" class="text-center">Action</th>
                                                 </tr>
                                                 <tr class="egt_form_header_input">
@@ -164,6 +166,13 @@
                                                     <td>
                                                         <input id="egt_rate_per_unit" type="text" class="form-control form-control-sm">
                                                     </td>
+                                                    <td>
+                                                        <input id="egt_fc_debit" type="text" class="FloatValidate egt_fc_debit form-control form-control-sm">
+                                                    </td>
+                                                    <td>
+                                                        <input id="egt_fc_credit" type="text" class="FloatValidate egt_fc_credit form-control form-control-sm">
+                                                    </td>
+
                                                     <td>
                                                         <input id="egt_debit" type="text" class="FloatValidate debit form-control form-control-sm">
                                                     </td>
@@ -200,6 +209,12 @@
                                                             <td>
                                                                 <input type="text" data-id="egt_rate_per_unit" name="pd[{{$loop->iteration}}][egt_rate_per_unit]" value="{{$dtl->rate_per_unit}}"  class="form-control form-control-sm">
                                                             </td>
+                                                            <td>
+                                                                <input data-id="egt_fc_debit" type="text" name="pd[{{$loop->iteration}}][egt_fc_debit]" value="{{number_format($dtl->fc_debit,3)}}" class="FloatValidate debit form-control form-control-sm">
+                                                            </td>
+                                                            <td>
+                                                                <input data-id="egt_fc_credit" type="text" name="pd[{{$loop->iteration}}][egt_fc_credit]" value="{{number_format($dtl->fc_credit,3)}}" class="FloatValidate credit form-control form-control-sm">
+                                                            </td>
 
                                                             <td>
                                                                 <input data-id="egt_debit" type="text" name="pd[{{$loop->iteration}}][egt_debit]" value="{{number_format($dtl->debit,3)}}" class="FloatValidate debit form-control form-control-sm">
@@ -221,6 +236,9 @@
                                                 <tfoot class="egt_form_footer">
                                                 <tr class="egt_form_footer_total">
                                                     <td class="voucher-total-title">Total</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

@@ -18,6 +18,9 @@
     .bg-own{
             background-color: #f3f2f7 !important;
         }
+        .table > :not(caption) > * > *{
+            padding:0 !important;
+        }
 </style>
 @endsection
 {{-- @dd('done') --}}
@@ -126,9 +129,11 @@
                     <th class="py-1 ps-4">Description</th>
                     <th class="py-1">Amount</th>
                     <th class="py-1">Rate/Unit</th>
+                    <th class="py-1">Debit(FC)</th>
+                    <th class="py-1">Credit(FC)</th>
 
-                    <th class="py-1">Debit(PKR)</th>
-                    <th class="py-1">Credit(PKR)</th>
+                    <th class="py-1">Debit(LC)</th>
+                    <th class="py-1">Credit(LC)</th>
                 </tr>
             </thead>
             <tbody>
@@ -148,7 +153,7 @@
                             $credit_sum = 0;
                         @endphp
                             <tr class="bg-own">
-                                <td colspan="8"><strong>{{ $key }}</strong></td>
+                                <td colspan="10"><strong>{{ $key }}</strong></td>
                             </tr>
                         @foreach ( $vch as $v )
                             @php
@@ -208,6 +213,13 @@
                                 <td class="py-1">
                                     {{ number_format($v->rate_per_unit,2) }}
                                 </td>
+                                <td class="py-1">
+                                    {{ number_format($v->fc_debit,2) }}
+                                </td>
+                                <td class="py-1">
+                                    {{ number_format($v->fc_credit,2) }}
+                                    {{-- <strong>0.00</strong> --}}
+                                </td>
 
                                 <td class="py-1">
                                     {{ number_format($v->debit,2) }}
@@ -218,18 +230,18 @@
                                 </td>
                             </tr>
                         @endforeach
-                            <tr class="bg-own">
-                                <td colspan="6"><strong>Total</strong></td>
+                            {{-- <tr class="bg-own">
+                                <td colspan="8"><strong>Total</strong></td>
                                 <td>{{ number_format($debit_sum,2) }}</td>
                                 <td>{{ number_format($credit_sum,2) }}</td>
-                            </tr>
+                            </tr> --}}
                             @php
                                 $debit_sum_sum += $debit_sum;
                                 $credit_sum_sum += $credit_sum;
                             @endphp
                     @endforeach
                     <tr class="bg-own">
-                        <td colspan="6"><strong>Grand Total</strong></td>
+                        <td colspan="8"><strong>Grand Total</strong></td>
                         <td style="color:red">{{ number_format($debit_sum_sum,2) }}</td>
                         <td style="color:red">{{ number_format($credit_sum_sum,2) }}</td>
                     </tr>
